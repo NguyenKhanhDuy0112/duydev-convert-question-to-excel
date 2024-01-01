@@ -2,7 +2,7 @@ FROM node:21.2.0 as builder
 
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn i
+RUN yarn install
 
 COPY . .
 RUN yarn run build
