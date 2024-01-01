@@ -1,0 +1,25 @@
+//COMMON STYLES
+@import "./common-styles/font";
+@import "./common-styles/varriables";
+@import "./common-styles/mixin";
+@import "./common-styles/base";
+@import "./common-styles/custom-antd";
+@import "./common-styles/ck-editor";
+@import "./common-styles/custom-react-quill";
+
+//LAYOUT STYLES
+@import "./layout-styles/default-layout";
+
+//COMPONENT STYLES
+@import "./component-styles/page-wrapper";
+@import "./component-styles/modal-confirm-delete";
+@import "./component-styles/loader";
+
+//PAGE STYLES
+@import "./page-styles/login";
+@import "./page-styles/dashboard";
+
+//PARTIAL STYLES
+@import "./partial-styles/header";
+@import "./partial-styles/footer";
+@import "./partial-styles/sidebar";

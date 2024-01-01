@@ -1,0 +1,96 @@
+.ant-table {
+    thead {
+        .ant-table-cell {
+            font-size: 14px;
+            // padding: 12px !important;
+            // background-color: $secondary !important;
+        }
+    }
+    tbody {
+        .ant-table-cell {
+            font-size: 13px;
+            // padding: 5px !important;
+        }
+    }
+}
+
+.ant-space {
+    width: 100%;
+}
+
+.ant-input {
+    height: 40px;
+}
+
+.ant-input-password {
+    height: 40px;
+
+    .ant-input {
+        height: 100%;
+    }
+}
+
+.ant-col.ant-form-item-label {
+    padding-bottom: 2px;
+
+    label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #444;
+    }
+}
+
+.ant-select-in-form-item {
+    height: 40px;
+}
+
+.ant-input-number {
+    width: 100%;
+
+    .ant-input-number-input-wrap {
+        width: 100%;
+        input {
+            height: 40px;
+            width: 100%;
+        }
+    }
+}
+
+.ant-picker {
+    height: 40px;
+    width: 100%;
+}
+
+.ant-btn {
+    height: 40px !important;
+    min-width: 40px !important;
+}
+
+.ant-modal {
+    .ant-modal-header {
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid $white-5f5;
+    }
+}
+
+.dot-menu-action {
+    height: 20px !important;
+    width: 20px !important;
+    padding: 0;
+    min-width: 20px !important;
+}
+
+.dropdown-action-table {
+    min-width: 150px !important;
+}
+
+.ant-card {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card__content {
+    .ant-card-head {
+        margin-top: 1rem;
+    }
+}

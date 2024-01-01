@@ -1,0 +1,38 @@
+.header {
+    background-color: #fff;
+    padding: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    margin-left: 80px;
+    padding: 0 24px 0 24px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 50;
+    align-items: center;
+    transition: all ease 0.2s;
+
+    &.active {
+        margin-left: 250px;
+    }
+
+    &__select {
+        width: 250px;
+    }
+
+    &__profile {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        @include flex-center();
+        @include border(1px, $primary);
+
+        img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    }
+}
