@@ -1,0 +1,49 @@
+.pageWrapper {
+    &__title {
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    &__footer {
+        @include position(fixed, null, 0, 0, 0);
+        height: 60px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        padding: 0 24px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    &__content {
+        position: relative;
+
+        &--has-footer {
+            padding-bottom: 60px;
+        }
+
+        &-wrapper {
+            padding-left: 1.5rem;
+            padding-top: 3rem;
+        }
+    }
+
+    &__back {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        border-left: 1px solid $gray-d9d;
+        transform: translateY(-15px);
+
+        &-btn {
+            position: absolute;
+            left: -100%;
+            background-color: $secondary-400;
+            color: $primary;
+            transform: translateX(-15%);
+            transform: translate(-15%, 35%);
+            height: 32px !important;
+            padding: 0 4px;
+        }
+    }
+}

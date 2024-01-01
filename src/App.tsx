@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ConfigProvider } from "antd"
+import "@/views/styles/_index.scss"
+import "react-quill/dist/quill.snow.css"
+import ManageRoutes from "./routes"
+import { Provider } from "react-redux"
+import { App as AppAntd } from "antd"
+import store from "@/redux/index.store"
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Provider store={store}>
+            <ConfigProvider
+                theme={{
+                    token: {
+                        colorPrimary: "#A13355",
+                        colorLink: "#A13355",
+                    },
+                    components: {
+                        Button: {
+                            colorPrimary: "#A13355",
+                            colorFillSecondary: "#FFE3ED",
+                        },
+                    },
+                }}
+            >
+                <AppAntd message={{ maxCount: 1, duration: 5000 }} notification={{ placement: "topRight" }}>
+                    <ManageRoutes />
+                </AppAntd>
+            </ConfigProvider>
+        </Provider>
+    )
 }
 
-export default App;
+export default App
