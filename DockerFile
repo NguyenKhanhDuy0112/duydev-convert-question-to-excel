@@ -1,7 +1,7 @@
 FROM node:21.2.0 as builder
 
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package.json yarn-lock.json ./
 RUN yarn i 
 
 COPY . .
