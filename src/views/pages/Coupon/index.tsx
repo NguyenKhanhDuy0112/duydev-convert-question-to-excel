@@ -81,9 +81,10 @@ function Coupon() {
     }
 
     const handleSubmitForm = async (values: ICoupon) => {
-        const formValues = { ...couponDetail, ...values }
+        const formValues = { ...couponDetail, ...values, cate_types: values?.cate_types?.filter((item) => item) }
         const isEdit = formValues?.id
 
+        console.log("formValues: ", formValues)
         try {
             if (isEdit) {
                 await updateCouponApi(formValues).unwrap()

@@ -58,16 +58,7 @@ function CouponForm(props: CouponFormProps) {
                     </Form.Item>
                 </Col>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="Code"
-                        rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
-                        ]}
-                        name={"code"}
-                    >
+                    <Form.Item label="Code" name={"code"}>
                         <Input placeholder="Code" />
                     </Form.Item>
                 </Col>
@@ -149,10 +140,6 @@ function CouponForm(props: CouponFormProps) {
                     <Form.Item
                         label="Link"
                         rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
                             {
                                 type: "url",
                                 message: MessageValidateForm.InvalidUrl,
