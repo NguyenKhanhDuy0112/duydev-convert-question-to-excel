@@ -42,6 +42,14 @@ function ContentTypeListing(props: CouponListingProps) {
             },
         },
         {
+            title: "Locale",
+            dataIndex: "locale",
+            key: "locale",
+            render: (value: string) => {
+                return <span>{Common.renderData(value)}</span>
+            },
+        },
+        {
             title: "Category",
             dataIndex: "category_id",
             key: "category_id",

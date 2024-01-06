@@ -7,6 +7,7 @@ export enum MessageValidateForm {
     Required = "This field is required.",
     InvalidUrl = "Please enter a valid url.",
     InvalidEmail = "Please enter a valid email address",
+    RequiredUpload = "Please upload file",
 }
 
 export enum NotificationTypeEnum {
@@ -27,6 +28,9 @@ export enum NotificationMessageEnum {
 
     LoginSuccess = "Login successfully",
     LoginError = "Login failed",
+
+    UploadSuccess = "Upload successfully",
+    UploadError = "Upload failed",
 }
 
 export enum NotificationTitleEnum {

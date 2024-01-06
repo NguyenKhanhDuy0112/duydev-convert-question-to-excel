@@ -12,11 +12,6 @@ export const contentTypeService = createApi({
                 params,
                 method: "GET",
             }),
-            transformResponse: (rawData: ICategoryType[]) => {
-                return {
-                    data: rawData,
-                }
-            },
         }),
         createContentTypeApi: builder.mutation<string, ICategoryType>({
             query: (body: ICategoryType) => ({

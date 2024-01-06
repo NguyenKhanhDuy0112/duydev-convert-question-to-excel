@@ -5,6 +5,7 @@ export enum RoleUserEnum {
 }
 
 export enum PermissionUserEnum {
+    MediaManagement = "media_management",
     UserManagement = "user_management",
     ContentManagement = "content_management",
     CategoryManagement = "category_management",

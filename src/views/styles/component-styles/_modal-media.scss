@@ -1,0 +1,21 @@
+.modal_media {
+    @include position(fixed, 0, 0, 0, 0);
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.5);
+    &-wrapper {
+    }
+    &-item {
+        object-fit: contain;
+        transition: all ease 0.25s;
+
+        &:hover {
+            filter: brightness(0.8);
+        }
+    }
+
+    &-img {
+        cursor: pointer;
+        border-radius: 10px;
+        object-fit: contain;
+    }
+}

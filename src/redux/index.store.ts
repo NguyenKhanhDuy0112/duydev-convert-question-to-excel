@@ -8,6 +8,7 @@ import { couponService } from "@/services/coupon.service"
 import { contentTypeService } from "@/services/contentType.service"
 import { contentManagementService } from "@/services/contentManagement.service"
 import { contentDetailManagementService } from "@/services/contentDetailManagement.service"
+import { mediaService } from "@/services/media.service"
 
 const store = configureStore({
     reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
         [contentTypeService.reducerPath]: contentTypeService.reducer,
         [contentManagementService.reducerPath]: contentManagementService.reducer,
         [contentDetailManagementService.reducerPath]: contentDetailManagementService.reducer,
+        [mediaService.reducerPath]: mediaService.reducer,
         rootReducer,
     },
     middleware: (getDefaultMiddleware) =>
@@ -30,7 +32,8 @@ const store = configureStore({
             couponService.middleware,
             contentTypeService.middleware,
             contentManagementService.middleware,
-            contentDetailManagementService.middleware
+            contentDetailManagementService.middleware,
+            mediaService.middleware
         ),
 })
 

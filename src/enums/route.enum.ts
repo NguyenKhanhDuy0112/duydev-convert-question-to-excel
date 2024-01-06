@@ -10,6 +10,7 @@ export enum PageRoute {
     NotFound = "/404",
     UserManagement = "/users-management",
     PersonalExperience = "/general-contents/personal-experience",
+    MediaManagement = "/media-management",
 }
 
 export enum ParamsEnum {

@@ -15,6 +15,7 @@ import Loader from "@/components/Loader/Loader"
 import { updateProfile } from "@/redux/modules/profile/profileSlice"
 import { IUser } from "@/models"
 import { cookiesStorage } from "@/helpers/cookieStorage"
+import MediaManagement from "@/views/pages/MediaManagement"
 
 //CONTAINERS
 const UnAuthenticate = lazy(() => import("@/views/containers/UnAuthenticate"))
@@ -62,6 +63,10 @@ const appRoutes: RouteObject[] = [
             {
                 path: "coupons",
                 element: <Coupon />,
+            },
+            {
+                path: "media-management",
+                element: <MediaManagement />,
             },
             {
                 path: "general-contents",

@@ -31,14 +31,13 @@ function ModalFormContent(props: ModalFormContentProps) {
     useEffect(() => {
         if (data?.en || data?.vi) {
             const payload = {
-                ...data?.vi,
                 ...data?.en,
-                items: [{ ...data?.vi }, { ...data?.en }],
+                ...data?.vi,
+                items: [{ ...data?.en }, { ...data?.vi }],
             }
             form.setFieldsValue(payload)
             console.log("Data: ", payload)
         } else {
-            form.resetFields()
         }
     }, [data])
 
@@ -50,7 +49,8 @@ function ModalFormContent(props: ModalFormContentProps) {
             master_content_id: data && data[LangCodeEnum.EN] ? data[LangCodeEnum.EN].master_content_id : undefined,
         }
 
-        onSubmitForm(payload)
+        // onSubmitForm(payload)
+        console.log("Payload: ", payload)
     }
 
     return (
@@ -91,68 +91,47 @@ function ModalFormContent(props: ModalFormContentProps) {
                         </Form.Item>
                     </Col>
                 </Row>
-                <Form.Item name={"items"}>
-                    <Form.List name="items">
-                        {(fields, { add, remove }) => (
-                            <Row gutter={16}>
-                                {fields.map(({ key, name, ...restField }) => {
-                                    console.log(key, name, restField)
-                                    const lang = restField?.fieldKey === 1 ? LangCodeEnum.VI : LangCodeEnum.EN
-                                    return (
-                                        <Col span={12}>
-                                            <Badge.Ribbon
-                                                placement="end"
-                                                text={
-                                                    <img
-                                                        width={25}
-                                                        src={
-                                                            lang === LangCodeEnum.EN
-                                                                ? AssetsImages.unitedStatesFlag
-                                                                : AssetsImages.vietnamFlag
+                <Form.List name="items">
+                    {(fields, { add, remove }) => (
+                        <Tabs>
+                            {fields.map((field, index) => (
+                                <Tabs.TabPane tab={TAB_LANGS[index].label} key={TAB_LANGS[index].value}>
+                                    <Row gutter={16}>
+                                        <Col span={24}>
+                                            <Card>
+                                                <Form.Item
+                                                    {...field}
+                                                    label="Name"
+                                                    name={[field.name, "name"]}
+                                                    fieldKey={[field.fieldKey || 0, "name"]}
+                                                    rules={[{ required: true, message: "Name is required" }]}
+                                                >
+                                                    <Input placeholder="Name" />
+                                                </Form.Item>
+                                                <Form.Item
+                                                    {...field}
+                                                    label="Description"
+                                                    name={[field.name, "description"]}
+                                                    fieldKey={[field.fieldKey || 0, "description"]}
+                                                    rules={[{ required: true, message: "Description is required" }]}
+                                                >
+                                                    <Editor
+                                                        value={form.getFieldValue(`${field.name}.description`) || ""}
+                                                        onChange={(value) =>
+                                                            form.setFieldsValue({
+                                                                [`${field.name}.description`]: value,
+                                                            })
                                                         }
                                                     />
-                                                }
-                                            >
-                                                <Card>
-                                                    <Row gutter={24}>
-                                                        <Col span={24}>
-                                                            <Form.Item
-                                                                {...restField}
-                                                                label="Name"
-                                                                name={[name, "name"]}
-                                                            >
-                                                                <Input placeholder="Name" />
-                                                            </Form.Item>
-                                                            <Form.Item {...restField} name={[name, "lang"]} hidden>
-                                                                <Input type="hidden" placeholder="Name" />
-                                                            </Form.Item>
-                                                        </Col>
-                                                    </Row>
-                                                    <Form.Item
-                                                        {...restField}
-                                                        label="Description"
-                                                        name={[name, "description"]}
-                                                    >
-                                                        <Editor
-                                                            value={
-                                                                form.getFieldValue(`${name}.description`)
-                                                                    ? form.getFieldValue(`${name}.description`)
-                                                                    : ""
-                                                            }
-                                                            onChange={(value) =>
-                                                                form.setFieldValue(`${name}.description`, value)
-                                                            }
-                                                        />
-                                                    </Form.Item>
-                                                </Card>
-                                            </Badge.Ribbon>
+                                                </Form.Item>
+                                            </Card>
                                         </Col>
-                                    )
-                                })}
-                            </Row>
-                        )}
-                    </Form.List>
-                </Form.Item>
+                                    </Row>
+                                </Tabs.TabPane>
+                            ))}
+                        </Tabs>
+                    )}
+                </Form.List>
             </Form>
         </Modal>
     )

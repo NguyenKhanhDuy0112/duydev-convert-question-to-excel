@@ -1,11 +1,9 @@
 import { Common, DataResponse, ICategory, ICategoryItem } from "@/models"
-import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
+import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table } from "antd"
 import { ColumnsType } from "antd/es/table"
 import { PlusOutlined } from "@ant-design/icons"
 import { ReactComponent as DotMenuIc } from "@/assets/icons/dots_menu_icon.svg"
-import { replaceHttps } from "@/helpers/utilities"
-import { FormatDateEnum, PageRoute, StatusEnum } from "@/enums"
-import moment from "moment"
+import { PageRoute } from "@/enums"
 import { useMemo, useState } from "react"
 import { useRouter } from "@/hooks"
 
@@ -57,6 +55,14 @@ function CategoryListing(props: CategoryListingProps) {
             },
         },
         {
+            title: "Locale",
+            dataIndex: "locale",
+            key: "locale",
+            render: (value: string) => {
+                return <span>{Common.renderData(value)}</span>
+            },
+        },
+        {
             title: "Sorting",
             dataIndex: "sorting",
             key: "sorting",
@@ -81,14 +87,6 @@ function CategoryListing(props: CategoryListingProps) {
 
     const columnsDetail: ColumnsType<ICategoryItem> = [
         {
-            title: "Sorting",
-            dataIndex: "sorting",
-            key: "sorting",
-            render: (value: number) => {
-                return <span>{Common.renderData(value)}</span>
-            },
-        },
-        {
             title: "Name",
             dataIndex: "name",
             key: "name",
@@ -97,17 +95,19 @@ function CategoryListing(props: CategoryListingProps) {
             },
         },
         {
-            title: "URL",
-            dataIndex: "url_link",
-            key: "url_link",
-            render: (value: string) => {
-                return value ? (
-                    <a href={value} target="_blank" rel="noreferrer">
-                        {replaceHttps(value)}
-                    </a>
-                ) : (
-                    Common.renderData(value)
-                )
+            title: "Locale",
+            dataIndex: "locale",
+            key: "locale",
+            render: (value: number) => {
+                return <span>{Common.renderData(value)}</span>
+            },
+        },
+        {
+            title: "Sorting",
+            dataIndex: "sorting",
+            key: "sorting",
+            render: (value: number) => {
+                return <span>{Common.renderData(value)}</span>
             },
         },
         {
