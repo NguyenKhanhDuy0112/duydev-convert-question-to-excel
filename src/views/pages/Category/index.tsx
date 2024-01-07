@@ -10,7 +10,6 @@ import { Button, Form } from "antd"
 import { SaveFilled } from "@ant-design/icons"
 import { useCreateCategoryApiMutation, useGetCategoriesApiQuery } from "@/services/category.service"
 import { INIT_PAGINATION, ProjectIDs } from "@/constants"
-import { useGetCategoryContentManagementApiQuery } from "@/services/contentManagement.service"
 
 function Category() {
     //HOOKS
@@ -22,7 +21,7 @@ function Category() {
     const [form] = Form.useForm<ICategory>()
 
     //SERVICES
-    const { data, isFetching, refetch } = useGetCategoryContentManagementApiQuery(INIT_PAGINATION)
+    const { data, isFetching, refetch } = useGetCategoriesApiQuery(INIT_PAGINATION)
     const [createCategoryApi, { isLoading: isLoadingCreate }] = useCreateCategoryApiMutation()
 
     const handleConfirmDelete = () => {}

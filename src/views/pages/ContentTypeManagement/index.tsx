@@ -134,7 +134,7 @@ function ContentTypeManagement() {
                 )
             }
             hasBackBtn={isFormPage}
-            title="Content Type"
+            title="Master Center"
         >
             {!isFormPage && (
                 <ContentTypeListing

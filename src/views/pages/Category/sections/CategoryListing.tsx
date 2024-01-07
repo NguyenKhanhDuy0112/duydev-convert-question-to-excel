@@ -55,9 +55,9 @@ function CategoryListing(props: CategoryListingProps) {
             },
         },
         {
-            title: "Locale",
-            dataIndex: "locale",
-            key: "locale",
+            title: "Localise",
+            dataIndex: "name_localize",
+            key: "name_localize",
             render: (value: string) => {
                 return <span>{Common.renderData(value)}</span>
             },

@@ -2,10 +2,11 @@ export interface ICategory {
     id?: string
     name?: string
     url_link?: string
+    name_localize?: string
     project_id?: string
     cate_type_id?: string
-    items?: ICategoryItem[]
-    subs?: ICategoryItem[]
+    items?: ICategory[]
+    subs?: ICategory[]
     is_active?: boolean
     sorting?: number
     created_at?: Date | null
@@ -15,6 +16,7 @@ export interface ICategory {
 export interface ICategoryItem {
     id?: string
     name?: string
+    name_localize?: string
     cate_type_id?: string
     url_link?: string
     is_active?: boolean

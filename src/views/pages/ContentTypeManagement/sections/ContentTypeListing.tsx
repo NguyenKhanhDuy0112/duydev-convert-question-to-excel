@@ -1,4 +1,4 @@
-import { Common, DataResponse, ICategoryType, IRequestPaging } from "@/models"
+import { Common, DataResponse, ICategory, ICategoryType, IRequestPaging } from "@/models"
 import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
 import { ColumnsType } from "antd/es/table"
 import { PlusOutlined } from "@ant-design/icons"
@@ -42,27 +42,27 @@ function ContentTypeListing(props: CouponListingProps) {
             },
         },
         {
-            title: "Locale",
-            dataIndex: "locale",
-            key: "locale",
+            title: "Localise",
+            dataIndex: "name_localize",
+            key: "name_localize",
             render: (value: string) => {
                 return <span>{Common.renderData(value)}</span>
             },
         },
         {
             title: "Category",
-            dataIndex: "category_id",
-            key: "category_id",
-            render: (value: string) => {
-                return <span>{Common.renderData(value)}</span>
+            dataIndex: "category",
+            key: "category",
+            render: (value: ICategory) => {
+                return <span>{Common.renderData(value?.name)}</span>
             },
         },
         {
             title: "Sub Category",
-            dataIndex: "sub_category_id",
-            key: "sub_category_id",
-            render: (value: string) => {
-                return <span>{Common.renderData(value)}</span>
+            dataIndex: "sub_category",
+            key: "sub_category",
+            render: (value: ICategory) => {
+                return <span>{Common.renderData(value?.name)}</span>
             },
         },
         {

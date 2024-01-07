@@ -48,7 +48,7 @@ function CouponListing(props: CouponListingProps) {
             dataIndex: "name",
             key: "name",
             render: (value: string) => {
-                return <span>{Common.renderData(`${value}`)}</span>
+                return <span>{Common.renderData(value)}</span>
             },
         },
         {
@@ -56,7 +56,7 @@ function CouponListing(props: CouponListingProps) {
             dataIndex: "code",
             key: "code",
             render: (value: string) => {
-                return <span>{Common.renderData(`${value}`)}</span>
+                return <span>{Common.renderData(value)}</span>
             },
         },
         {
@@ -72,7 +72,7 @@ function CouponListing(props: CouponListingProps) {
             dataIndex: "discount",
             key: "discount",
             render: (value: string) => {
-                return <span>{Common.renderData(`${value}`)}</span>
+                return <span>{Common.renderData(value)}</span>
             },
         },
         {
@@ -80,7 +80,7 @@ function CouponListing(props: CouponListingProps) {
             dataIndex: "prefix",
             key: "prefix",
             render: (value: string) => {
-                return <span>{Common.renderData(`${value}`)}</span>
+                return <span>{Common.renderData(value)}</span>
             },
         },
         {

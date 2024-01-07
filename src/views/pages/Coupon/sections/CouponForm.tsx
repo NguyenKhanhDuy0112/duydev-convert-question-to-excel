@@ -11,8 +11,8 @@ import { useState } from "react"
 import { ICategory, ICoupon } from "@/models"
 
 //SERVICES
-import { useGetCategoryContentManagementApiQuery } from "@/services/contentManagement.service"
 import { useGetCouponsTypeApiQuery } from "@/services/coupon.service"
+import { useGetCategoriesApiQuery } from "@/services/category.service"
 
 //COMPONENTS
 import { Col, DatePicker, Form, FormInstance, Input, InputNumber, Row, Select } from "antd"
@@ -30,7 +30,7 @@ function CouponForm(props: CouponFormProps) {
     const [selectedCategory, setSelectedCategory] = useState<ICategory>()
 
     //SERVICES
-    const { data: dataCategories } = useGetCategoryContentManagementApiQuery(INIT_PAGINATION)
+    const { data: dataCategories } = useGetCategoriesApiQuery(INIT_PAGINATION)
     const { data: dataCouponType } = useGetCouponsTypeApiQuery()
 
     return (

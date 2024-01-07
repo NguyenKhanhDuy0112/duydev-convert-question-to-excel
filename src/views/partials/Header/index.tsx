@@ -1,12 +1,10 @@
-import { Avatar, Button, Dropdown, Layout, MenuProps, Select, theme } from "antd"
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
+import { Avatar, Dropdown, Layout, MenuProps, Select, theme } from "antd"
 import { useRouter } from "@/hooks"
 import { PageRoute } from "@/enums"
 import { useGetCategoriesApiQuery } from "@/services/category.service"
 import { INIT_PAGINATION } from "@/constants"
 import { useDispatch } from "react-redux"
 import { logout } from "@/redux/modules/auth/authSlice"
-import { useGetCategoryContentManagementApiQuery } from "@/services/contentManagement.service"
 
 const { Header: HeaderAntd } = Layout
 
@@ -28,7 +26,7 @@ function Header(props: HeaderProps) {
     const { pathname, navigate } = useRouter()
 
     //SERVICES
-    const { data } = useGetCategoryContentManagementApiQuery(INIT_PAGINATION)
+    const { data } = useGetCategoriesApiQuery(INIT_PAGINATION)
 
     const items: MenuProps["items"] = [
         {
