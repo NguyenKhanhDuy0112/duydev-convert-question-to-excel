@@ -19,7 +19,7 @@ export const contentManagementService = createApi({
         }),
         getContentManagementApi: builder.query<DataResponse<IContentList>, { cate_type_id: string }>({
             query: (params) => ({
-                url: `/fo/content/${params?.cate_type_id}`,
+                url: `/category/content/${params?.cate_type_id}`,
                 method: "GET",
             }),
             transformResponse: (response: IContentList) => {
