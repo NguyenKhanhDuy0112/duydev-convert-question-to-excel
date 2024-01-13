@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 
 # Set NODE_OPTIONS for memory control during the build
-ENV NODE_OPTIONS="--max-old-space-size=2048"
+# ENV NODE_OPTIONS="--max-old-space-size=2048"
 
 # Install dependencies
 RUN yarn install
