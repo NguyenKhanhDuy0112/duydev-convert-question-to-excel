@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM node:21.2.0 as builder
+FROM node:21.2.0-alpine as builder
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 
 # Set NODE_OPTIONS for memory control during the build
-ENV NODE_OPTIONS="--max-old-space-size=2048"
+# ENV NODE_OPTIONS="--max-old-space-size=2048"
 
 # Install dependencies
 RUN yarn install
