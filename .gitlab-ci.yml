@@ -1,0 +1,34 @@
+variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+
+stages:
+    - build
+    - deploy
+
+push-container:
+    stage: build
+    image: docker:18-dind
+    services:
+        - docker:18-dind
+    script:
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+        - docker build --network host -t $REGISTRY_URI/$NAMESPACE:coupon_web_bo-$CI_COMMIT_SHA . --no-cache
+        - docker push $REGISTRY_URI/$NAMESPACE:coupon_web_bo-$CI_COMMIT_SHA
+        - echo coupon_web_bo-$CI_COMMIT_SHA
+    only:
+        - main
+
+deploy:
+    stage: deploy
+    before_script:
+        - "command -v ssh-agent >/dev/null || ( apk add --update openssh )"
+        - eval $(ssh-agent -s)
+        - echo "$COUPON_SERVER_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+        - mkdir -p ~/.ssh
+        - chmod 700 ~/.ssh
+        - ssh-keyscan $COUPON_WEB_SERVER_IP_ADDRESS >> ~/.ssh/known_hosts
+        - chmod 644 ~/.ssh/known_hosts
+    script:
+        - ssh $COUPON_SERVER_USER_NAME@$COUPON_WEB_SERVER_IP_ADDRESS "IMAGE_NAME=$REGISTRY_URI/$NAMESPACE:coupon_web_bo-$CI_COMMIT_SHA docker-compose -f $COUPON_SERVER_PATH/coupon_web_bo/$DOCKER_COMPOSE up -d"
+    only:
+        - main
