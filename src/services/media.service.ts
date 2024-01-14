@@ -24,6 +24,12 @@ export const mediaService = createApi({
                 method: "POST",
             }),
         }),
+        deleteMediaApi: builder.mutation<any, { id: string }>({
+            query: (params) => ({
+                url: `/media/${params.id}`,
+                method: "DELETE",
+            }),
+        }),
     }),
 })
 
@@ -32,4 +38,6 @@ export const {
     useLazyGetMediaApiQuery,
 
     useCreateMediaApiMutation,
+
+    useDeleteMediaApiMutation,
 } = mediaService

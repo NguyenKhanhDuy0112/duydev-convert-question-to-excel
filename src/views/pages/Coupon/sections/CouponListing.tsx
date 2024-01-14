@@ -1,13 +1,25 @@
-import { Common, DataResponse, ICategory, ICoupon, IRequestPaging } from "@/models"
-import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
-import { ColumnsType } from "antd/es/table"
-import { PlusOutlined } from "@ant-design/icons"
-import moment from "moment"
+//MODELS
+import { Common, DataResponse, ICoupon, IRequestPaging } from "@/models"
 
-import { ReactComponent as DotMenuIc } from "@/assets/icons/dots_menu_icon.svg"
+//UTILITIES
+import moment from "moment"
 import { replaceHttps } from "@/helpers/utilities"
-import { FormatDateEnum } from "@/enums"
+
+//HOOKS
 import { useState } from "react"
+
+//MODELS
+import { ColumnsType } from "antd/es/table"
+
+//ENUMS
+import { FormatDateEnum } from "@/enums"
+
+//ICONS
+import { PlusOutlined } from "@ant-design/icons"
+import { ReactComponent as DotMenuIc } from "@/assets/icons/dots_menu_icon.svg"
+
+//COMPONENTS
+import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table } from "antd"
 
 interface CouponListingProps {
     isLoading?: boolean

@@ -1,22 +1,33 @@
-import { Common, DataResponse, ICategory, ICategoryType, IRequestPaging } from "@/models"
-import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
-import { ColumnsType } from "antd/es/table"
-import { PlusOutlined } from "@ant-design/icons"
-import moment from "moment"
-
-import { ReactComponent as DotMenuIc } from "@/assets/icons/dots_menu_icon.svg"
-import { FormatDateEnum, StatusEnum } from "@/enums"
+//HOOKS
 import { useState } from "react"
 
-interface CouponListingProps {
+//UTILITIES
+import moment from "moment"
+
+//MODELS
+import { Common, DataResponse, ICategory, ICategoryType, IRequestPaging } from "@/models"
+import { ColumnsType } from "antd/es/table"
+
+//ENUMS
+import { FormatDateEnum, StatusEnum } from "@/enums"
+
+//ICONS
+import { ReactComponent as DotMenuIc } from "@/assets/icons/dots_menu_icon.svg"
+import { PlusOutlined } from "@ant-design/icons"
+
+//COMPONENTS
+import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
+
+interface MasterCenterListingProps {
     data?: DataResponse<ICategoryType[]>
+    loading?: boolean
     onDelete: (data?: ICategoryType) => void
     onActionForm: (value?: ICategoryType) => void
     pagination?: IRequestPaging
 }
 
-function ContentTypeListing(props: CouponListingProps) {
-    const { data, pagination, onActionForm, onDelete } = props
+function MasterCenterListing(props: MasterCenterListingProps) {
+    const { data, pagination, loading, onActionForm, onDelete } = props
 
     //STATES
     const [currentRecord, setCurrentRecord] = useState<ICategoryType>({})
@@ -116,6 +127,7 @@ function ContentTypeListing(props: CouponListingProps) {
             <Table
                 columns={columns}
                 rowKey={"id"}
+                loading={loading}
                 dataSource={data?.data || []}
                 pagination={{ current: pagination?.page, total: data?.total, pageSize: pagination?.limit }}
             />
@@ -123,4 +135,4 @@ function ContentTypeListing(props: CouponListingProps) {
     )
 }
 
-export default ContentTypeListing
+export default MasterCenterListing

@@ -1,6 +1,5 @@
 .login {
     @include flex-center();
-    background-color: $secondary;
     min-height: 100vh;
     &__wrapper {
         max-width: 414px;

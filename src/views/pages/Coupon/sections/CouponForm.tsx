@@ -2,10 +2,7 @@
 import { INIT_PAGINATION } from "@/constants"
 
 //ENUMS
-import { FormatDateEnum, MessageValidateForm, StatusCoupon } from "@/enums"
-
-//HOOKS
-import { useState } from "react"
+import { FormatDateEnum, StatusCoupon } from "@/enums"
 
 //MODELS
 import { ICategory, ICoupon } from "@/models"
@@ -24,10 +21,7 @@ interface CouponFormProps {
     onSubmitForm: (value: ICoupon) => void
 }
 function CouponForm(props: CouponFormProps) {
-    const { form, data, onSubmitForm } = props
-
-    //STATES
-    const [selectedCategory, setSelectedCategory] = useState<ICategory>()
+    const { form, onSubmitForm } = props
 
     //SERVICES
     const { data: dataCategories } = useGetCategoriesApiQuery(INIT_PAGINATION)
@@ -44,16 +38,7 @@ function CouponForm(props: CouponFormProps) {
         >
             <Row gutter={20}>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="Name"
-                        rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
-                        ]}
-                        name={"name"}
-                    >
+                    <Form.Item label="Name" name={"name"}>
                         <Input placeholder="Name" />
                     </Form.Item>
                 </Col>
@@ -66,30 +51,12 @@ function CouponForm(props: CouponFormProps) {
 
             <Row gutter={20}>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="Discount"
-                        rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
-                        ]}
-                        name={"discount"}
-                    >
+                    <Form.Item label="Discount" name={"discount"}>
                         <InputNumber placeholder="Discount" />
                     </Form.Item>
                 </Col>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="Currency code"
-                        rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
-                        ]}
-                        name={"currency_code"}
-                    >
+                    <Form.Item label="Currency code" name={"currency_code"}>
                         <Select placeholder="Select currency code">
                             <Select.Option key={"$"}>$</Select.Option>
                         </Select>
@@ -99,16 +66,7 @@ function CouponForm(props: CouponFormProps) {
 
             <Row gutter={20}>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="Coupon type ID"
-                        rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
-                        ]}
-                        name={"coupon_type_id"}
-                    >
+                    <Form.Item label="Coupon type ID" name={"coupon_type_id"}>
                         <Select placeholder="Select coupon type">
                             {dataCouponType?.data?.map((item) => (
                                 <Select.Option key={item.id}>{item.name}</Select.Option>
@@ -117,16 +75,7 @@ function CouponForm(props: CouponFormProps) {
                     </Form.Item>
                 </Col>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="Prefix"
-                        rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
-                        ]}
-                        name={"prefix"}
-                    >
+                    <Form.Item label="Prefix" name={"prefix"}>
                         <Select placeholder="Select prefix">
                             <Select.Option key={StatusCoupon.Off}>{StatusCoupon.Off}</Select.Option>
                             <Select.Option key={StatusCoupon.On}>{StatusCoupon.On}</Select.Option>
@@ -137,30 +86,12 @@ function CouponForm(props: CouponFormProps) {
 
             <Row gutter={20}>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="Link"
-                        rules={[
-                            {
-                                type: "url",
-                                message: MessageValidateForm.InvalidUrl,
-                            },
-                        ]}
-                        name={"link"}
-                    >
+                    <Form.Item label="Link" name={"link"}>
                         <Input placeholder="Link" />
                     </Form.Item>
                 </Col>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="Expiration date"
-                        rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
-                        ]}
-                        name={"expire_date"}
-                    >
+                    <Form.Item label="Expiration date" name={"expire_date"}>
                         <DatePicker format={FormatDateEnum.Default} />
                     </Form.Item>
                 </Col>
@@ -168,16 +99,7 @@ function CouponForm(props: CouponFormProps) {
 
             <Row gutter={20}>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="Maste cate type"
-                        rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
-                        ]}
-                        name={"cate_types"}
-                    >
+                    <Form.Item label="Maste cate type" name={"cate_types"}>
                         <TreeCheckbox
                             data={
                                 dataCategories?.data
@@ -200,16 +122,7 @@ function CouponForm(props: CouponFormProps) {
                     </Form.Item>
                 </Col>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="Description"
-                        rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
-                        ]}
-                        name={"description"}
-                    >
+                    <Form.Item label="Description" name={"description"}>
                         <Input.TextArea rows={4} placeholder="Description" />
                     </Form.Item>
                 </Col>

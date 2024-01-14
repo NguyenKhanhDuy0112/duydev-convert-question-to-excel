@@ -1,7 +1,13 @@
-//MODELS
+//CONSTANTS
 import { INIT_PAGINATION } from "@/constants"
+
+//ENUMS
 import { MessageValidateForm } from "@/enums"
+
+//MODELS
 import { ICategory, ICategoryType } from "@/models"
+
+//HOOKS
 import { useEffect, useState } from "react"
 
 //SERVICES
@@ -10,13 +16,13 @@ import { useGetCategoriesApiQuery } from "@/services/category.service"
 //COMPONENTS
 import { Col, Form, FormInstance, Input, Row, Select, Switch } from "antd"
 
-interface CouponFormProps {
+interface MasterCenterFormProps {
     data?: ICategoryType
     form: FormInstance<ICategoryType>
     onSubmitForm: (value: ICategoryType) => void
 }
 
-function ContentTypeForm(props: CouponFormProps) {
+function MasterCenterForm(props: MasterCenterFormProps) {
     const { form, data, onSubmitForm } = props
 
     //STATES
@@ -102,4 +108,4 @@ function ContentTypeForm(props: CouponFormProps) {
     )
 }
 
-export default ContentTypeForm
+export default MasterCenterForm

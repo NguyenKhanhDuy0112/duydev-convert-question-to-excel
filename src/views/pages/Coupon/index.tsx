@@ -1,22 +1,34 @@
-import PageWrapper from "@/components/PageWrapper"
-import { useModal, useNotification, useRouter } from "@/hooks"
+//MODELS
 import { ICoupon, IRequestPaging } from "@/models"
-import { useEffect, useMemo, useState } from "react"
-import ModalConfirmDelete from "@/components/ModalConfirmDelete"
-import CouponListing from "./sections/CouponListing"
-import CouponForm from "./sections/CouponForm"
 
+//HOOKS
+import { useModal, useNotification, useRouter } from "@/hooks"
+import { useEffect, useMemo, useState } from "react"
+
+//ENUMS
 import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
+
+//SERVICES
 import {
     useCreateCouponApiMutation,
     useDeleteCouponApiMutation,
     useGetCouponsApiQuery,
     useUpdateCouponApiMutation,
 } from "@/services/coupon.service"
+
+//CONSTANTS
 import { INIT_PAGINATION } from "@/constants"
-import { Button, Form } from "antd"
+
+//ICONS
 import { SaveFilled } from "@ant-design/icons"
 import dayjs from "dayjs"
+
+//COMPONENTS
+import ModalConfirmDelete from "@/components/ModalConfirmDelete"
+import CouponListing from "./sections/CouponListing"
+import CouponForm from "./sections/CouponForm"
+import PageWrapper from "@/components/PageWrapper"
+import { Button, Form } from "antd"
 
 function Coupon() {
     //HOOKS
@@ -46,6 +58,8 @@ function Coupon() {
                     setCouponDetail(couponDetail)
                     form.setFieldsValue({ ...couponDetail, expire_date: dayjs(couponDetail?.expire_date) })
                 }
+            } else {
+                form.resetFields()
             }
         }
     }, [searchParams, data])
@@ -84,7 +98,6 @@ function Coupon() {
         const formValues = { ...couponDetail, ...values, cate_types: values?.cate_types?.filter((item) => item) }
         const isEdit = formValues?.id
 
-        console.log("formValues: ", formValues)
         try {
             if (isEdit) {
                 await updateCouponApi(formValues).unwrap()

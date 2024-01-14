@@ -1,21 +1,26 @@
+//UTILITIES
 import { Suspense, lazy, useEffect } from "react"
 import { RouteObject, createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
+
+//CONSTANTS
 import { CookieStorageKey } from "@/constants"
 
 //HOOKS
 import { useAuth, useCookieStorage } from "@/hooks"
+import { useDispatch } from "react-redux"
 
 //SERVICES
 import { useGetUserprofileApiQuery } from "@/services/user.service"
 
 //REDUX
-import { useDispatch } from "react-redux"
 import { login } from "@/redux/modules/auth/authSlice"
-import Loader from "@/components/Loader/Loader"
 import { updateProfile } from "@/redux/modules/profile/profileSlice"
+
+//MODELS
 import { IUser } from "@/models"
-import { cookiesStorage } from "@/helpers/cookieStorage"
-import MediaManagement from "@/views/pages/MediaManagement"
+
+//COMPONENTS
+import Loader from "@/components/Loader/Loader"
 
 //CONTAINERS
 const UnAuthenticate = lazy(() => import("@/views/containers/UnAuthenticate"))
@@ -32,7 +37,8 @@ const ContentManagement = lazy(() => import("@/views/pages/ContentManagement"))
 const FAQs = lazy(() => import("@/views/pages/GeneralContent/FAQs"))
 const UserManagement = lazy(() => import("@/views/pages/UserManagement"))
 const PersonalExperience = lazy(() => import("@/views/pages/PersonalExperience"))
-const ContentTypeManagement = lazy(() => import("@/views/pages/ContentTypeManagement"))
+const MasterCenter = lazy(() => import("@/views/pages/MasterCenter"))
+const MediaManagement = lazy(() => import("@/views/pages/MediaManagement"))
 
 const appRoutes: RouteObject[] = [
     {
@@ -86,8 +92,8 @@ const appRoutes: RouteObject[] = [
                 element: <ContentManagement />,
             },
             {
-                path: "content-type-managements",
-                element: <ContentTypeManagement />,
+                path: "master-center",
+                element: <MasterCenter />,
             },
             {
                 path: "users-management",

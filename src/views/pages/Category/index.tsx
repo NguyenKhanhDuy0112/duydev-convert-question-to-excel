@@ -1,15 +1,28 @@
-import PageWrapper from "@/components/PageWrapper"
+//MODELS
 import { ICategory } from "@/models"
+
+//HOOKS
+import { useModal, useNotification, useRouter } from "@/hooks"
 import { useMemo } from "react"
+
+//ENUMS
+import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
+
+//ICONS
+import { SaveFilled } from "@ant-design/icons"
+
+//SERVICES
+import { useCreateCategoryApiMutation, useGetCategoriesApiQuery } from "@/services/category.service"
+
+//CONSTANTS
+import { INIT_PAGINATION, ProjectIDs } from "@/constants"
+
+//COMPONENTS
+import { Button, Form } from "antd"
+import ModalConfirmDelete from "@/components/ModalConfirmDelete"
 import CategoryListing from "./sections/CategoryListing"
 import CategoryForm from "./sections/CategoryForm"
-import { useModal, useNotification, useRouter } from "@/hooks"
-import ModalConfirmDelete from "@/components/ModalConfirmDelete"
-import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
-import { Button, Form } from "antd"
-import { SaveFilled } from "@ant-design/icons"
-import { useCreateCategoryApiMutation, useGetCategoriesApiQuery } from "@/services/category.service"
-import { INIT_PAGINATION, ProjectIDs } from "@/constants"
+import PageWrapper from "@/components/PageWrapper"
 
 function Category() {
     //HOOKS
@@ -31,7 +44,6 @@ function Category() {
     }, [searchParams])
 
     const handleRedirectForm = (values: ICategory) => {
-        console.log("values: ", values)
         form.setFieldsValue(values)
         return navigate(
             `${PageRoute.Categories}?${ParamsEnum.ID}=${values?.id}&${ParamsEnum.CATE_TYPE_ID}=${values?.cate_type_id}`

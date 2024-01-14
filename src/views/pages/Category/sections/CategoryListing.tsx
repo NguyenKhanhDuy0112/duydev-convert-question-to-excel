@@ -1,11 +1,19 @@
-import { Common, DataResponse, ICategory, ICategoryItem } from "@/models"
-import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table } from "antd"
+//MODELS
 import { ColumnsType } from "antd/es/table"
-import { PlusOutlined } from "@ant-design/icons"
+import { Common, DataResponse, ICategory, ICategoryItem } from "@/models"
+
+//ICONS
 import { ReactComponent as DotMenuIc } from "@/assets/icons/dots_menu_icon.svg"
+import { PlusOutlined } from "@ant-design/icons"
+//ENUMS
 import { PageRoute } from "@/enums"
+
+//HOOKS
 import { useMemo, useState } from "react"
 import { useRouter } from "@/hooks"
+
+//COMPONENTS
+import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table } from "antd"
 
 interface CategoryListingProps {
     data?: DataResponse<ICategory[]>
@@ -38,6 +46,33 @@ function CategoryListing(props: CategoryListingProps) {
                         View
                     </div>
                 ),
+                key: "1",
+            })
+        } else {
+            items.unshift({
+                label: <div onClick={() => navigate(`${PageRoute.MasterCenter}`)}>Create Master Center</div>,
+                key: "1",
+            })
+        }
+
+        return items
+    }, [currentRecord])
+
+    const itemsMenuChildren = useMemo(() => {
+        let items: MenuProps["items"] = []
+
+        if (currentRecord?.cate_type_id) {
+            items.unshift({
+                label: (
+                    <div onClick={() => navigate(`${PageRoute.ContentManagements}/${currentRecord?.cate_type_id}`)}>
+                        View
+                    </div>
+                ),
+                key: "1",
+            })
+        } else {
+            items.unshift({
+                label: <div onClick={() => navigate(`${PageRoute.MasterCenter}`)}>Create Master Center</div>,
                 key: "1",
             })
         }
@@ -119,20 +154,7 @@ function CategoryListing(props: CategoryListingProps) {
                 <Dropdown
                     overlayClassName="dropdown-action-table"
                     menu={{
-                        items: [
-                            {
-                                label: (
-                                    <div
-                                        onClick={() =>
-                                            navigate(`${PageRoute.ContentManagements}/${currentRecord?.cate_type_id}`)
-                                        }
-                                    >
-                                        View
-                                    </div>
-                                ),
-                                key: "0",
-                            },
-                        ],
+                        items: itemsMenuChildren,
                     }}
                     trigger={["click"]}
                 >

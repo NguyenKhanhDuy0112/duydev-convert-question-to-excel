@@ -1,8 +1,14 @@
+//ENUMS
 import { MessageValidateForm } from "@/enums"
+
+//MODELS
 import { ICategory } from "@/models"
-import { Button, Col, Form, FormInstance, Input, Modal, Row } from "antd"
+
+//ICONS
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons"
-import { ReactComponent as CloseIcon } from "@/assets/icons/close_icon.svg"
+
+//COMPONENTS
+import { Button, Col, Form, FormInstance, Input, Row } from "antd"
 
 interface CategoryFormProps {
     form: FormInstance<ICategory>

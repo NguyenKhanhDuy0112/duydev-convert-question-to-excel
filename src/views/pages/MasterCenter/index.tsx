@@ -4,16 +4,12 @@ import { useEffect, useMemo, useState } from "react"
 
 //MODELS
 import { ICategoryType, ICoupon, IRequestPaging } from "@/models"
-import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
-import { INIT_PAGINATION } from "@/constants"
 
-//COMPONENTS
-import ContentTypeListing from "./sections/ContentTypeListing"
-import ContentTypeForm from "./sections/ContentTypeForm"
-import ModalConfirmDelete from "@/components/ModalConfirmDelete"
-import PageWrapper from "@/components/PageWrapper"
-import { Button, Form } from "antd"
-import { SaveFilled } from "@ant-design/icons"
+//ENUMS
+import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
+
+//CONSTANTS
+import { INIT_PAGINATION } from "@/constants"
 
 //SERVICES
 import {
@@ -23,7 +19,17 @@ import {
     useUpdateContentTypeApiMutation,
 } from "@/services/contentType.service"
 
-function ContentTypeManagement() {
+//ICONS
+import { SaveFilled } from "@ant-design/icons"
+
+//COMPONENTS
+import ModalConfirmDelete from "@/components/ModalConfirmDelete"
+import PageWrapper from "@/components/PageWrapper"
+import { Button, Form } from "antd"
+import MasterCenterListing from "./sections/MasterCenterListing"
+import MasterCenterForm from "./sections/MasterCenterForm"
+
+function MasterCenter() {
     //HOOKS
     const { visible: visibleConfirmDelete, toggle: toggleConfirmDelete } = useModal()
     const { searchParams, navigate } = useRouter()
@@ -34,7 +40,7 @@ function ContentTypeManagement() {
     const [dataDetail, setDataDetail] = useState<ICategoryType | undefined>({})
 
     //SERVICES
-    const { data, refetch } = useGetContentTypeApiQuery(pagination)
+    const { data, isFetching: isFetchingList, refetch } = useGetContentTypeApiQuery(pagination)
     const [createContentTypeApi, { isLoading: isLoadingCreate }] = useCreateContentTypeApiMutation()
     const [updateContentTypeApi, { isLoading: isLoadingUpdate }] = useUpdateContentTypeApiMutation()
     const [deleteContentTypeApi, { isLoading: isLoadingDelete }] = useDeleteContentTypeApiMutation()
@@ -82,7 +88,7 @@ function ContentTypeManagement() {
     const handleRedirectForm = (values?: ICategoryType) => {
         form.setFieldsValue({ ...values, status: values?.id ? values?.is_active : true })
         setDataDetail(values)
-        return navigate(`${PageRoute.ContentTypeManagements}?id=${values?.id ? values?.id : ""}`)
+        return navigate(`${PageRoute.MasterCenter}?id=${values?.id ? values?.id : ""}`)
     }
 
     const handleSubmitForm = async (values: ICategoryType) => {
@@ -137,15 +143,16 @@ function ContentTypeManagement() {
             title="Master Center"
         >
             {!isFormPage && (
-                <ContentTypeListing
+                <MasterCenterListing
                     data={data}
                     pagination={pagination}
+                    loading={isFetchingList}
                     onActionForm={handleRedirectForm}
                     onDelete={handleToggleModalDelete}
                 />
             )}
 
-            {isFormPage && <ContentTypeForm form={form} data={dataDetail} onSubmitForm={handleSubmitForm} />}
+            {isFormPage && <MasterCenterForm form={form} data={dataDetail} onSubmitForm={handleSubmitForm} />}
 
             <ModalConfirmDelete
                 visible={visibleConfirmDelete}
@@ -157,4 +164,4 @@ function ContentTypeManagement() {
     )
 }
 
-export default ContentTypeManagement
+export default MasterCenter

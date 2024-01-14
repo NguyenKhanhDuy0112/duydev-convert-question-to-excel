@@ -26,7 +26,7 @@ export const SIDE_BARS: SidebarItem[] = [
             },
             {
                 key: "master_cate_type",
-                link: PageRoute.ContentTypeManagements,
+                link: PageRoute.MasterCenter,
                 label: "Master Center",
                 icon: AppstoreOutlined,
                 permission: PermissionUserEnum.CategoryManagement,

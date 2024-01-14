@@ -6,7 +6,7 @@ import { useProfile, useRouter } from "@/hooks"
 import { SIDE_BARS } from "@/constants/sidebar.constant"
 import LinkItem from "./components/LinkItem"
 import { SidebarItem } from "@/models"
-import { PageRoute, PermissionUserEnum } from "@/enums"
+import { PageRoute } from "@/enums"
 
 type MenuItem = Required<MenuProps>["items"][number]
 

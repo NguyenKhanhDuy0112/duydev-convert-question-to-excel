@@ -1,11 +1,24 @@
+//UTILITIES
 import { getBase64 } from "@/helpers/utilities"
-import { Form, Modal, Upload, message } from "antd"
+
+//MODELS
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from "antd/es/upload"
-import { useState } from "react"
-import { PlusOutlined } from "@ant-design/icons"
-import { MessageValidateForm, NotificationMessageEnum, NotificationTypeEnum } from "@/enums"
-import { useCreateMediaApiMutation } from "@/services/media.service"
+
+//HOOKSs
 import { useNotification } from "@/hooks"
+import { useState } from "react"
+
+//ICONS
+import { PlusOutlined } from "@ant-design/icons"
+
+//ENUMS
+import { MessageValidateForm, NotificationMessageEnum, NotificationTypeEnum } from "@/enums"
+
+//SERVICES
+import { useCreateMediaApiMutation } from "@/services/media.service"
+
+//COMPONENTS
+import { Form, Modal, Upload, message } from "antd"
 
 interface MediaFormProps {
     show: boolean
@@ -27,9 +40,9 @@ function MediaForm(props: MediaFormProps) {
         if (!isJpgOrPng) {
             message.error("You can only upload JPG/PNG file!")
         }
-        const isLt2M = file.size / 1024 / 1024 < 2
+        const isLt2M = file.size / 1024 / 1024 < 1
         if (!isLt2M) {
-            message.error("Image must smaller than 2MB!")
+            message.error("Image must smaller than 1MB!")
         }
         return isJpgOrPng && isLt2M
     }
