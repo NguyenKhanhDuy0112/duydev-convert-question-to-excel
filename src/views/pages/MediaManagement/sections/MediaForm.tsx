@@ -48,9 +48,13 @@ function MediaForm(props: MediaFormProps) {
     }
 
     const handleChange: UploadProps["onChange"] = (info: UploadChangeParam<UploadFile>) => {
-        getBase64(info.file.originFileObj as RcFile, (url) => {
-            setImageUrl(url as string)
-        })
+        try {
+            getBase64(info?.file?.originFileObj as RcFile, (url) => {
+                setImageUrl(url as string)
+            })
+        } catch (err) {
+            showNotification({ type: NotificationTypeEnum.Error, message: NotificationMessageEnum.UploadError })
+        }
     }
 
     const uploadButton = (

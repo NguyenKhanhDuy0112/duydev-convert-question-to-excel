@@ -1,5 +1,6 @@
 export interface ICategory {
     id?: string
+    category_id?: string
     name?: string
     url_link?: string
     name_localize?: string

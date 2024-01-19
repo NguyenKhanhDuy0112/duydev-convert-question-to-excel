@@ -1,5 +1,5 @@
 //CONSTANTS
-import { INIT_PAGINATION } from "@/constants"
+import { INIT_PAGINATION, TAB_LANGS } from "@/constants"
 
 //ENUMS
 import { FormatDateEnum, StatusCoupon } from "@/enums"
@@ -12,8 +12,10 @@ import { useGetCouponsTypeApiQuery } from "@/services/coupon.service"
 import { useGetCategoriesApiQuery } from "@/services/category.service"
 
 //COMPONENTS
-import { Col, DatePicker, Form, FormInstance, Input, InputNumber, Row, Select } from "antd"
+import { Card, Col, DatePicker, Divider, Form, FormInstance, Input, InputNumber, Row, Select, Tabs } from "antd"
 import TreeCheckbox from "@/components/TreeCheckbox"
+import UploadFile from "@/components/UploadFile"
+import TextEditor from "@/components/TextEditor"
 
 interface CouponFormProps {
     data?: ICoupon
@@ -35,37 +37,26 @@ function CouponForm(props: CouponFormProps) {
             labelAlign="left"
             wrapperCol={{ span: 24 }}
             form={form}
+            initialValues={{
+                langs: TAB_LANGS?.map((item) => ({ lang: item?.value })),
+            }}
         >
             <Row gutter={20}>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item label="Name" name={"name"}>
-                        <Input placeholder="Name" />
+                    <Form.Item name={"image"}>
+                        <UploadFile
+                            imageUrl={form.getFieldValue("image") || ""}
+                            onChange={(value) => form.setFieldValue("image", value)}
+                        />
                     </Form.Item>
                 </Col>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
                     <Form.Item label="Code" name={"code"}>
                         <Input placeholder="Code" />
                     </Form.Item>
-                </Col>
-            </Row>
-
-            <Row gutter={20}>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
                     <Form.Item label="Discount" name={"discount"}>
                         <InputNumber placeholder="Discount" />
                     </Form.Item>
-                </Col>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item label="Currency code" name={"currency_code"}>
-                        <Select placeholder="Select currency code">
-                            <Select.Option key={"$"}>$</Select.Option>
-                        </Select>
-                    </Form.Item>
-                </Col>
-            </Row>
-
-            <Row gutter={20}>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
                     <Form.Item label="Coupon type ID" name={"coupon_type_id"}>
                         <Select placeholder="Select coupon type">
                             {dataCouponType?.data?.map((item) => (
@@ -73,24 +64,6 @@ function CouponForm(props: CouponFormProps) {
                             ))}
                         </Select>
                     </Form.Item>
-                </Col>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item label="Prefix" name={"prefix"}>
-                        <Select placeholder="Select prefix">
-                            <Select.Option key={StatusCoupon.Off}>{StatusCoupon.Off}</Select.Option>
-                            <Select.Option key={StatusCoupon.On}>{StatusCoupon.On}</Select.Option>
-                        </Select>
-                    </Form.Item>
-                </Col>
-            </Row>
-
-            <Row gutter={20}>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item label="Link" name={"link"}>
-                        <Input placeholder="Link" />
-                    </Form.Item>
-                </Col>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
                     <Form.Item label="Expiration date" name={"expire_date"}>
                         <DatePicker format={FormatDateEnum.Default} />
                     </Form.Item>
@@ -121,12 +94,77 @@ function CouponForm(props: CouponFormProps) {
                         />
                     </Form.Item>
                 </Col>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item label="Description" name={"description"}>
-                        <Input.TextArea rows={4} placeholder="Description" />
-                    </Form.Item>
-                </Col>
             </Row>
+            <Divider />
+
+            <Form.List name="langs">
+                {(fields, { add, remove }) => (
+                    <Tabs>
+                        {fields.map((field, index) => (
+                            <Tabs.TabPane tab={TAB_LANGS[index].label} key={TAB_LANGS[index].value}>
+                                <Row gutter={16}>
+                                    <Col span={24}>
+                                        <Row gutter={24}>
+                                            <Col span={12}>
+                                                <Form.Item
+                                                    label="Name"
+                                                    name={[field.name, "name"]}
+                                                    fieldKey={[field.fieldKey || 0, "name"]}
+                                                >
+                                                    <Input placeholder="Name" />
+                                                </Form.Item>
+                                            </Col>
+                                            <Col span={12}>
+                                                <Form.Item
+                                                    label="Currency code"
+                                                    name={[field.name, "currency_code"]}
+                                                    fieldKey={[field.fieldKey || 0, "currency_code"]}
+                                                >
+                                                    <Select placeholder="Select currency code">
+                                                        <Select.Option key={"$"}>$</Select.Option>
+                                                    </Select>
+                                                </Form.Item>
+                                            </Col>
+                                            <Col span={12}>
+                                                <Form.Item
+                                                    label="Prefix"
+                                                    name={[field.name, "sub_title"]}
+                                                    fieldKey={[field.fieldKey || 0, "sub_title"]}
+                                                >
+                                                    <Select placeholder="Select prefix">
+                                                        <Select.Option key={StatusCoupon.Off}>
+                                                            {StatusCoupon.Off}
+                                                        </Select.Option>
+                                                        <Select.Option key={StatusCoupon.On}>
+                                                            {StatusCoupon.On}
+                                                        </Select.Option>
+                                                    </Select>
+                                                </Form.Item>
+                                            </Col>
+                                        </Row>
+                                        <Form.Item
+                                            name={[field.name, "description"]}
+                                            fieldKey={[field.fieldKey || 0, "description"]}
+                                            label="Content"
+                                        >
+                                            <TextEditor
+                                                value={
+                                                    form.getFieldValue(`${field.name}.description`)
+                                                        ? form.getFieldValue(`${field.name}.description`)
+                                                        : ""
+                                                }
+                                                onChange={(value) =>
+                                                    form.setFieldValue(`${field.name}.description`, value)
+                                                }
+                                            />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                            </Tabs.TabPane>
+                        ))}
+                    </Tabs>
+                )}
+            </Form.List>
         </Form>
     )
 }

@@ -17,7 +17,7 @@ export const mediaService = createApi({
                 }
             },
         }),
-        createMediaApi: builder.mutation<any, any>({
+        createMediaApi: builder.mutation<{ link_url: string }, any>({
             query: (body: IContentDetailForm) => ({
                 url: "/media",
                 body,

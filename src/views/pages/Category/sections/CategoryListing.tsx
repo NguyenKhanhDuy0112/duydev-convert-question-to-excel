@@ -3,10 +3,11 @@ import { ColumnsType } from "antd/es/table"
 import { Common, DataResponse, ICategory, ICategoryItem } from "@/models"
 
 //ICONS
-import { ReactComponent as DotMenuIc } from "@/assets/icons/dots_menu_icon.svg"
+import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 import { PlusOutlined } from "@ant-design/icons"
+
 //ENUMS
-import { PageRoute } from "@/enums"
+import { PageRoute, ParamsEnum } from "@/enums"
 
 //HOOKS
 import { useMemo, useState } from "react"
@@ -50,7 +51,17 @@ function CategoryListing(props: CategoryListingProps) {
             })
         } else {
             items.unshift({
-                label: <div onClick={() => navigate(`${PageRoute.MasterCenter}`)}>Create Master Center</div>,
+                label: (
+                    <div
+                        onClick={() =>
+                            navigate(
+                                `${PageRoute.MasterCenter}?${ParamsEnum.ID}=&${ParamsEnum.CATEGORY_ID}=${currentRecord?.id}`
+                            )
+                        }
+                    >
+                        Create Master Center
+                    </div>
+                ),
                 key: "1",
             })
         }
@@ -72,7 +83,17 @@ function CategoryListing(props: CategoryListingProps) {
             })
         } else {
             items.unshift({
-                label: <div onClick={() => navigate(`${PageRoute.MasterCenter}`)}>Create Master Center</div>,
+                label: (
+                    <div
+                        onClick={() =>
+                            navigate(
+                                `${PageRoute.MasterCenter}?${ParamsEnum.ID}=&${ParamsEnum.CATEGORY_ID}=${currentRecord?.category_id}&${ParamsEnum.SUB_CATEGORY_ID}=${currentRecord?.id}`
+                            )
+                        }
+                    >
+                        Create Master Center
+                    </div>
+                ),
                 key: "1",
             })
         }
@@ -158,7 +179,7 @@ function CategoryListing(props: CategoryListingProps) {
                     }}
                     trigger={["click"]}
                 >
-                    <Button type="text" className="dot-menu-action">
+                    <Button onClick={() => setCurrentRecord(record)} type="text" className="dot-menu-action">
                         <DotMenuIc />
                     </Button>
                 </Dropdown>
@@ -183,7 +204,7 @@ function CategoryListing(props: CategoryListingProps) {
                 rowKey={"id"}
                 dataSource={data?.data ? data?.data : []}
                 loading={isLoading}
-                pagination={{ current: 1, total: 20 }}
+                pagination={{ current: data?.page, total: data?.total }}
                 expandable={{
                     expandedRowRender: (record: ICategory) => {
                         return (
@@ -192,7 +213,11 @@ function CategoryListing(props: CategoryListingProps) {
                                     className="tableWrapper__table-detail"
                                     pagination={false}
                                     columns={columnsDetail}
-                                    dataSource={record?.items ? record?.items : []}
+                                    dataSource={
+                                        record?.items
+                                            ? record?.items?.map((item) => ({ ...item, category_id: record?.id }))
+                                            : []
+                                    }
                                 />
                             </div>
                         )

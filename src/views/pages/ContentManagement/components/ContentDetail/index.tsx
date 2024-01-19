@@ -8,7 +8,7 @@ import { useMemo } from "react"
 import { LangCodeEnum } from "@/enums"
 
 //ICONS
-import { ReactComponent as DotMenuIc } from "@/assets/icons/dots_menu_icon.svg"
+import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 import { PlusOutlined } from "@ant-design/icons"
 
 //COMPONENTS

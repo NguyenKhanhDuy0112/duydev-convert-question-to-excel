@@ -15,12 +15,22 @@ export interface ICoupon {
     coupon_type_id?: string
     sorting?: number
     image?: string
+    langs?: ICouponLang[]
     is_verify?: boolean
     created_at?: Date | null
     updated_at?: Date | null
     expired_at?: Date | null
     expire_date?: Date | null
     cate_types?: React.Key[]
+}
+
+export interface ICouponLang {
+    id?: string
+    name?: string
+    description?: string
+    currency_code?: string
+    prefix?: StatusCoupon
+    lang?: string
 }
 
 export interface ICouponType {

@@ -1,8 +1,8 @@
-import { ICategory, ICategoryItem } from "@/models"
+import { ICategory } from "@/models"
 import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table } from "antd"
 import { ColumnsType } from "antd/es/table"
-import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons"
-import { ReactComponent as DotMenuIc } from "@/assets/icons/dots_menu_icon.svg"
+import { PlusOutlined } from "@ant-design/icons"
+import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 
 interface FAQsListingProps {
     data: ICategory[]

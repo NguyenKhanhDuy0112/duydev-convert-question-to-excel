@@ -1,5 +1,5 @@
 import { Layout, Menu } from "antd"
-import { ReactComponent as LogoIc } from "@/assets/icons/logo.svg"
+import LogoIc from "@/assets/icons/logo.svg"
 import { MenuProps } from "rc-menu"
 import { useEffect, useMemo, useState } from "react"
 import { useProfile, useRouter } from "@/hooks"

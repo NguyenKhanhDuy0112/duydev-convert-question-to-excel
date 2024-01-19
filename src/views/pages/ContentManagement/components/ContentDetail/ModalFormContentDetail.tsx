@@ -1,10 +1,5 @@
-import { AssetsImages } from "@/assets/images"
-
 //CONSTANTS
 import { TAB_LANGS } from "@/constants"
-
-//ENUMS
-import { LangCodeEnum } from "@/enums"
 
 //HOOKS
 import { useEffect } from "react"
@@ -14,8 +9,8 @@ import { useRouter } from "@/hooks"
 import { IContentDetail, IContentDetailForm } from "@/models"
 
 //COMPONENTS
-import { Badge, Button, Card, Col, Form, Input, Modal, Row, Tabs } from "antd"
-import Editor from "@/components/Editor"
+import { Button, Card, Col, Form, Input, Modal, Row, Tabs } from "antd"
+import TextEditor from "@/components/TextEditor"
 
 interface ModalFormContentDetailProps {
     isLoading?: boolean
@@ -114,7 +109,7 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
                                                     fieldKey={[field.fieldKey || 0, "content"]}
                                                     label="Content"
                                                 >
-                                                    <Editor
+                                                    <TextEditor
                                                         value={
                                                             form.getFieldValue(`${field.name}.content`)
                                                                 ? form.getFieldValue(`${field.name}.content`)

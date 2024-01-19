@@ -12,7 +12,7 @@ import { ColumnsType } from "antd/es/table"
 import { FormatDateEnum, StatusEnum } from "@/enums"
 
 //ICONS
-import { ReactComponent as DotMenuIc } from "@/assets/icons/dots_menu_icon.svg"
+import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 import { PlusOutlined } from "@ant-design/icons"
 
 //COMPONENTS
@@ -129,6 +129,9 @@ function MasterCenterListing(props: MasterCenterListingProps) {
                 rowKey={"id"}
                 loading={loading}
                 dataSource={data?.data || []}
+                onChange={(pagination) => {
+                    console.log("Pagination: ", pagination)
+                }}
                 pagination={{ current: pagination?.page, total: data?.total, pageSize: pagination?.limit }}
             />
         </Space>

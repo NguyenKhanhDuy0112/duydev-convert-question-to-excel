@@ -2,7 +2,7 @@ import { Common, DataResponse, IRequestPaging, IUser, IUserGroup } from "@/model
 import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
 import { ColumnsType } from "antd/es/table"
 import { PlusOutlined } from "@ant-design/icons"
-import { ReactComponent as DotMenuIc } from "@/assets/icons/dots_menu_icon.svg"
+import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 import { useState } from "react"
 import { StatusEnum } from "@/enums"
 

@@ -1,12 +1,22 @@
-import { AssetsImages } from "@/assets/images"
-import Editor from "@/components/Editor"
+//CONSTANTS
 import { TAB_LANGS } from "@/constants"
+
+//ENUMS
 import { LangCodeEnum, MessageValidateForm } from "@/enums"
+
+//HOOKS
 import { useRouter } from "@/hooks"
-import { IContentForm, IContentItem } from "@/models"
-import { useGetContentTypeManagementApiQuery } from "@/services/contentManagement.service"
-import { Badge, Button, Card, Col, Form, Input, Modal, Row, Select, Tabs } from "antd"
 import { useEffect } from "react"
+
+//MODELS
+import { IContentForm, IContentItem } from "@/models"
+
+//SERVICES
+import { useGetContentTypeManagementApiQuery } from "@/services/contentManagement.service"
+
+//COMPONENTS
+import { Button, Card, Col, Form, Input, Modal, Row, Select, Tabs } from "antd"
+import TextEditor from "@/components/TextEditor"
 
 interface ModalFormContentProps {
     isLoading?: boolean
@@ -115,7 +125,7 @@ function ModalFormContent(props: ModalFormContentProps) {
                                                     fieldKey={[field.fieldKey || 0, "description"]}
                                                     rules={[{ required: true, message: "Description is required" }]}
                                                 >
-                                                    <Editor
+                                                    <TextEditor
                                                         value={form.getFieldValue(`${field.name}.description`) || ""}
                                                         onChange={(value) =>
                                                             form.setFieldsValue({

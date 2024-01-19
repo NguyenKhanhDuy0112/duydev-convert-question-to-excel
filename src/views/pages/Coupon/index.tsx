@@ -29,6 +29,7 @@ import CouponListing from "./sections/CouponListing"
 import CouponForm from "./sections/CouponForm"
 import PageWrapper from "@/components/PageWrapper"
 import { Button, Form } from "antd"
+import { useCreateMediaApiMutation } from "@/services/media.service"
 
 function Coupon() {
     //HOOKS
@@ -42,6 +43,7 @@ function Coupon() {
 
     //SERVICES
     const { data, isLoading: isLoadingList, refetch } = useGetCouponsApiQuery(pagination)
+    const [uploadImageApi, { isLoading: isLoadingUploadImage }] = useCreateMediaApiMutation()
     const [createCouponApi, { isLoading: isLoadingCreate }] = useCreateCouponApiMutation()
     const [updateCouponApi, { isLoading: isLoadingUpdate }] = useUpdateCouponApiMutation()
     const [deleteCouponApi, { isLoading: isLoadingDelete }] = useDeleteCouponApiMutation()
@@ -95,8 +97,27 @@ function Coupon() {
     }
 
     const handleSubmitForm = async (values: ICoupon) => {
-        const formValues = { ...couponDetail, ...values, cate_types: values?.cate_types?.filter((item) => item) }
+        const formValues = {
+            ...couponDetail,
+            ...values,
+            cate_types: values?.cate_types?.filter((item) => item),
+            expire_date: dayjs(values?.expire_date).toDate(),
+        }
         const isEdit = formValues?.id
+
+        if (values?.image && typeof values?.image !== "string") {
+            try {
+                const formData = new FormData()
+                formData.append("file", values?.image)
+                const responseImage = await uploadImageApi(formData).unwrap()
+                formValues.image = responseImage?.link_url
+            } catch (err) {
+                showNotification({
+                    type: NotificationTypeEnum.Error,
+                    message: NotificationMessageEnum.UploadError,
+                })
+            }
+        }
 
         try {
             if (isEdit) {
@@ -132,7 +153,7 @@ function Coupon() {
                             Cancel
                         </Button>
                         <Button
-                            loading={isLoadingCreate || isLoadingUpdate}
+                            loading={isLoadingCreate || isLoadingUpdate || isLoadingUploadImage}
                             icon={<SaveFilled />}
                             type="primary"
                             onClick={() => form.submit()}

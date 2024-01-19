@@ -1,7 +1,6 @@
-import { MessageValidateForm, StatusCoupon } from "@/enums"
+import { MessageValidateForm } from "@/enums"
 import { ICategory, ICoupon } from "@/models"
-import { DatePicker, Form, Input, InputNumber, Modal, Select, Switch } from "antd"
-import { ReactComponent as CloseIcon } from "@/assets/icons/close_icon.svg"
+import { Form, Input, Modal } from "antd"
 
 interface PersonalExperienceFormProps {
     data?: ICoupon

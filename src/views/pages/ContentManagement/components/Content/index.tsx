@@ -1,7 +1,7 @@
 import { AssetsImages } from "@/assets/images"
 
 //MODELS
-import { ICategory, IContent, IContentDetail, IContentDetailForm, IContentItem } from "@/models"
+import { IContentDetail, IContentItem } from "@/models"
 
 //ENUMS
 import { LangCodeEnum } from "@/enums"
@@ -15,7 +15,7 @@ import { useGetContentTypeManagementApiQuery } from "@/services/contentManagemen
 //COMPONENTS
 import { Badge, Button, Card, Dropdown, MenuProps } from "antd"
 import ContentDetail from "../ContentDetail"
-import { ReactComponent as DotMenuIc } from "@/assets/icons/dots_menu_icon.svg"
+import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 
 interface ContentProps {
     data?: IContentItem

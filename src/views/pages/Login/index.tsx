@@ -2,7 +2,7 @@ import { MessageValidateForm, NotificationMessageEnum, NotificationTypeEnum, Pag
 
 //COMPONENTS
 import { Button, Card, Col, Form, Input, Row } from "antd"
-import { ReactComponent as LogoIc } from "@/assets/icons/logo.svg"
+import LogoIc from "@/assets/icons/logo.svg"
 
 //MODELS
 import { useNotification, useRouter } from "@/hooks"

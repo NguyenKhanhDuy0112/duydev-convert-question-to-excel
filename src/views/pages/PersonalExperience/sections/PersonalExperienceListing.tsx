@@ -1,10 +1,10 @@
-import { ICategory, ICoupon } from "@/models"
-import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
+import { ICoupon } from "@/models"
+import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table } from "antd"
 import { ColumnsType } from "antd/es/table"
-import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons"
+import { PlusOutlined } from "@ant-design/icons"
 import moment from "moment"
 import { StatusCoupon } from "@/enums"
-import { ReactComponent as DotMenuIc } from "@/assets/icons/dots_menu_icon.svg"
+import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 
 interface PersonalExperienceListingProps {
     data: ICoupon[]

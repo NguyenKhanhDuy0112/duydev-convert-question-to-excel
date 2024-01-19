@@ -36,10 +36,12 @@ function MasterCenterForm(props: MasterCenterFormProps) {
     }, [data])
 
     const handleSelectCategory = (value: string) => {
-        const selectedCategory = dataCategories?.data?.find((item) => item.id === value)
+        const selectedCategory = dataCategories?.data?.find((item: ICategory) => item.id === value)
         form.setFieldsValue({ sub_category_id: data?.category_id ? data?.sub_category_id : undefined })
         setSelectedCategory(selectedCategory)
     }
+
+    console.log("selectedCategory: ", selectedCategory, "data: ", data)
 
     return (
         <Form onFinish={onSubmitForm} layout="vertical" labelAlign="left" wrapperCol={{ span: 24 }} form={form}>
@@ -97,7 +99,7 @@ function MasterCenterForm(props: MasterCenterFormProps) {
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
                     <Form.Item label="Sub category" name={"sub_category_id"}>
                         <Select placeholder="Select category">
-                            {selectedCategory?.subs?.map((item) => (
+                            {selectedCategory?.items?.map((item) => (
                                 <Select.Option key={item.id}>{item.name}</Select.Option>
                             ))}
                         </Select>

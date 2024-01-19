@@ -57,6 +57,17 @@ function MasterCenter() {
                     setDataDetail(couponDetail)
                     form.setFieldsValue({ ...couponDetail })
                 }
+            } else {
+                const body = {
+                    category_id: String(searchParams.get(ParamsEnum.CATEGORY_ID)),
+                    sub_category_id: String(searchParams.get(ParamsEnum.SUB_CATEGORY_ID)),
+                }
+                setDataDetail({
+                    ...body,
+                })
+                form.setFieldsValue({
+                    ...body,
+                })
             }
         }
     }, [searchParams, data])
