@@ -3,10 +3,17 @@ import { useModal, useNotification, useRouter } from "@/hooks"
 import { useEffect, useMemo, useState } from "react"
 
 //MODELS
-import { ICategoryType, ICoupon, IRequestPaging } from "@/models"
+import { ICategoryType, ICoupon, IMasterPageForm, IRequestPaging } from "@/models"
 
 //ENUMS
-import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
+import {
+    ContentTypeEnum,
+    MasterCateEnum,
+    NotificationMessageEnum,
+    NotificationTypeEnum,
+    PageRoute,
+    ParamsEnum,
+} from "@/enums"
 
 //CONSTANTS
 import { INIT_PAGINATION } from "@/constants"
@@ -18,6 +25,12 @@ import {
     useGetMasterPagesApiQuery,
     useUpdateMasterPageApiMutation,
 } from "@/services/masterPage.service"
+import {
+    useCreateContentManagementApiMutation,
+    useDeleteContentManagementApiMutation,
+    useGetContentTypeManagementApiQuery,
+    useUpdateContentManagementApiMutation,
+} from "@/services/contentManagement.service"
 
 //ICONS
 import { SaveFilled } from "@ant-design/icons"
@@ -40,10 +53,17 @@ function MasterPage() {
     const [dataDetail, setDataDetail] = useState<ICategoryType | undefined>({})
 
     //SERVICES
+    const { data: contentTypes } = useGetContentTypeManagementApiQuery()
+
     const { data, isFetching: isFetchingList, refetch } = useGetMasterPagesApiQuery(pagination)
-    const [createContentTypeApi, { isLoading: isLoadingCreate }] = useCreateMasterPageApiMutation()
-    const [updateContentTypeApi, { isLoading: isLoadingUpdate }] = useUpdateMasterPageApiMutation()
-    const [deleteContentTypeApi, { isLoading: isLoadingDelete }] = useDeleteMasterPageApiMutation()
+    const [createMasterPageApi, { isLoading: isLoadingCreate }] = useCreateMasterPageApiMutation()
+    const [updateMasterPageApi, { isLoading: isLoadingUpdate }] = useUpdateMasterPageApiMutation()
+    const [deleteMasterPageApi, { isLoading: isLoadingDelete }] = useDeleteMasterPageApiMutation()
+
+    //SERVICES
+    const [createContentApi, { isLoading: isLoadingCreateContent }] = useCreateContentManagementApiMutation()
+    const [updateContentApi, { isLoading: isLoadingUpdateContent }] = useUpdateContentManagementApiMutation()
+    const [deleteContentApi, { isLoading: isLoadingDeleteContent }] = useDeleteContentManagementApiMutation()
 
     //ANTD
     const [form] = Form.useForm()
@@ -66,7 +86,7 @@ function MasterPage() {
 
     const handleConfirmDelete = async () => {
         try {
-            await deleteContentTypeApi(dataDetail || {}).unwrap()
+            await deleteMasterPageApi(dataDetail || {}).unwrap()
 
             showNotification({
                 type: NotificationTypeEnum.Success,
@@ -94,15 +114,32 @@ function MasterPage() {
         return navigate(`${PageRoute.MasterPage}?id=${values?.id ? values?.id : ""}`)
     }
 
-    const handleSubmitForm = async (values: ICategoryType) => {
+    const handleSubmitForm = async (values: IMasterPageForm) => {
         const formValues = { ...dataDetail, ...values }
         const isEdit = formValues?.id
 
+        formValues.type_id = contentTypes?.data?.find((item) => item?.name === ContentTypeEnum.PAGE)?.id || ""
+        formValues.master_type = MasterCateEnum.MASTER_PAGE
+
         try {
             if (isEdit) {
-                await updateContentTypeApi(formValues).unwrap()
+                const response = await updateMasterPageApi(formValues).unwrap()
+                formValues.cate_type_id = response?.id || ""
+                delete formValues.route
+                delete formValues.name_localize
+                delete formValues.name
+                await updateContentApi({
+                    ...formValues,
+                })
             } else {
-                await createContentTypeApi(formValues).unwrap()
+                const response = await createMasterPageApi(formValues).unwrap()
+                formValues.cate_type_id = response?.id || ""
+                delete formValues.route
+                delete formValues.name_localize
+                delete formValues.name
+                await createContentApi({
+                    ...formValues,
+                })
             }
 
             showNotification({
@@ -132,7 +169,9 @@ function MasterPage() {
                             Cancel
                         </Button>
                         <Button
-                            loading={isLoadingCreate || isLoadingUpdate}
+                            loading={
+                                isLoadingCreate || isLoadingUpdate || isLoadingCreateContent || isLoadingUpdateContent
+                            }
                             icon={<SaveFilled />}
                             type="primary"
                             onClick={() => form.submit()}

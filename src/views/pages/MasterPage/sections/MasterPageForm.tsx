@@ -82,7 +82,7 @@ function MasterPageForm(props: MasterPageFormProps) {
                                             label="Name"
                                             name={[field.name, "name"]}
                                             fieldKey={[field.fieldKey || 0, "name"]}
-                                            rules={[{ required: true, message: "Name is required" }]}
+                                            rules={[{ required: true, message: MessageValidateForm.Required }]}
                                         >
                                             <Input placeholder="Name" />
                                         </Form.Item>
@@ -91,7 +91,6 @@ function MasterPageForm(props: MasterPageFormProps) {
                                             label="Description"
                                             name={[field.name, "description"]}
                                             fieldKey={[field.fieldKey || 0, "description"]}
-                                            rules={[{ required: true, message: "Description is required" }]}
                                         >
                                             <TextEditor
                                                 value={form.getFieldValue(`${field.name}.description`) || ""}
