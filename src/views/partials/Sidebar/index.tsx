@@ -1,12 +1,20 @@
-import { Layout, Menu } from "antd"
-import LogoIc from "@/assets/icons/logo.svg"
-import { MenuProps } from "rc-menu"
+//HOOKS
 import { useEffect, useMemo, useState } from "react"
 import { useProfile, useRouter } from "@/hooks"
+
+//CONSTANTS
 import { SIDE_BARS } from "@/constants/sidebar.constant"
-import LinkItem from "./components/LinkItem"
+
+//MODELS
 import { SidebarItem } from "@/models"
-import { PageRoute } from "@/enums"
+import { MenuProps } from "rc-menu"
+
+//ICONS
+import LogoIc from "@/assets/icons/logo.svg"
+
+//COMPONENTS
+import LinkItem from "./components/LinkItem"
+import { Layout, Menu } from "antd"
 
 type MenuItem = Required<MenuProps>["items"][number]
 
@@ -37,8 +45,7 @@ function Sidebar(props: SidebarProps) {
     const [defaultSelectedKey, setDefaultSelectedKey] = useState<string>("")
     const [keys, setKeys] = useState<any>()
     const { permissions, groups } = useProfile()
-
-    const { navigate, pathname } = useRouter()
+    const { pathname } = useRouter()
 
     useEffect(() => {
         const key = keys.find((item: any) => item.link === pathname)
@@ -76,7 +83,7 @@ function Sidebar(props: SidebarProps) {
                         const itemParent = getItem(
                             <LinkItem isParent label={option.label} key={option.key} link={option?.link} />,
                             option.key,
-                            <img src={option.icon} alt="" />,
+                            <option.icon />,
 
                             itemsChildren
                         )
@@ -94,7 +101,7 @@ function Sidebar(props: SidebarProps) {
                         const itemParent = getItem(
                             <LinkItem isParent label={option.label} key={option.key} link={option?.link} />,
                             option.key,
-                            <img src={option.icon} alt="" />
+                            <option.icon />
                         )
                         menus.push(itemParent)
                     }
@@ -113,7 +120,6 @@ function Sidebar(props: SidebarProps) {
                 <LogoIc />
             </div>
             <Menu
-                defaultOpenKeys={["admin", "report", "merchant", "partner", PageRoute.ContentManagements]}
                 selectedKeys={[defaultSelectedKey]}
                 mode="inline"
                 items={itemsMenu}

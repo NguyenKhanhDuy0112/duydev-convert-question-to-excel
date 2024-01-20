@@ -1,16 +1,33 @@
-import { Upload, message } from "antd"
+//MODELS
 import type { RcFile, UploadChangeParam, UploadProps, UploadFile as UploadFileAntd } from "antd/es/upload"
+
+//HOOKS
 import { useMemo, useState } from "react"
-import { PlusOutlined } from "@ant-design/icons"
+import { useModal } from "@/hooks"
+
+//ICONS
+import { CloudUploadOutlined } from "@ant-design/icons"
+
+//UTILITIES
 import { getBase64 } from "@/helpers/utilities"
+
+//ENUMS
+import { UploadTypeEnum } from "@/enums"
+
+//COMPONENTS
+import { Upload, message } from "antd"
+import ModalMedia from "../ModalMedia"
 
 interface UploadFileProps {
     imageUrl?: string
-    onChange: (info: RcFile) => void
+    uploadType: UploadTypeEnum
+    onChange: (info: RcFile | string) => void
 }
 function UploadFile(props: UploadFileProps) {
-    const { imageUrl, onChange } = props
+    const { imageUrl, uploadType, onChange } = props
     const [image, setImage] = useState<string>(imageUrl || "")
+    const { visible, toggle } = useModal()
+
     const beforeUpload = (file: RcFile) => {
         const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png"
         if (!isJpgOrPng) {
@@ -36,25 +53,39 @@ function UploadFile(props: UploadFileProps) {
         } else {
             return (
                 <div>
-                    <PlusOutlined />
+                    <CloudUploadOutlined size={30} />
                     <div style={{ marginTop: 8 }}>Upload</div>
                 </div>
             )
         }
     }, [image])
 
+    const handleSelectImage = (image: string) => {
+        toggle()
+        setImage(image)
+        onChange(image as string)
+    }
+
     return (
-        <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            beforeUpload={beforeUpload}
-            onChange={handleChange}
-            accept="image/*"
-        >
-            {renderImageUrl}
-        </Upload>
+        <>
+            {uploadType === UploadTypeEnum.GALLERY ? (
+                <button onClick={toggle} type="button" className="uploadFile">
+                    {renderImageUrl}
+                </button>
+            ) : (
+                <Upload
+                    name="avatar"
+                    listType="picture-card"
+                    className="avatar-uploader"
+                    showUploadList={false}
+                    beforeUpload={beforeUpload}
+                    onChange={handleChange}
+                >
+                    {renderImageUrl}
+                </Upload>
+            )}
+            <ModalMedia show={visible} onClose={toggle} onSelectImage={handleSelectImage} />
+        </>
     )
 }
 

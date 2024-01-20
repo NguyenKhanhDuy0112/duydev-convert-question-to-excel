@@ -2,7 +2,7 @@
 import { TAB_LANGS } from "@/constants"
 
 //ENUMS
-import { LangCodeEnum, MessageValidateForm } from "@/enums"
+import { ContentTypeEnum, LangCodeEnum, MasterCateEnum, MessageValidateForm } from "@/enums"
 
 //HOOKS
 import { useRouter } from "@/hooks"
@@ -46,7 +46,6 @@ function ModalFormContent(props: ModalFormContentProps) {
                 items: [{ ...data?.en }, { ...data?.vi }],
             }
             form.setFieldsValue(payload)
-            console.log("Data: ", payload)
         } else {
         }
     }, [data])
@@ -56,11 +55,11 @@ function ModalFormContent(props: ModalFormContentProps) {
             items: values?.items,
             cate_type_id: params?.cateTypeID as string,
             type_id: values?.type_id,
+            master_type: MasterCateEnum.COUPON_MASTER_CATE,
             master_content_id: data && data[LangCodeEnum.EN] ? data[LangCodeEnum.EN].master_content_id : undefined,
         }
 
-        // onSubmitForm(payload)
-        console.log("Payload: ", payload)
+        onSubmitForm(payload)
     }
 
     return (
@@ -94,9 +93,11 @@ function ModalFormContent(props: ModalFormContentProps) {
                             name={`type_id`}
                         >
                             <Select placeholder="Select category type">
-                                {contentTypes?.data?.map((item) => (
-                                    <Select.Option key={item.id}>{item.name}</Select.Option>
-                                ))}
+                                {contentTypes?.data
+                                    ?.filter((item) => item?.name !== ContentTypeEnum.PAGE)
+                                    ?.map((item) => (
+                                        <Select.Option key={item.id}>{item.name}</Select.Option>
+                                    ))}
                             </Select>
                         </Form.Item>
                     </Col>

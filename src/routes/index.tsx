@@ -20,7 +20,7 @@ import { updateProfile } from "@/redux/modules/profile/profileSlice"
 import { IUser } from "@/models"
 
 //COMPONENTS
-import Loader from "@/components/Loader/Loader"
+const Loader = lazy(() => import("@/components/Loader/Loader"))
 
 //CONTAINERS
 const UnAuthenticate = lazy(() => import("@/views/containers/UnAuthenticate"))
@@ -34,10 +34,9 @@ const NotFound = lazy(() => import("@/views/pages/NotFound"))
 const Category = lazy(() => import("@/views/pages/Category"))
 const Coupon = lazy(() => import("@/views/pages/Coupon"))
 const ContentManagement = lazy(() => import("@/views/pages/ContentManagement"))
-const FAQs = lazy(() => import("@/views/pages/GeneralContent/FAQs"))
 const UserManagement = lazy(() => import("@/views/pages/UserManagement"))
-const PersonalExperience = lazy(() => import("@/views/pages/PersonalExperience"))
 const MasterCenter = lazy(() => import("@/views/pages/MasterCenter"))
+const MasterPage = lazy(() => import("@/views/pages/MasterPage"))
 const MediaManagement = lazy(() => import("@/views/pages/MediaManagement"))
 
 const appRoutes: RouteObject[] = [
@@ -75,25 +74,16 @@ const appRoutes: RouteObject[] = [
                 element: <MediaManagement />,
             },
             {
-                path: "general-contents",
-                children: [
-                    {
-                        path: "FAQs",
-                        element: <FAQs />,
-                    },
-                    {
-                        path: "personal-experience",
-                        element: <PersonalExperience />,
-                    },
-                ],
-            },
-            {
                 path: "content-managements/:cateTypeID",
                 element: <ContentManagement />,
             },
             {
                 path: "master-center",
                 element: <MasterCenter />,
+            },
+            {
+                path: "master-page",
+                element: <MasterPage />,
             },
             {
                 path: "users-management",

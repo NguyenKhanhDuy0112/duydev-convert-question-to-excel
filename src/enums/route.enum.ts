@@ -11,6 +11,7 @@ export enum PageRoute {
     UserManagement = "/users-management",
     PersonalExperience = "/general-contents/personal-experience",
     MediaManagement = "/media-management",
+    MasterPage = "/master-page",
 }
 
 export enum ParamsEnum {

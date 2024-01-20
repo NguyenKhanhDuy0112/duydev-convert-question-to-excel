@@ -1,13 +1,17 @@
-import BlankLayout from "@/views/layouts/BlankLayout";
-import { Outlet } from "react-router-dom";
+import { Suspense } from "react"
+import { Outlet } from "react-router-dom"
 
+//COMPONENTS
+import Loader from "@/components/Loader/Loader"
+import BlankLayout from "@/views/layouts/BlankLayout"
 function UnAuthenticate() {
-    
-    return ( 
+    return (
         <BlankLayout>
-            <Outlet/>
+            <Suspense fallback={<Loader />}>
+                <Outlet />
+            </Suspense>
         </BlankLayout>
-     );
+    )
 }
 
-export default UnAuthenticate;
+export default UnAuthenticate

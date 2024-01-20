@@ -5,6 +5,7 @@ export const INIT_PAGINATION = {
     page: 1,
     limit: 10,
     search: "",
+    lang: LangCodeEnum.VI,
     project_id: ProjectIDs.Project_1,
 }
 

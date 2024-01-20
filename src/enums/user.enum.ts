@@ -11,5 +11,7 @@ export enum PermissionUserEnum {
     CategoryManagement = "category_management",
     SettingsManagement = "settings_management",
     CouponManagement = "coupon_management",
+    MasterPage = "master_page",
+    MasterCenter = "master_center",
     UserInfo = "user_info",
 }

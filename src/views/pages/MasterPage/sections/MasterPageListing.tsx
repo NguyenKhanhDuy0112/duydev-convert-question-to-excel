@@ -26,7 +26,7 @@ interface MasterCenterListingProps {
     pagination?: IRequestPaging
 }
 
-function MasterCenterListing(props: MasterCenterListingProps) {
+function MasterPageListing(props: MasterCenterListingProps) {
     const { data, pagination, loading, onActionForm, onDelete } = props
 
     //STATES
@@ -61,35 +61,6 @@ function MasterCenterListing(props: MasterCenterListingProps) {
             },
         },
         {
-            title: "Category",
-            dataIndex: "category",
-            key: "category",
-            render: (value: ICategory) => {
-                return <span>{Common.renderData(value?.name)}</span>
-            },
-        },
-        {
-            title: "Sub Category",
-            dataIndex: "sub_category",
-            key: "sub_category",
-            render: (value: ICategory) => {
-                return <span>{Common.renderData(value?.name)}</span>
-            },
-        },
-        {
-            title: "Status",
-            dataIndex: "is_active",
-            key: "is_active",
-            render: (value: boolean) => {
-                return (
-                    <Tag color={value ? "green-inverse" : "red-inverse"}>
-                        {value ? StatusEnum.Activated : StatusEnum.Deactivated}
-                    </Tag>
-                )
-            },
-        },
-
-        {
             title: "Created at",
             dataIndex: "created_at",
             key: "created_at",
@@ -115,8 +86,13 @@ function MasterCenterListing(props: MasterCenterListingProps) {
     return (
         <Space direction="vertical" size={"large"}>
             <Row justify={"space-between"}>
-                <Col>
+                <Col span={6}>
                     <Input.Search type="primary" placeholder="Search by name" />
+                </Col>
+                <Col xl={{ span: 3 }} lg={{ span: 4 }} xs={{ span: 6 }}>
+                    <Button onClick={() => onActionForm({})} icon={<PlusOutlined />} className="w-100" type="primary">
+                        Create New
+                    </Button>
                 </Col>
             </Row>
             <Table
@@ -133,4 +109,4 @@ function MasterCenterListing(props: MasterCenterListingProps) {
     )
 }
 
-export default MasterCenterListing
+export default MasterPageListing

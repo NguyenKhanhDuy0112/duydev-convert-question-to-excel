@@ -13,7 +13,6 @@ import { INIT_PAGINATION } from "@/constants"
 
 //SERVICES
 import {
-    useCreateContentTypeApiMutation,
     useDeleteContentTypeApiMutation,
     useGetContentTypeApiQuery,
     useUpdateContentTypeApiMutation,
@@ -41,7 +40,6 @@ function MasterCenter() {
 
     //SERVICES
     const { data, isFetching: isFetchingList, refetch } = useGetContentTypeApiQuery(pagination)
-    const [createContentTypeApi, { isLoading: isLoadingCreate }] = useCreateContentTypeApiMutation()
     const [updateContentTypeApi, { isLoading: isLoadingUpdate }] = useUpdateContentTypeApiMutation()
     const [deleteContentTypeApi, { isLoading: isLoadingDelete }] = useDeleteContentTypeApiMutation()
 
@@ -58,15 +56,21 @@ function MasterCenter() {
                     form.setFieldsValue({ ...couponDetail })
                 }
             } else {
-                const body = {
-                    category_id: String(searchParams.get(ParamsEnum.CATEGORY_ID)),
-                    sub_category_id: String(searchParams.get(ParamsEnum.SUB_CATEGORY_ID)),
+                const body: ICategoryType = {}
+
+                if (searchParams.get(ParamsEnum.CATEGORY_ID)) {
+                    body.category_id = String(searchParams.get(ParamsEnum.CATEGORY_ID))
                 }
+                if (searchParams.get(ParamsEnum.SUB_CATEGORY_ID)) {
+                    body.sub_category_id = String(searchParams.get(ParamsEnum.SUB_CATEGORY_ID))
+                }
+
                 setDataDetail({
                     ...body,
                 })
                 form.setFieldsValue({
                     ...body,
+                    is_active: true,
                 })
             }
         }
@@ -106,19 +110,20 @@ function MasterCenter() {
         const formValues = { ...dataDetail, ...values }
         const isEdit = formValues?.id
 
+        if (!values?.sub_category_id) {
+            delete formValues.sub_category_id
+        }
+
         try {
             if (isEdit) {
                 await updateContentTypeApi(formValues).unwrap()
-            } else {
-                await createContentTypeApi(formValues).unwrap()
+                showNotification({
+                    type: NotificationTypeEnum.Success,
+                    message: isEdit ? NotificationMessageEnum.UpdateSuccess : NotificationMessageEnum.CreateSuccess,
+                })
+                refetch()
+                navigate(-1)
             }
-
-            showNotification({
-                type: NotificationTypeEnum.Success,
-                message: isEdit ? NotificationMessageEnum.UpdateSuccess : NotificationMessageEnum.CreateSuccess,
-            })
-            refetch()
-            navigate(-1)
         } catch (err) {
             showNotification({
                 type: NotificationTypeEnum.Error,
@@ -140,7 +145,7 @@ function MasterCenter() {
                             Cancel
                         </Button>
                         <Button
-                            loading={isLoadingCreate || isLoadingUpdate}
+                            loading={isLoadingUpdate}
                             icon={<SaveFilled />}
                             type="primary"
                             onClick={() => form.submit()}

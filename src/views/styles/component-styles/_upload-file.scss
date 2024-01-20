@@ -1,0 +1,16 @@
+.uploadFile {
+    border: 1px dashed $primary;
+    border-radius: 10px;
+    height: 350px;
+    width: 100%;
+    padding: 1rem;
+    cursor: pointer;
+
+    .anticon.anticon-cloud-upload {
+        font-size: 60px;
+    }
+
+    img {
+        width: 100%;
+    }
+}

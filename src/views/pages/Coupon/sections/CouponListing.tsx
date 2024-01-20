@@ -135,11 +135,11 @@ function CouponListing(props: CouponListingProps) {
     return (
         <Space direction="vertical" size={"large"}>
             <Row justify={"space-between"}>
-                <Col span={6}>
+                <Col>
                     <Input.Search type="primary" placeholder="Search by name" />
                 </Col>
-                <Col xl={{ span: 3 }} lg={{ span: 4 }} xs={{ span: 6 }}>
-                    <Button onClick={() => onActionForm({})} icon={<PlusOutlined />} className="w-100" type="primary">
+                <Col>
+                    <Button onClick={() => onActionForm({})} icon={<PlusOutlined />} type="primary">
                         Create New
                     </Button>
                 </Col>

@@ -1,6 +1,6 @@
 import { PageRoute, PermissionUserEnum, RoleUserEnum } from "@/enums"
 import { SidebarItem } from "@/models"
-import { AppstoreOutlined, SettingOutlined } from "@ant-design/icons"
+import { AppstoreOutlined, UserOutlined, InboxOutlined } from "@ant-design/icons"
 
 export const SIDE_BARS: SidebarItem[] = [
     {
@@ -13,7 +13,7 @@ export const SIDE_BARS: SidebarItem[] = [
     {
         key: PageRoute.ContentManagements,
         label: "Content Management",
-        icon: AppstoreOutlined,
+        icon: InboxOutlined,
         permission: PermissionUserEnum.CategoryManagement,
         children: [
             {
@@ -25,9 +25,17 @@ export const SIDE_BARS: SidebarItem[] = [
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
             },
             {
-                key: "master_cate_type",
+                key: PermissionUserEnum.MasterCenter,
                 link: PageRoute.MasterCenter,
                 label: "Master Center",
+                icon: AppstoreOutlined,
+                permission: PermissionUserEnum.CategoryManagement,
+                roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
+            },
+            {
+                key: PermissionUserEnum.MasterPage,
+                link: PageRoute.MasterPage,
+                label: "Master Page",
                 icon: AppstoreOutlined,
                 permission: PermissionUserEnum.CategoryManagement,
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
@@ -53,7 +61,7 @@ export const SIDE_BARS: SidebarItem[] = [
     {
         key: "admin",
         label: "Admin",
-        icon: SettingOutlined,
+        icon: UserOutlined,
         permission: PermissionUserEnum.UserManagement,
         children: [
             {

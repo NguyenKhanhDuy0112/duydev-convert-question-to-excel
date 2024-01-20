@@ -1,4 +1,4 @@
-import { LangCodeEnum } from "@/enums"
+import { LangCodeEnum, MasterCateEnum } from "@/enums"
 import { IContentDetailList } from "./contentDetail.model"
 
 export interface IContent {
@@ -20,6 +20,7 @@ export interface IContentForm {
     items: IContent[]
     cate_type_id: string
     type_id: string
+    master_type: MasterCateEnum
     master_content_id?: string
 }
 

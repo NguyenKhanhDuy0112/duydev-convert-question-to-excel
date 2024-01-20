@@ -2,7 +2,7 @@
 import { INIT_PAGINATION, TAB_LANGS } from "@/constants"
 
 //ENUMS
-import { FormatDateEnum, StatusCoupon } from "@/enums"
+import { FormatDateEnum, StatusCoupon, UploadTypeEnum } from "@/enums"
 
 //MODELS
 import { ICategory, ICoupon } from "@/models"
@@ -12,7 +12,7 @@ import { useGetCouponsTypeApiQuery } from "@/services/coupon.service"
 import { useGetCategoriesApiQuery } from "@/services/category.service"
 
 //COMPONENTS
-import { Card, Col, DatePicker, Divider, Form, FormInstance, Input, InputNumber, Row, Select, Tabs } from "antd"
+import { Col, DatePicker, Divider, Form, FormInstance, Input, InputNumber, Row, Select, Tabs } from "antd"
 import TreeCheckbox from "@/components/TreeCheckbox"
 import UploadFile from "@/components/UploadFile"
 import TextEditor from "@/components/TextEditor"
@@ -45,6 +45,7 @@ function CouponForm(props: CouponFormProps) {
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
                     <Form.Item name={"image"}>
                         <UploadFile
+                            uploadType={UploadTypeEnum.GALLERY}
                             imageUrl={form.getFieldValue("image") || ""}
                             onChange={(value) => form.setFieldValue("image", value)}
                         />
@@ -141,23 +142,16 @@ function CouponForm(props: CouponFormProps) {
                                                     </Select>
                                                 </Form.Item>
                                             </Col>
+                                            <Col span={12}>
+                                                <Form.Item
+                                                    name={[field.name, "description"]}
+                                                    fieldKey={[field.fieldKey || 0, "description"]}
+                                                    label="Description"
+                                                >
+                                                    <Input.TextArea rows={4} placeholder="Description" />
+                                                </Form.Item>
+                                            </Col>
                                         </Row>
-                                        <Form.Item
-                                            name={[field.name, "description"]}
-                                            fieldKey={[field.fieldKey || 0, "description"]}
-                                            label="Content"
-                                        >
-                                            <TextEditor
-                                                value={
-                                                    form.getFieldValue(`${field.name}.description`)
-                                                        ? form.getFieldValue(`${field.name}.description`)
-                                                        : ""
-                                                }
-                                                onChange={(value) =>
-                                                    form.setFieldValue(`${field.name}.description`, value)
-                                                }
-                                            />
-                                        </Form.Item>
                                     </Col>
                                 </Row>
                             </Tabs.TabPane>
