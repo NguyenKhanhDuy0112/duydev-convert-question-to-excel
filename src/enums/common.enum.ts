@@ -44,3 +44,9 @@ export enum StatusEnum {
     Activated = "Activated",
     Deactivated = "Deactivated",
 }
+
+export enum DeviceTypeEnum {
+    Mobile = "Mobile",
+    Desktop = "Desktop",
+    Tablet = "Tablet",
+}

@@ -19,7 +19,7 @@ import {
 import { NotificationMessageEnum, NotificationTypeEnum } from "@/enums"
 
 //ICONS
-import { PlusOutlined } from "@ant-design/icons"
+import { PlusOutlined, EyeOutlined } from "@ant-design/icons"
 
 //COMPONENTS
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
@@ -30,10 +30,11 @@ import { Button, Space } from "antd"
 
 interface EditContentProps {
     data?: IContentList
+    onViewContent: () => void
     refetchContent: () => void
 }
 function EditContent(props: EditContentProps) {
-    const { data, refetchContent } = props
+    const { data, refetchContent, onViewContent } = props
 
     //HOOKS
     const { visible: visibleModalEditContent, toggle: toggleModalEditContent } = useModal()
@@ -183,7 +184,10 @@ function EditContent(props: EditContentProps) {
 
     return (
         <>
-            <div className="d-flex justify-end m-b-4">
+            <div className="d-flex justify-between m-b-4">
+                <Button onClick={onViewContent} icon={<EyeOutlined />} type="primary">
+                    View content
+                </Button>
                 <Button onClick={handleCreateContent} icon={<PlusOutlined />} type="primary">
                     Create New Content
                 </Button>

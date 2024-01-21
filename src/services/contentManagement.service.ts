@@ -28,6 +28,17 @@ export const contentManagementService = createApi({
                 }
             },
         }),
+        getContentManagementMasterPageApi: builder.query<DataResponse<IContentList>, { page_id: string }>({
+            query: (params) => ({
+                url: `/content-mn/master-page/${params?.page_id}`,
+                method: "GET",
+            }),
+            transformResponse: (response: IContentList) => {
+                return {
+                    data: response,
+                }
+            },
+        }),
         getCategoryContentManagementApi: builder.query<DataResponse<ICategory[]>, { project_id: string }>({
             query: (params: { project_id: string }) => ({
                 url: `/content-mn/category-content/${params?.project_id}`,
@@ -76,6 +87,9 @@ export const contentManagementService = createApi({
 export const {
     useGetContentManagementApiQuery,
     useLazyGetContentManagementApiQuery,
+
+    useGetContentManagementMasterPageApiQuery,
+    useLazyGetContentManagementMasterPageApiQuery,
 
     useGetContentTypeManagementApiQuery,
     useLazyGetContentTypeManagementApiQuery,

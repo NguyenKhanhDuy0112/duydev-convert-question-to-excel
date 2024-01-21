@@ -9,6 +9,8 @@ export interface ICategory {
     items?: ICategory[]
     subs?: ICategory[]
     is_active?: boolean
+    slug?: string
+    parent_slug?: string
     sorting?: number
     created_at?: Date | null
     updated_at?: Date | null

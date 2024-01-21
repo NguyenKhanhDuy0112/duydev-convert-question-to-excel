@@ -5,11 +5,11 @@ import { useState } from "react"
 import moment from "moment"
 
 //MODELS
-import { Common, DataResponse, ICategory, ICategoryType, IRequestPaging } from "@/models"
+import { Common, DataResponse, ICategoryType, IMasterPage, IRequestPaging } from "@/models"
 import { ColumnsType } from "antd/es/table"
 
 //ENUMS
-import { FormatDateEnum, StatusEnum } from "@/enums"
+import { FormatDateEnum } from "@/enums"
 
 //ICONS
 import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
@@ -19,10 +19,10 @@ import { PlusOutlined } from "@ant-design/icons"
 import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
 
 interface MasterCenterListingProps {
-    data?: DataResponse<ICategoryType[]>
+    data?: DataResponse<IMasterPage[]>
     loading?: boolean
-    onDelete: (data?: ICategoryType) => void
-    onActionForm: (value?: ICategoryType) => void
+    onDelete: (data?: IMasterPage) => void
+    onActionForm: (value?: IMasterPage) => void
     pagination?: IRequestPaging
 }
 
@@ -30,7 +30,7 @@ function MasterPageListing(props: MasterCenterListingProps) {
     const { data, pagination, loading, onActionForm, onDelete } = props
 
     //STATES
-    const [currentRecord, setCurrentRecord] = useState<ICategoryType>({})
+    const [currentRecord, setCurrentRecord] = useState<IMasterPage>({})
 
     const items: MenuProps["items"] = [
         {
@@ -43,7 +43,7 @@ function MasterPageListing(props: MasterCenterListingProps) {
         },
     ]
 
-    const columns: ColumnsType<ICategoryType> = [
+    const columns: ColumnsType<IMasterPage> = [
         {
             title: "Name",
             dataIndex: "name",
@@ -56,6 +56,14 @@ function MasterPageListing(props: MasterCenterListingProps) {
             title: "Localise",
             dataIndex: "name_localize",
             key: "name_localize",
+            render: (value: string) => {
+                return <span>{Common.renderData(value)}</span>
+            },
+        },
+        {
+            title: "Route",
+            dataIndex: "route",
+            key: "route",
             render: (value: string) => {
                 return <span>{Common.renderData(value)}</span>
             },

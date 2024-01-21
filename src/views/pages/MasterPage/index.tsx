@@ -28,6 +28,7 @@ import {
 import {
     useCreateContentManagementApiMutation,
     useDeleteContentManagementApiMutation,
+    useGetContentManagementMasterPageApiQuery,
     useGetContentTypeManagementApiQuery,
     useUpdateContentManagementApiMutation,
 } from "@/services/contentManagement.service"
@@ -54,6 +55,16 @@ function MasterPage() {
 
     //SERVICES
     const { data: contentTypes } = useGetContentTypeManagementApiQuery()
+    const { data: contentMasterPage } = useGetContentManagementMasterPageApiQuery(
+        {
+            page_id: dataDetail?.id || "",
+        },
+        {
+            skip: !dataDetail?.id,
+        }
+    )
+
+    console.log("contentMasterPage: ", contentMasterPage)
 
     const { data, isFetching: isFetchingList, refetch } = useGetMasterPagesApiQuery(pagination)
     const [createMasterPageApi, { isLoading: isLoadingCreate }] = useCreateMasterPageApiMutation()

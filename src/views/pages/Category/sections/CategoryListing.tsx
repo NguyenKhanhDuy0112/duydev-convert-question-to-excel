@@ -43,7 +43,13 @@ function CategoryListing(props: CategoryListingProps) {
         if (currentRecord?.cate_type_id) {
             items.unshift({
                 label: (
-                    <div onClick={() => navigate(`${PageRoute.ContentManagements}/${currentRecord?.cate_type_id}`)}>
+                    <div
+                        onClick={() =>
+                            navigate(
+                                `${PageRoute.ContentManagements}/${currentRecord?.cate_type_id}?${ParamsEnum.CAT_SLUG}=${currentRecord?.slug}`
+                            )
+                        }
+                    >
                         View
                     </div>
                 ),
@@ -75,7 +81,13 @@ function CategoryListing(props: CategoryListingProps) {
         if (currentRecord?.cate_type_id) {
             items.unshift({
                 label: (
-                    <div onClick={() => navigate(`${PageRoute.ContentManagements}/${currentRecord?.cate_type_id}`)}>
+                    <div
+                        onClick={() =>
+                            navigate(
+                                `${PageRoute.ContentManagements}/${currentRecord?.cate_type_id}?&${ParamsEnum.CAT_SLUG}=${currentRecord?.parent_slug}&${ParamsEnum.SUB_CAT_SLUG}=${currentRecord?.slug}`
+                            )
+                        }
+                    >
                         View
                     </div>
                 ),
@@ -215,7 +227,11 @@ function CategoryListing(props: CategoryListingProps) {
                                     columns={columnsDetail}
                                     dataSource={
                                         record?.items
-                                            ? record?.items?.map((item) => ({ ...item, category_id: record?.id }))
+                                            ? record?.items?.map((item) => ({
+                                                  ...item,
+                                                  category_id: record?.id,
+                                                  parent_slug: record?.slug,
+                                              }))
                                             : []
                                     }
                                 />
