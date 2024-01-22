@@ -1,10 +1,6 @@
 //HOOKS
 import { useModal, useRouter } from "@/hooks"
-import { useSearchParams } from "react-router-dom"
-import { useEffect, useMemo, useRef } from "react"
-
-//ENUMS
-import { ParamsEnum } from "@/enums"
+import { useEffect, useRef } from "react"
 
 //SERVICES
 import { useGetContentManagementApiQuery } from "@/services/contentManagement.service"
@@ -21,16 +17,12 @@ function ContentManagement() {
     } = useRouter()
     const { visible, toggle } = useModal()
     const iframeDevice = useRef<any>(null)
-    const [searchParams] = useSearchParams()
     const { data, refetch } = useGetContentManagementApiQuery({ cate_type_id: cateTypeID || "" }, { skip: !cateTypeID })
 
     useEffect(() => {
         const iframe = document.getElementById("iframeDevice") as HTMLIFrameElement
-        if (iframe) {
-            iframe.contentWindow?.postMessage("The user is 'bob' and the password is 'secret'", env.FO_URL)
-            console.log("iframe: ", iframe)
-        }
-    }, [data])
+        iframe.contentWindow?.postMessage(JSON.stringify(data?.data), `${env.FO_URL}/draft/collection`)
+    }, [data, visible])
 
     return (
         <PageWrapper title="Content Management">
