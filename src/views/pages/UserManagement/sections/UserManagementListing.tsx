@@ -1,4 +1,4 @@
-import { Common, DataResponse, IRequestPaging, IUser, IUserGroup } from "@/models"
+import { Common, DataResponse, IRequestPaging, IUser } from "@/models"
 import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
 import { ColumnsType } from "antd/es/table"
 import { PlusOutlined } from "@ant-design/icons"
@@ -92,8 +92,9 @@ function UserManagementListing(props: UserManagementListingProps) {
         {
             title: "Action",
             key: "id",
+            fixed: "right",
             align: "center",
-            width: "5%",
+            width: "10%",
             render: (_, record: IUser) => (
                 <Dropdown overlayClassName="dropdown-action-table" menu={{ items }} trigger={["click"]}>
                     <Button onClick={() => setCurrentRecord(record)} type="text" className="dot-menu-action">
@@ -119,6 +120,7 @@ function UserManagementListing(props: UserManagementListingProps) {
             <Table
                 columns={columns}
                 rowKey={"id"}
+                scroll={{ x: 1000 }}
                 dataSource={data?.data || []}
                 pagination={{ current: pagination?.page, total: data?.total }}
             />

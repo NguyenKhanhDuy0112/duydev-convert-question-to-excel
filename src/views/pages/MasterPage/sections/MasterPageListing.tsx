@@ -79,8 +79,9 @@ function MasterPageListing(props: MasterCenterListingProps) {
         {
             title: "Action",
             key: "id",
+            fixed: "right",
             align: "center",
-            width: "5%",
+            width: "10%",
             render: (_, record: ICategoryType) => (
                 <Dropdown overlayClassName="dropdown-action-table" menu={{ items }} trigger={["click"]}>
                     <Button onClick={() => setCurrentRecord(record)} type="text" className="dot-menu-action">
@@ -108,6 +109,7 @@ function MasterPageListing(props: MasterCenterListingProps) {
                 rowKey={"id"}
                 loading={loading}
                 dataSource={data?.data || []}
+                scroll={{ x: 1000 }}
                 onChange={(pagination) => {
                     console.log("Pagination: ", pagination)
                 }}

@@ -21,7 +21,7 @@ import {
 import { useCreateMediaApiMutation } from "@/services/media.service"
 
 //CONSTANTS
-import { INIT_PAGINATION } from "@/constants"
+import { INIT_PAGINATION, TAB_LANGS } from "@/constants"
 
 //ICONS
 import { SaveFilled } from "@ant-design/icons"
@@ -60,7 +60,13 @@ function Coupon() {
                 const couponDetail = data?.data?.find((item) => item.id === id)
                 if (couponDetail?.id) {
                     setCouponDetail(couponDetail)
-                    form.setFieldsValue({ ...couponDetail, expire_date: dayjs(couponDetail?.expire_date) })
+                    form.setFieldsValue({
+                        ...couponDetail,
+                        expire_date: dayjs(couponDetail?.expire_date),
+                        langs: couponDetail?.langs?.length
+                            ? couponDetail?.langs
+                            : TAB_LANGS?.map((item) => ({ lang: item?.value })),
+                    })
                 }
             } else {
                 form.resetFields()

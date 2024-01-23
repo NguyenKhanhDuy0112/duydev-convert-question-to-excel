@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react"
 import { useGetContentManagementApiQuery } from "@/services/contentManagement.service"
 
 //COMPONENTS
-import EditContent from "./sections/EditContent/EditContent"
+import EditContent from "./sections/EditContent"
 import PageWrapper from "@/components/PageWrapper"
 import PreviewDevice from "@/components/PreviewDevice"
 import { env } from "@/constants"

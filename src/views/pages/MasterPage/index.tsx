@@ -3,7 +3,7 @@ import { useModal, useNotification, useRouter } from "@/hooks"
 import { useEffect, useMemo, useState } from "react"
 
 //MODELS
-import { ICategoryType, ICoupon, IMasterPageForm, IRequestPaging } from "@/models"
+import { ICategoryType, IContent, ICoupon, IMasterPage, IMasterPageForm, IRequestPaging } from "@/models"
 
 //ENUMS
 import {
@@ -16,7 +16,7 @@ import {
 } from "@/enums"
 
 //CONSTANTS
-import { INIT_PAGINATION } from "@/constants"
+import { INIT_PAGINATION, ProjectIDs, TAB_LANGS } from "@/constants"
 
 //SERVICES
 import {
@@ -39,7 +39,7 @@ import { SaveFilled } from "@ant-design/icons"
 //COMPONENTS
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
 import PageWrapper from "@/components/PageWrapper"
-import { Button, Form } from "antd"
+import { Button, Form, Spin } from "antd"
 import MasterPageListing from "./sections/MasterPageListing"
 import MasterPageForm from "./sections/MasterPageForm"
 
@@ -51,11 +51,15 @@ function MasterPage() {
 
     //STATES
     const [pagination, setPagination] = useState<IRequestPaging>(INIT_PAGINATION)
-    const [dataDetail, setDataDetail] = useState<ICategoryType | undefined>({})
+    const [dataDetail, setDataDetail] = useState<IMasterPage | undefined>({})
 
     //SERVICES
     const { data: contentTypes } = useGetContentTypeManagementApiQuery()
-    const { data: contentMasterPage } = useGetContentManagementMasterPageApiQuery(
+    const {
+        data: contentMasterPage,
+        isLoading: isLoadingContentMasterPage,
+        refetch: refetchContentMasterPage,
+    } = useGetContentManagementMasterPageApiQuery(
         {
             page_id: dataDetail?.id || "",
         },
@@ -63,8 +67,6 @@ function MasterPage() {
             skip: !dataDetail?.id,
         }
     )
-
-    console.log("contentMasterPage: ", contentMasterPage)
 
     const { data, isFetching: isFetchingList, refetch } = useGetMasterPagesApiQuery(pagination)
     const [createMasterPageApi, { isLoading: isLoadingCreate }] = useCreateMasterPageApiMutation()
@@ -83,10 +85,18 @@ function MasterPage() {
         if (isFormPage) {
             const id = searchParams.get(ParamsEnum.ID)
             if (id) {
-                const couponDetail = data?.data?.find((item) => item.id === id)
-                if (couponDetail?.id) {
-                    setDataDetail(couponDetail)
-                    form.setFieldsValue({ ...couponDetail })
+                const masterPageDetail = data?.data?.find((item) => item.id === id)
+                if (masterPageDetail?.id) {
+                    let items: IContent[] = []
+                    Object.keys(contentMasterPage?.data || {})?.forEach((item) => {
+                        items = [...items, ...(contentMasterPage?.data![item] || [])]
+                    })
+
+                    setDataDetail(masterPageDetail)
+                    form.setFieldsValue({
+                        ...masterPageDetail,
+                        items: items?.length ? items : TAB_LANGS.map((item) => ({ lang: item?.value })),
+                    })
                 }
             } else {
                 setDataDetail({})
@@ -95,10 +105,20 @@ function MasterPage() {
         }
     }, [searchParams, data])
 
+    useEffect(() => {
+        if (contentMasterPage?.data) {
+            let items: IContent[] = []
+            Object.keys(contentMasterPage?.data || {})?.forEach((item) => {
+                items = [...items, ...(contentMasterPage?.data![item] || [])]
+            })
+            form.setFieldsValue({ items: items?.length ? items : TAB_LANGS.map((item) => ({ lang: item?.value })) })
+        }
+    }, [contentMasterPage])
+
     const handleConfirmDelete = async () => {
         try {
             await deleteMasterPageApi(dataDetail || {}).unwrap()
-
+            await deleteContentApi({ master_content_id: dataDetail?.id || "" })
             showNotification({
                 type: NotificationTypeEnum.Success,
                 message: NotificationMessageEnum.DeleteSuccess,
@@ -126,7 +146,7 @@ function MasterPage() {
     }
 
     const handleSubmitForm = async (values: IMasterPageForm) => {
-        const formValues = { ...dataDetail, ...values }
+        const formValues = { ...dataDetail, ...values, project_id: ProjectIDs.Project_1 }
         const isEdit = formValues?.id
 
         formValues.type_id = contentTypes?.data?.find((item) => item?.name === ContentTypeEnum.PAGE)?.id || ""
@@ -141,7 +161,9 @@ function MasterPage() {
                 delete formValues.name
                 await updateContentApi({
                     ...formValues,
+                    master_content_id: values?.items[0]?.master_content_id || "",
                 })
+                refetchContentMasterPage()
             } else {
                 const response = await createMasterPageApi(formValues).unwrap()
                 formValues.cate_type_id = response?.id || ""
@@ -205,7 +227,11 @@ function MasterPage() {
                 />
             )}
 
-            {isFormPage && <MasterPageForm form={form} onSubmitForm={handleSubmitForm} />}
+            {isFormPage && (
+                <Spin spinning={isLoadingContentMasterPage}>
+                    <MasterPageForm form={form} onSubmitForm={handleSubmitForm} />
+                </Spin>
+            )}
 
             <ModalConfirmDelete
                 visible={visibleConfirmDelete}

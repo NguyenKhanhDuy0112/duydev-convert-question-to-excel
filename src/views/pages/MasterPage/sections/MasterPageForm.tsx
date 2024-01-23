@@ -20,6 +20,7 @@ function MasterPageForm(props: MasterPageFormProps) {
     return (
         <Form
             onFinish={onSubmitForm}
+            autoComplete="off"
             layout="vertical"
             initialValues={{ items: TAB_LANGS?.map((item) => ({ lang: item?.value, name: "", description: "" })) }}
             labelAlign="left"

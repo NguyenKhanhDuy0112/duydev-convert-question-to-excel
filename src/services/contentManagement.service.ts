@@ -1,4 +1,4 @@
-import { DataResponse, ICategory, ICategoryType, IContentForm, IContentList } from "@/models"
+import { DataResponse, ICategory, ICategoryType, IContent, IContentForm, IContentList } from "@/models"
 import { baseQuery } from "./baseQuery.service"
 import { createApi } from "@reduxjs/toolkit/query/react"
 
@@ -28,12 +28,15 @@ export const contentManagementService = createApi({
                 }
             },
         }),
-        getContentManagementMasterPageApi: builder.query<DataResponse<IContentList>, { page_id: string }>({
+        getContentManagementMasterPageApi: builder.query<
+            DataResponse<{ [key: string]: IContent[] }>,
+            { page_id: string }
+        >({
             query: (params) => ({
                 url: `/content-mn/master-page/${params?.page_id}`,
                 method: "GET",
             }),
-            transformResponse: (response: IContentList) => {
+            transformResponse: (response: { [key: string]: IContent[] }) => {
                 return {
                     data: response,
                 }

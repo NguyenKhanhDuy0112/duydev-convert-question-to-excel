@@ -2,11 +2,11 @@
 import type { RcFile, UploadChangeParam, UploadProps, UploadFile as UploadFileAntd } from "antd/es/upload"
 
 //HOOKS
-import { useMemo, useState } from "react"
+import { MouseEvent, useMemo, useState } from "react"
 import { useModal } from "@/hooks"
 
 //ICONS
-import { CloudUploadOutlined } from "@ant-design/icons"
+import { CloudUploadOutlined, CloseOutlined } from "@ant-design/icons"
 
 //UTILITIES
 import { getBase64 } from "@/helpers/utilities"
@@ -66,11 +66,22 @@ function UploadFile(props: UploadFileProps) {
         onChange(image as string)
     }
 
+    const handleDeleteImage = (e: MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        setImage("")
+        onChange("")
+    }
+
     return (
         <>
             {uploadType === UploadTypeEnum.GALLERY ? (
                 <button onClick={toggle} type="button" className="uploadFile">
                     {renderImageUrl}
+                    {image && (
+                        <button type="button" onClick={(e) => handleDeleteImage(e)} className="uploadFile__close">
+                            <CloseOutlined />
+                        </button>
+                    )}
                 </button>
             ) : (
                 <Upload

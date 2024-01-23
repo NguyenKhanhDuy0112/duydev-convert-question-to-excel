@@ -1,5 +1,5 @@
 //MODELS
-import { Common, DataResponse, ICoupon, IRequestPaging } from "@/models"
+import { Common, DataResponse, ICoupon, ICouponLang, IRequestPaging } from "@/models"
 
 //UTILITIES
 import moment from "moment"
@@ -12,7 +12,7 @@ import { useState } from "react"
 import { ColumnsType } from "antd/es/table"
 
 //ENUMS
-import { FormatDateEnum } from "@/enums"
+import { FormatDateEnum, LangCodeEnum } from "@/enums"
 
 //ICONS
 import { PlusOutlined } from "@ant-design/icons"
@@ -57,10 +57,10 @@ function CouponListing(props: CouponListingProps) {
         },
         {
             title: "Name",
-            dataIndex: "name",
-            key: "name",
-            render: (value: string) => {
-                return <span>{Common.renderData(value)}</span>
+            dataIndex: "langs",
+            key: "langs",
+            render: (value: ICouponLang[]) => {
+                return <span>{Common.renderData(value?.find((item) => item?.lang === LangCodeEnum.EN)?.name)}</span>
             },
         },
         {
@@ -121,7 +121,8 @@ function CouponListing(props: CouponListingProps) {
             title: "Action",
             key: "id",
             align: "center",
-            width: "5%",
+            fixed: "right",
+            width: "10%",
             render: (_, record: ICoupon) => (
                 <Dropdown overlayClassName="dropdown-action-table" menu={{ items }} trigger={["click"]}>
                     <Button onClick={() => setCurrentRecord(record)} type="text" className="dot-menu-action">
@@ -148,6 +149,7 @@ function CouponListing(props: CouponListingProps) {
                 columns={columns}
                 rowKey={"id"}
                 loading={isLoading}
+                scroll={{ x: 1000 }}
                 dataSource={data?.data || []}
                 pagination={{ current: pagination?.page, total: data?.total, pageSize: pagination?.limit }}
             />
