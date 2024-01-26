@@ -72,11 +72,23 @@ function CouponListing(props: CouponListingProps) {
             },
         },
         {
-            title: "Currency code",
-            dataIndex: "currency_code",
-            key: "currency_code",
+            title: "Type",
+            dataIndex: "type",
+            key: "type",
             render: (value: string) => {
                 return <span>{Common.renderData(value)}</span>
+            },
+        },
+        {
+            title: "Currency code",
+            dataIndex: "langs",
+            key: "langs",
+            render: (value: ICouponLang[]) => {
+                return (
+                    <span>
+                        {Common.renderData(value?.find((item) => item?.lang === LangCodeEnum.EN)?.currency_code)}
+                    </span>
+                )
             },
         },
         {
@@ -93,20 +105,6 @@ function CouponListing(props: CouponListingProps) {
             key: "prefix",
             render: (value: string) => {
                 return <span>{Common.renderData(value)}</span>
-            },
-        },
-        {
-            title: "Link",
-            dataIndex: "link",
-            key: "link",
-            render: (value: string) => {
-                return value ? (
-                    <a href={value} target="_blank" rel="noreferrer">
-                        {replaceHttps(value)}
-                    </a>
-                ) : (
-                    Common.renderData(value)
-                )
             },
         },
         {

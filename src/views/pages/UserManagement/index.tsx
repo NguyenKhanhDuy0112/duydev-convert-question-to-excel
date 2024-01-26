@@ -1,14 +1,14 @@
 import PageWrapper from "@/components/PageWrapper"
 import { useModal, useRouter } from "@/hooks"
 import { IUser } from "@/models"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
 import UserManagementListing from "./sections/UserManagementListing"
 import UserManagementForm from "./sections/UserManagementForm"
 import { PageRoute, ParamsEnum } from "@/enums"
 import { Button, Form } from "antd"
 import { SaveFilled } from "@ant-design/icons"
-import { useGetUsersApiQuery } from "@/services/user.service"
+import { useGetPermissionsApiQuery, useGetUsersApiQuery } from "@/services/user.service"
 import { INIT_PAGINATION } from "@/constants"
 
 function UserManagement() {
@@ -17,11 +17,27 @@ function UserManagement() {
 
     //HOOKS
     const { visible: visibleConfirmDelete, toggle: toggleConfirmDelete } = useModal()
+    const { searchParams, navigate } = useRouter()
 
     //SERVICES
     const { data } = useGetUsersApiQuery(pagination)
-    const { searchParams, navigate } = useRouter()
+    const { data: dataPermissions } = useGetPermissionsApiQuery()
+
     const [form] = Form.useForm()
+
+    useEffect(() => {
+        if (searchParams.has(ParamsEnum.ID)) {
+            const id = searchParams.get(ParamsEnum.ID)
+            if (id) {
+                const userDetail = data?.data?.find((item) => item.id === id)
+                if (userDetail?.id) {
+                    form.setFieldsValue({ ...userDetail, group_id: userDetail?.uUserGroup![0]?.uGroups?.id || "" })
+                }
+            }
+        } else {
+            form.resetFields()
+        }
+    }, [searchParams])
 
     const isFormUserPage = useMemo(() => {
         return searchParams.has(ParamsEnum.ID)
@@ -65,7 +81,9 @@ function UserManagement() {
                 />
             )}
 
-            {isFormUserPage && <UserManagementForm onSubmitForm={handleSubmitForm} form={form} />}
+            {isFormUserPage && (
+                <UserManagementForm onSubmitForm={handleSubmitForm} form={form} permissions={dataPermissions?.data} />
+            )}
 
             <ModalConfirmDelete
                 visible={visibleConfirmDelete}

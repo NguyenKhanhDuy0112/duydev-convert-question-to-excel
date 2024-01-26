@@ -10,6 +10,8 @@ import { contentManagementService } from "@/services/contentManagement.service"
 import { contentDetailManagementService } from "@/services/contentDetailManagement.service"
 import { mediaService } from "@/services/media.service"
 import { masterPageService } from "@/services/masterPage.service"
+import { commonService } from "@/services/common.service"
+import { frontOfficeService } from "@/services/frontOffice.service"
 
 const store = configureStore({
     reducer: {
@@ -23,6 +25,8 @@ const store = configureStore({
         [contentDetailManagementService.reducerPath]: contentDetailManagementService.reducer,
         [mediaService.reducerPath]: mediaService.reducer,
         [masterPageService.reducerPath]: masterPageService.reducer,
+        [commonService.reducerPath]: commonService.reducer,
+        [frontOfficeService.reducerPath]: frontOfficeService.reducer,
         rootReducer,
     },
     middleware: (getDefaultMiddleware) =>
@@ -36,7 +40,9 @@ const store = configureStore({
             contentManagementService.middleware,
             contentDetailManagementService.middleware,
             mediaService.middleware,
-            masterPageService.middleware
+            masterPageService.middleware,
+            commonService.middleware,
+            frontOfficeService.middleware
         ),
 })
 

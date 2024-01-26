@@ -31,6 +31,9 @@ export enum NotificationMessageEnum {
 
     UploadSuccess = "Upload successfully",
     UploadError = "Upload failed",
+
+    ClearCacheSuccess = "Clear cache successfully",
+    ClearCacheError = "Clear cache failed",
 }
 
 export enum NotificationTitleEnum {

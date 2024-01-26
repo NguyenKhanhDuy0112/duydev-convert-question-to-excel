@@ -1,4 +1,4 @@
-import { DataResponse, ICategory, ICoupon, ICouponType, IRequestPaging, IUser } from "@/models"
+import { DataResponse, ICategory, ICoupon, ICouponType, IRequestPaging, IRoleUser, IUser } from "@/models"
 import { baseQuery } from "./baseQuery.service"
 import { createApi } from "@reduxjs/toolkit/query/react"
 
@@ -19,12 +19,12 @@ export const userService = createApi({
                 method: "GET",
             }),
         }),
-        getPermissionsApi: builder.query<DataResponse<IUser[]>, void>({
+        getPermissionsApi: builder.query<DataResponse<IRoleUser[]>, void>({
             query: () => ({
                 url: "/user/group-perms",
                 method: "GET",
             }),
-            transformResponse: (rawData: IUser[]) => {
+            transformResponse: (rawData: IRoleUser[]) => {
                 return {
                     data: rawData,
                 }

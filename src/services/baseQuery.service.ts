@@ -23,6 +23,28 @@ export const baseQuery = fetchBaseQuery({
     },
 })
 
+export const baseQueryFO = fetchBaseQuery({
+    baseUrl: `${env.FO_URL}/api`,
+    prepareHeaders: (headers) => {
+        const token = cookiesStorage.get(CookieStorageKey.ACCESS_TOKEN)
+        if (token) {
+            headers.set("Authorization", `Bearer ${token}`)
+            headers.set("X-API-KEY", env.FO_X_API_KEY)
+        }
+        return headers
+    },
+    cache: "no-cache",
+    fetchFn(input: any, init: any) {
+        return fetch(input, init).then((response: any) => {
+            if (response.status === 401) {
+                cookiesStorage.remove(CookieStorageKey.ACCESS_TOKEN)
+                window.location.href = `/login`
+            }
+            return response
+        })
+    },
+})
+
 export const baseQueryWithReAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
     args,
     api,

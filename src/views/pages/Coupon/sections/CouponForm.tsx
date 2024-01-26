@@ -12,10 +12,9 @@ import { useGetCouponsTypeApiQuery } from "@/services/coupon.service"
 import { useGetCategoriesApiQuery } from "@/services/category.service"
 
 //COMPONENTS
-import { Col, DatePicker, Divider, Form, FormInstance, Input, InputNumber, Row, Select, Tabs } from "antd"
+import { Col, DatePicker, Divider, Form, FormInstance, Input, InputNumber, Row, Select, Switch, Tabs } from "antd"
 import TreeCheckbox from "@/components/TreeCheckbox"
 import UploadFile from "@/components/UploadFile"
-import TextEditor from "@/components/TextEditor"
 
 interface CouponFormProps {
     data?: ICoupon
@@ -39,6 +38,7 @@ function CouponForm(props: CouponFormProps) {
             form={form}
             initialValues={{
                 langs: TAB_LANGS?.map((item) => ({ lang: item?.value })),
+                is_verify: true,
             }}
         >
             <Row gutter={20}>
@@ -52,6 +52,9 @@ function CouponForm(props: CouponFormProps) {
                     </Form.Item>
                 </Col>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                    <Form.Item name={"is_verify"} label="Verify" valuePropName="checked">
+                        <Switch />
+                    </Form.Item>
                     <Form.Item label="Code" name={"code"}>
                         <Input placeholder="Code" />
                     </Form.Item>

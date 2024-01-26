@@ -18,6 +18,7 @@ import { updateProfile } from "@/redux/modules/profile/profileSlice"
 
 //MODELS
 import { IUser } from "@/models"
+import SettingClearCache from "@/views/pages/SettingClearCache"
 
 //COMPONENTS
 const Loader = lazy(() => import("@/components/Loader/Loader"))
@@ -88,6 +89,10 @@ const appRoutes: RouteObject[] = [
             {
                 path: "users-management",
                 element: <UserManagement />,
+            },
+            {
+                path: "setting/clear-cache",
+                element: <SettingClearCache />,
             },
         ],
     },

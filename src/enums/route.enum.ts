@@ -12,6 +12,7 @@ export enum PageRoute {
     PersonalExperience = "/general-contents/personal-experience",
     MediaManagement = "/media-management",
     MasterPage = "/master-page",
+    SettingClearCache = "/setting/clear-cache",
 }
 
 export enum ParamsEnum {

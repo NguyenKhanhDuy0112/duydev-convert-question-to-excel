@@ -1,17 +1,16 @@
 import { MessageValidateForm, RoleUserEnum } from "@/enums"
-import { ICategory, IUser } from "@/models"
-import { Button, Checkbox, Col, Form, FormInstance, Input, Modal, Row, Select } from "antd"
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons"
-import { ReactComponent as CloseIcon } from "@/assets/icons/close_icon.svg"
+import { IRoleUser, IUser } from "@/models"
+import { Checkbox, Col, Form, FormInstance, Input, Row, Select } from "antd"
 
 interface UserManagementFormProps {
     data?: IUser
+    permissions?: IRoleUser[]
     form: FormInstance<IUser>
     onSubmitForm: (value: IUser) => void
 }
 function UserManagementForm(props: UserManagementFormProps) {
-    const { data, form, onSubmitForm } = props
-
+    const { data, permissions, form, onSubmitForm } = props
+    console.log("permissions: ", permissions)
     return (
         <Form onFinish={onSubmitForm} labelAlign="left" autoComplete="off" layout="vertical" form={form}>
             <Row gutter={20}>
@@ -34,16 +33,7 @@ function UserManagementForm(props: UserManagementFormProps) {
                     </Form.Item>
                 </Col>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="Phone Number (Optional)"
-                        rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
-                        ]}
-                        name={"phone_number"}
-                    >
+                    <Form.Item label="Phone Number (Optional)" name={"phone_number"}>
                         <Input placeholder="Phone number" />
                     </Form.Item>
                 </Col>
@@ -84,37 +74,13 @@ function UserManagementForm(props: UserManagementFormProps) {
                                 message: MessageValidateForm.Required,
                             },
                         ]}
-                        name={"user_type"}
+                        name={"group_id"}
                     >
                         <Select placeholder="User type">
-                            <Select.Option key={RoleUserEnum.Admin}>{RoleUserEnum.Admin}</Select.Option>
-                            <Select.Option key={RoleUserEnum.Partner}>{RoleUserEnum.Partner}</Select.Option>
-                            <Select.Option key={RoleUserEnum.Staff}>{RoleUserEnum.Staff}</Select.Option>
+                            {permissions?.map((item) => (
+                                <Select.Option key={item.id}>{item.name}</Select.Option>
+                            ))}
                         </Select>
-                    </Form.Item>
-                </Col>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}></Col>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item label="Permissions">
-                        <Checkbox.Group>
-                            <Row gutter={[6, 6]}>
-                                <Col span={12}>
-                                    <Checkbox value="User Managemen">User Management</Checkbox>
-                                </Col>
-                                <Col span={12}>
-                                    <Checkbox value="Category">Category</Checkbox>
-                                </Col>
-                                <Col span={12}>
-                                    <Checkbox value="Content Management">Content Management</Checkbox>
-                                </Col>
-                                <Col span={12}>
-                                    <Checkbox value="FAQs">FAQs</Checkbox>
-                                </Col>
-                                <Col span={12}>
-                                    <Checkbox value="Coupons">Coupons</Checkbox>
-                                </Col>
-                            </Row>
-                        </Checkbox.Group>
                     </Form.Item>
                 </Col>
             </Row>

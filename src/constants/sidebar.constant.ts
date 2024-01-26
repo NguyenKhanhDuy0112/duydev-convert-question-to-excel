@@ -73,4 +73,19 @@ export const SIDE_BARS: SidebarItem[] = [
             },
         ],
     },
+    {
+        key: "setting",
+        label: "Setting",
+        icon: UserOutlined,
+        permission: PermissionUserEnum.UserManagement,
+        children: [
+            {
+                key: PermissionUserEnum.SettingsManagement,
+                link: PageRoute.SettingClearCache,
+                label: "Clear cache",
+                permission: PermissionUserEnum.UserManagement,
+                roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
+            },
+        ],
+    },
 ]

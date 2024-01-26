@@ -7,7 +7,7 @@ export interface IUser {
     phone?: string
     email?: string
     birthday?: Date | null
-    groups?: IGroup[]
+    groups?: IRoleUser[]
     is_active?: boolean
     role?: RoleUserEnum
     created_at?: Date | null
@@ -20,13 +20,14 @@ export interface IUserGroup {
     id?: string
     user_id?: string
     group_id?: string
-    uGroups?: IGroup
+    uGroups?: IRoleUser
 }
 
-export interface IGroup {
+export interface IRoleUser {
     id?: string
     name?: string
     is_active?: boolean
+    permissions?: IPermission[]
     uGroupPermission?: IGroupPermission[]
 }
 
