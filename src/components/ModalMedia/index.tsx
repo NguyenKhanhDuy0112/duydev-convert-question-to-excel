@@ -41,7 +41,7 @@ function ModalMedia(props: ModalMediaProps) {
             >
                 <Spin spinning={isLoadingMedia}>
                     <List
-                        grid={{ gutter: 16, column: 6 }}
+                        grid={{ gutter: 16, xs: 1, md: 2, lg: 4, xl: 6 }}
                         dataSource={data?.data}
                         renderItem={(item) => (
                             <List.Item className="modal_media-item" key={item?.id}>
