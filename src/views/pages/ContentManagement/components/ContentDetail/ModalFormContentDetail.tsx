@@ -83,44 +83,42 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
                                 <Tabs.TabPane tab={TAB_LANGS[index].label} key={TAB_LANGS[index].value}>
                                     <Row gutter={16}>
                                         <Col span={24}>
-                                            <Card>
-                                                <Row gutter={24}>
-                                                    <Col span={12}>
-                                                        <Form.Item
-                                                            label="Title"
-                                                            name={[field.name, "title"]}
-                                                            fieldKey={[field.fieldKey || 0, "title"]}
-                                                        >
-                                                            <Input placeholder="Title" />
-                                                        </Form.Item>
-                                                    </Col>
-                                                    <Col span={12}>
-                                                        <Form.Item
-                                                            label="Sub Title"
-                                                            name={[field.name, "sub_title"]}
-                                                            fieldKey={[field.fieldKey || 0, "sub_title"]}
-                                                        >
-                                                            <Input placeholder="Sub title" />
-                                                        </Form.Item>
-                                                    </Col>
-                                                </Row>
-                                                <Form.Item
-                                                    name={[field.name, "content"]}
-                                                    fieldKey={[field.fieldKey || 0, "content"]}
-                                                    label="Content"
-                                                >
-                                                    <TextEditor
-                                                        value={
-                                                            form.getFieldValue(`${field.name}.content`)
-                                                                ? form.getFieldValue(`${field.name}.content`)
-                                                                : ""
-                                                        }
-                                                        onChange={(value) =>
-                                                            form.setFieldValue(`${field.name}.content`, value)
-                                                        }
-                                                    />
-                                                </Form.Item>
-                                            </Card>
+                                            <Row gutter={24}>
+                                                <Col xs={{ span: 24 }} lg={{ span: 12 }}>
+                                                    <Form.Item
+                                                        label="Title"
+                                                        name={[field.name, "title"]}
+                                                        fieldKey={[field.fieldKey || 0, "title"]}
+                                                    >
+                                                        <Input placeholder="Title" />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col xs={{ span: 24 }} lg={{ span: 12 }}>
+                                                    <Form.Item
+                                                        label="Sub Title"
+                                                        name={[field.name, "sub_title"]}
+                                                        fieldKey={[field.fieldKey || 0, "sub_title"]}
+                                                    >
+                                                        <Input placeholder="Sub title" />
+                                                    </Form.Item>
+                                                </Col>
+                                            </Row>
+                                            <Form.Item
+                                                name={[field.name, "content"]}
+                                                fieldKey={[field.fieldKey || 0, "content"]}
+                                                label="Content"
+                                            >
+                                                <TextEditor
+                                                    value={
+                                                        form.getFieldValue(`${field.name}.content`)
+                                                            ? form.getFieldValue(`${field.name}.content`)
+                                                            : ""
+                                                    }
+                                                    onChange={(value) =>
+                                                        form.setFieldValue(`${field.name}.content`, value)
+                                                    }
+                                                />
+                                            </Form.Item>
                                         </Col>
                                     </Row>
                                 </Tabs.TabPane>
