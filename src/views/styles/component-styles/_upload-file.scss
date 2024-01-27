@@ -2,10 +2,14 @@
     position: relative;
     border: 1px dashed $primary;
     border-radius: 10px;
-    height: 420px;
+    height: 300px;
     width: 100%;
     padding: 1rem;
     cursor: pointer;
+
+    @include responsive(xl-screen) {
+        height: 420px;
+    }
 
     .anticon.anticon-cloud-upload {
         font-size: 60px;

@@ -1,9 +1,10 @@
-import { Avatar, Dropdown, Layout, MenuProps, Select, theme } from "antd"
+import { Avatar, Button, Dropdown, Layout, MenuProps, Select, theme } from "antd"
 import { useRouter } from "@/hooks"
 import { PageRoute } from "@/enums"
 import { useGetCategoriesApiQuery } from "@/services/category.service"
 import { INIT_PAGINATION } from "@/constants"
 import { useDispatch } from "react-redux"
+import { MenuOutlined } from "@ant-design/icons"
 import { logout } from "@/redux/modules/auth/authSlice"
 
 const { Header: HeaderAntd } = Layout
@@ -53,7 +54,11 @@ function Header(props: HeaderProps) {
                     <Option key={"Category 4"}>Category 4</Option>
                 </Select>
             ) : (
-                <div></div>
+                <div>
+                    <Button type="text" className="header__menu-toggle" onClick={() => onCollapsed(!collapsed)}>
+                        <MenuOutlined />
+                    </Button>
+                </div>
             )}
             <Dropdown menu={{ items }} trigger={["click"]}>
                 <article className="header__profile">

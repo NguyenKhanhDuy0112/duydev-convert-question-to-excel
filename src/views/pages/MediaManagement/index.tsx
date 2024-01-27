@@ -61,9 +61,8 @@ function MediaManagement() {
 
     return (
         <PageWrapper title="Media Management">
-            <Row justify={"space-between"} className="m-b-6">
-                <Col span={6}></Col>
-                <Col xl={{ span: 3 }} lg={{ span: 4 }} xs={{ span: 6 }}>
+            <Row justify={"space-between"} gutter={[16, 16]} className="m-b-6">
+                <Col lg={{ span: 6 }} xl={{ span: 4 }} md={{ span: 6 }} xs={{ span: 24 }}>
                     <Button onClick={toggleModalForm} icon={<PlusOutlined />} className="w-100" type="primary">
                         Upload
                     </Button>

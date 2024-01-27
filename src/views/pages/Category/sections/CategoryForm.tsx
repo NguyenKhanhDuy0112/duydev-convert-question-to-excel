@@ -67,7 +67,7 @@ function CategoryForm(props: CategoryFormProps) {
                         <>
                             {fields.map(({ key, name, ...restField }) => (
                                 <Row gutter={16}>
-                                    <Col flex={1}>
+                                    <Col span={11}>
                                         <Form.Item
                                             {...restField}
                                             className="flex-1"
@@ -82,7 +82,7 @@ function CategoryForm(props: CategoryFormProps) {
                                             <Input placeholder="Name" />
                                         </Form.Item>
                                     </Col>
-                                    <Col flex={1}>
+                                    <Col span={11}>
                                         <Form.Item
                                             {...restField}
                                             name={[name, "url_link"]}
@@ -101,7 +101,7 @@ function CategoryForm(props: CategoryFormProps) {
                                             <Input placeholder="URL" />
                                         </Form.Item>
                                     </Col>
-                                    <Col>
+                                    <Col span={2}>
                                         <Form.Item>
                                             <MinusCircleOutlined onClick={() => remove(name)} />
                                         </Form.Item>

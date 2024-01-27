@@ -109,7 +109,7 @@ function CouponForm(props: CouponFormProps) {
                                 <Row gutter={16}>
                                     <Col span={24}>
                                         <Row gutter={24}>
-                                            <Col span={12}>
+                                            <Col lg={{ span: 12 }} xs={{ span: 24 }}>
                                                 <Form.Item
                                                     label="Name"
                                                     name={[field.name, "name"]}
@@ -118,7 +118,7 @@ function CouponForm(props: CouponFormProps) {
                                                     <Input placeholder="Name" />
                                                 </Form.Item>
                                             </Col>
-                                            <Col span={12}>
+                                            <Col lg={{ span: 12 }} xs={{ span: 24 }}>
                                                 <Form.Item
                                                     label="Currency code"
                                                     name={[field.name, "currency_code"]}
@@ -129,7 +129,7 @@ function CouponForm(props: CouponFormProps) {
                                                     </Select>
                                                 </Form.Item>
                                             </Col>
-                                            <Col span={12}>
+                                            <Col lg={{ span: 12 }} xs={{ span: 24 }}>
                                                 <Form.Item
                                                     label="Prefix"
                                                     name={[field.name, "sub_title"]}
@@ -145,7 +145,7 @@ function CouponForm(props: CouponFormProps) {
                                                     </Select>
                                                 </Form.Item>
                                             </Col>
-                                            <Col span={12}>
+                                            <Col lg={{ span: 12 }} xs={{ span: 24 }}>
                                                 <Form.Item
                                                     name={[field.name, "description"]}
                                                     fieldKey={[field.fieldKey || 0, "description"]}

@@ -182,7 +182,8 @@ function CategoryListing(props: CategoryListingProps) {
             title: "Action",
             key: "id",
             align: "center",
-            width: "5%",
+            fixed: "right",
+            width: "8%",
             render: (_, record: ICategory) => (
                 <Dropdown
                     overlayClassName="dropdown-action-table"
@@ -201,11 +202,11 @@ function CategoryListing(props: CategoryListingProps) {
 
     return (
         <Space direction="vertical" size={"large"}>
-            <Row justify={"space-between"}>
-                <Col span={6}>
+            <Row justify={"space-between"} gutter={[16, 16]}>
+                <Col lg={{ span: 8 }} xs={{ span: 24 }} md={{ span: 12 }}>
                     <Input.Search type="primary" placeholder="Search category" />
                 </Col>
-                <Col xl={{ span: 3 }} lg={{ span: 4 }} xs={{ span: 6 }}>
+                <Col lg={{ span: 6 }} xl={{ span: 4 }} md={{ span: 6 }} xs={{ span: 24 }}>
                     <Button onClick={() => onActionForm({})} icon={<PlusOutlined />} className="w-100" type="primary">
                         Create New
                     </Button>
@@ -216,6 +217,7 @@ function CategoryListing(props: CategoryListingProps) {
                 rowKey={"id"}
                 dataSource={data?.data ? data?.data : []}
                 loading={isLoading}
+                scroll={{ x: 1000 }}
                 pagination={{ current: data?.page, total: data?.total }}
                 expandable={{
                     expandedRowRender: (record: ICategory) => {

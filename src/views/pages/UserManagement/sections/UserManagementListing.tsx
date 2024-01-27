@@ -94,7 +94,7 @@ function UserManagementListing(props: UserManagementListingProps) {
             key: "id",
             fixed: "right",
             align: "center",
-            width: "10%",
+            width: "8%",
             render: (_, record: IUser) => (
                 <Dropdown overlayClassName="dropdown-action-table" menu={{ items }} trigger={["click"]}>
                     <Button onClick={() => setCurrentRecord(record)} type="text" className="dot-menu-action">
@@ -107,11 +107,11 @@ function UserManagementListing(props: UserManagementListingProps) {
 
     return (
         <Space direction="vertical" size={"large"}>
-            <Row justify={"space-between"}>
-                <Col span={6}>
+            <Row justify={"space-between"} gutter={[16, 16]}>
+                <Col lg={{ span: 8 }} xs={{ span: 24 }} md={{ span: 12 }}>
                     <Input.Search type="primary" placeholder="Search by name" />
                 </Col>
-                <Col xl={{ span: 3 }} lg={{ span: 4 }} xs={{ span: 6 }}>
+                <Col lg={{ span: 6 }} xl={{ span: 4 }} md={{ span: 6 }} xs={{ span: 24 }}>
                     <Button onClick={() => onActionForm({})} icon={<PlusOutlined />} className="w-100" type="primary">
                         Create New
                     </Button>

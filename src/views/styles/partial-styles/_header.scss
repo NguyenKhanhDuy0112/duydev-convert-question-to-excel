@@ -5,19 +5,38 @@
     position: sticky;
     top: 0;
     margin-left: 80px;
-    padding: 0 24px 0 24px;
+    padding: 0 16px 0 16px;
     display: flex;
     justify-content: space-between;
     z-index: 50;
     align-items: center;
     transition: all ease 0.2s;
 
+    @include responsive(xl-screen) {
+        padding: 0 24px 0 24px;
+    }
+
     &.active {
-        margin-left: 250px;
+        margin-left: 0px;
+
+        @include responsive(xl-screen) {
+            margin-left: 250px;
+        }
     }
 
     &__select {
         width: 250px;
+    }
+
+    &__menu {
+        &-toggle {
+            display: block;
+            padding: 0 !important;
+
+            @include responsive(xl-screen) {
+                display: none;
+            }
+        }
     }
 
     &__profile {

@@ -1,6 +1,6 @@
 //HOOKS
 import { useEffect, useMemo, useState } from "react"
-import { useProfile, useRouter } from "@/hooks"
+import { useProfile, useRouter, useWindowSize } from "@/hooks"
 
 //CONSTANTS
 import { SIDE_BARS } from "@/constants/sidebar.constant"
@@ -14,7 +14,7 @@ import LogoIc from "@/assets/icons/logo.svg"
 
 //COMPONENTS
 import LinkItem from "./components/LinkItem"
-import { Layout, Menu } from "antd"
+import { Drawer, Layout, Menu } from "antd"
 
 type MenuItem = Required<MenuProps>["items"][number]
 
@@ -22,6 +22,7 @@ const { Sider } = Layout
 
 interface SidebarProps {
     collapsed: boolean
+    onCollapse: () => void
 }
 
 function getItem(
@@ -41,16 +42,20 @@ function getItem(
 }
 
 function Sidebar(props: SidebarProps) {
-    const { collapsed } = props
+    const { collapsed, onCollapse } = props
     const [defaultSelectedKey, setDefaultSelectedKey] = useState<string>("")
     const [keys, setKeys] = useState<any>()
     const { permissions, groups } = useProfile()
     const { pathname } = useRouter()
+    const { width } = useWindowSize()
 
     useEffect(() => {
         const key = keys.find((item: any) => item.link === pathname)
         if (key?.key) {
             setDefaultSelectedKey(key.key)
+            if (collapsed) {
+                onCollapse()
+            }
         }
     }, [pathname, keys])
 
@@ -115,17 +120,35 @@ function Sidebar(props: SidebarProps) {
     }, [permissions])
 
     return (
-        <Sider width={250} className="sidebar" theme="light" trigger={null} collapsible collapsed={collapsed}>
-            <div className="sidebar__logo">
-                <LogoIc />
-            </div>
-            <Menu
-                selectedKeys={[defaultSelectedKey]}
-                mode="inline"
-                items={itemsMenu}
-                onSelect={(value) => setDefaultSelectedKey(value.key)}
-            />
-        </Sider>
+        <>
+            {width && width > 1024 ? (
+                <Sider width={250} className="sidebar" theme="light">
+                    <div className="sidebar__logo">
+                        <LogoIc />
+                    </div>
+                    <Menu
+                        selectedKeys={[defaultSelectedKey]}
+                        mode="inline"
+                        items={itemsMenu}
+                        onSelect={(value) => setDefaultSelectedKey(value.key)}
+                    />
+                </Sider>
+            ) : (
+                <Drawer open={collapsed} onClose={onCollapse} placement="left" width={250}>
+                    <Sider width={250} className="sidebar" theme="light" trigger={null}>
+                        <div className="sidebar__logo">
+                            <LogoIc />
+                        </div>
+                        <Menu
+                            selectedKeys={[defaultSelectedKey]}
+                            mode="inline"
+                            items={itemsMenu}
+                            onSelect={(value) => setDefaultSelectedKey(value.key)}
+                        />
+                    </Sider>
+                </Drawer>
+            )}
+        </>
     )
 }
 

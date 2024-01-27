@@ -86,7 +86,7 @@ function ModalFormContent(props: ModalFormContentProps) {
                 onFinish={handleSubmitForm}
             >
                 <Row gutter={16}>
-                    <Col span={12}>
+                    <Col xs={{ span: 24 }} lg={{ span: 12 }}>
                         <Form.Item
                             rules={[{ required: true, message: MessageValidateForm.Required }]}
                             label="Category type"
@@ -109,33 +109,31 @@ function ModalFormContent(props: ModalFormContentProps) {
                                 <Tabs.TabPane tab={TAB_LANGS[index].label} key={TAB_LANGS[index].value}>
                                     <Row gutter={16}>
                                         <Col span={24}>
-                                            <Card>
-                                                <Form.Item
-                                                    {...field}
-                                                    label="Name"
-                                                    name={[field.name, "name"]}
-                                                    fieldKey={[field.fieldKey || 0, "name"]}
-                                                    rules={[{ required: true, message: "Name is required" }]}
-                                                >
-                                                    <Input placeholder="Name" />
-                                                </Form.Item>
-                                                <Form.Item
-                                                    {...field}
-                                                    label="Description"
-                                                    name={[field.name, "description"]}
-                                                    fieldKey={[field.fieldKey || 0, "description"]}
-                                                    rules={[{ required: true, message: "Description is required" }]}
-                                                >
-                                                    <TextEditor
-                                                        value={form.getFieldValue(`${field.name}.description`) || ""}
-                                                        onChange={(value) =>
-                                                            form.setFieldsValue({
-                                                                [`${field.name}.description`]: value,
-                                                            })
-                                                        }
-                                                    />
-                                                </Form.Item>
-                                            </Card>
+                                            <Form.Item
+                                                {...field}
+                                                label="Name"
+                                                name={[field.name, "name"]}
+                                                fieldKey={[field.fieldKey || 0, "name"]}
+                                                rules={[{ required: true, message: "Name is required" }]}
+                                            >
+                                                <Input placeholder="Name" />
+                                            </Form.Item>
+                                            <Form.Item
+                                                {...field}
+                                                label="Description"
+                                                name={[field.name, "description"]}
+                                                fieldKey={[field.fieldKey || 0, "description"]}
+                                                rules={[{ required: true, message: "Description is required" }]}
+                                            >
+                                                <TextEditor
+                                                    value={form.getFieldValue(`${field.name}.description`) || ""}
+                                                    onChange={(value) =>
+                                                        form.setFieldsValue({
+                                                            [`${field.name}.description`]: value,
+                                                        })
+                                                    }
+                                                />
+                                            </Form.Item>
                                         </Col>
                                     </Row>
                                 </Tabs.TabPane>

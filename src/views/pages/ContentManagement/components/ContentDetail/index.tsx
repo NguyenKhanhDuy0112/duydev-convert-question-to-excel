@@ -68,7 +68,8 @@ function ContentDetail(props: ContentDetailProps) {
                 title: "Action",
                 key: "id",
                 align: "center",
-                width: "5%",
+                fixed: "right",
+                width: "8%",
                 render: (_: any, record: any) => (
                     <Dropdown
                         overlayClassName="dropdown-action-table"
@@ -107,6 +108,7 @@ function ContentDetail(props: ContentDetailProps) {
             <Table
                 columns={columns}
                 rowKey={"id"}
+                scroll={{ x: 1000 }}
                 dataSource={Object.keys(data || {})?.map((item) => ({
                     ...data![item]?.find((el) => el?.lang === LangCodeEnum.EN),
                     data: data![item],

@@ -2,11 +2,19 @@
     min-height: 100vh;
 
     &__content {
-        padding: 24px 24px 24px 104px;
+        padding: 16px;
         transition: all ease 0.2s;
 
+        @include responsive(xl-screen) {
+            padding: 24px 24px 24px 104px;
+        }
+
         &.active {
-            padding: 24px 24px 24px 274px;
+            padding: 16px;
+
+            @include responsive(xl-screen) {
+                padding: 24px 24px 24px 274px;
+            }
         }
     }
 

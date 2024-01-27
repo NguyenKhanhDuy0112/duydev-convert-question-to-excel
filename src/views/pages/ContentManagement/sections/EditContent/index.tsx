@@ -184,7 +184,7 @@ function EditContent(props: EditContentProps) {
 
     return (
         <>
-            <div className="d-flex justify-between m-b-4">
+            <div className="d-flex justify-between m-b-4 gap-4">
                 <Button onClick={onViewContent} icon={<EyeOutlined />} type="primary">
                     View content
                 </Button>
