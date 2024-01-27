@@ -17,6 +17,7 @@ export interface ICoupon {
     image?: string
     langs?: ICouponLang[]
     is_verify?: boolean
+    aCouponType?: ICouponType
     created_at?: Date | null
     updated_at?: Date | null
     expired_at?: Date | null

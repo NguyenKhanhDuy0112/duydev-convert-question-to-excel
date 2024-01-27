@@ -1,6 +1,6 @@
 import { PageRoute, PermissionUserEnum, RoleUserEnum } from "@/enums"
 import { SidebarItem } from "@/models"
-import { AppstoreOutlined, UserOutlined, InboxOutlined } from "@ant-design/icons"
+import { AppstoreOutlined, UserOutlined, InboxOutlined, SettingOutlined } from "@ant-design/icons"
 
 export const SIDE_BARS: SidebarItem[] = [
     {
@@ -76,7 +76,7 @@ export const SIDE_BARS: SidebarItem[] = [
     {
         key: "setting",
         label: "Setting",
-        icon: UserOutlined,
+        icon: SettingOutlined,
         permission: PermissionUserEnum.UserManagement,
         children: [
             {

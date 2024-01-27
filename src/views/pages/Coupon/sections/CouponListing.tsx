@@ -1,5 +1,5 @@
 //MODELS
-import { Common, DataResponse, ICoupon, ICouponLang, IRequestPaging } from "@/models"
+import { Common, DataResponse, ICoupon, ICouponLang, ICouponType, IRequestPaging } from "@/models"
 
 //UTILITIES
 import moment from "moment"
@@ -12,14 +12,14 @@ import { useState } from "react"
 import { ColumnsType } from "antd/es/table"
 
 //ENUMS
-import { FormatDateEnum, LangCodeEnum } from "@/enums"
+import { CouponTypeEnum, FormatDateEnum, LangCodeEnum } from "@/enums"
 
 //ICONS
 import { PlusOutlined } from "@ant-design/icons"
 import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 
 //COMPONENTS
-import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table } from "antd"
+import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
 
 interface CouponListingProps {
     isLoading?: boolean
@@ -73,10 +73,14 @@ function CouponListing(props: CouponListingProps) {
         },
         {
             title: "Type",
-            dataIndex: "type",
-            key: "type",
-            render: (value: string) => {
-                return <span>{Common.renderData(value)}</span>
+            dataIndex: "aCouponType",
+            key: "aCouponType",
+            render: (value: ICouponType) => {
+                return (
+                    <Tag color={value?.name === CouponTypeEnum.CODE ? "green-inverse" : "orange-inverse"}>
+                        {Common.renderData(value?.name?.toUpperCase())}
+                    </Tag>
+                )
             },
         },
         {
