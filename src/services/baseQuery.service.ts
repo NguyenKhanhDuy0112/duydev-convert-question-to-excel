@@ -3,7 +3,7 @@ import { cookiesStorage } from "@/helpers/cookieStorage"
 import { fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query"
 
 export const baseQuery = fetchBaseQuery({
-    baseUrl: env.API_BO_ENDPOINT,
+    baseUrl: `${env.API_BO_ENDPOINT}/ali-service-api`,
     prepareHeaders: (headers) => {
         const token = cookiesStorage.get(CookieStorageKey.ACCESS_TOKEN)
         if (token) {
