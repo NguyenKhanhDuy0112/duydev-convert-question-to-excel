@@ -30,9 +30,8 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
     useEffect(() => {
         if (data?.length) {
             const payload = {
-                items: [...data],
+                items: TAB_LANGS?.map((item) => data?.find((i) => i?.lang === item?.value)),
             }
-            console.log("Data: ", data)
             form.setFieldsValue(payload)
         } else {
             form.resetFields()
