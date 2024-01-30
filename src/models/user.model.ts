@@ -21,6 +21,8 @@ export interface IUserGroup {
     user_id?: string
     group_id?: string
     uGroups?: IRoleUser
+    created_at?: Date | null
+    updated_at?: Date | null
 }
 
 export interface IRoleUser {
@@ -29,6 +31,8 @@ export interface IRoleUser {
     is_active?: boolean
     permissions?: IPermission[]
     uGroupPermission?: IGroupPermission[]
+    created_at?: Date | null
+    updated_at?: Date | null
 }
 
 export interface IGroupPermission {
@@ -36,6 +40,8 @@ export interface IGroupPermission {
     group_id?: string
     permission_id?: string
     uPermissions?: IPermission
+    created_at?: Date | null
+    updated_at?: Date | null
 }
 
 export interface IPermission {
@@ -43,4 +49,6 @@ export interface IPermission {
     name?: string
     desc?: string
     is_active?: boolean
+    created_at?: Date | null
+    updated_at?: Date | null
 }

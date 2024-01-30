@@ -64,14 +64,6 @@ function CouponListing(props: CouponListingProps) {
             },
         },
         {
-            title: "Code",
-            dataIndex: "code",
-            key: "code",
-            render: (value: string) => {
-                return <span>{Common.renderData(value)}</span>
-            },
-        },
-        {
             title: "Type",
             dataIndex: "aCouponType",
             key: "aCouponType",
@@ -84,29 +76,9 @@ function CouponListing(props: CouponListingProps) {
             },
         },
         {
-            title: "Currency code",
-            dataIndex: "langs",
-            key: "langs",
-            render: (value: ICouponLang[]) => {
-                return (
-                    <span>
-                        {Common.renderData(value?.find((item) => item?.lang === LangCodeEnum.EN)?.currency_code)}
-                    </span>
-                )
-            },
-        },
-        {
             title: "Discount",
             dataIndex: "discount",
             key: "discount",
-            render: (value: string) => {
-                return <span>{Common.renderData(value)}</span>
-            },
-        },
-        {
-            title: "Prefix",
-            dataIndex: "prefix",
-            key: "prefix",
             render: (value: string) => {
                 return <span>{Common.renderData(value)}</span>
             },

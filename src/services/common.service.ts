@@ -11,7 +11,13 @@ export const commonService = createApi({
                 method: "POST",
             }),
         }),
+        postClearCacheFOApi: builder.mutation<void, void>({
+            query: () => ({
+                url: "/common/clear-cache-fo",
+                method: "POST",
+            }),
+        }),
     }),
 })
 
-export const { usePostClearCacheApiMutation } = commonService
+export const { usePostClearCacheApiMutation, usePostClearCacheFOApiMutation } = commonService

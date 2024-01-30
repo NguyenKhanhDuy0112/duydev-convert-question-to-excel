@@ -14,4 +14,5 @@ export enum PermissionUserEnum {
     MasterPage = "master_page",
     MasterCenter = "master_center",
     UserInfo = "user_info",
+    GroupRoleManagement = "group_role_management",
 }

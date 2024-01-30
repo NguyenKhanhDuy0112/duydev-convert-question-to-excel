@@ -71,6 +71,13 @@ export const SIDE_BARS: SidebarItem[] = [
                 permission: PermissionUserEnum.UserManagement,
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
             },
+            {
+                key: PermissionUserEnum.GroupRoleManagement,
+                link: PageRoute.GroupRoleManagement,
+                label: "Role Management",
+                permission: PermissionUserEnum.UserManagement,
+                roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
+            },
         ],
     },
     {

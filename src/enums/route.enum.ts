@@ -13,6 +13,7 @@ export enum PageRoute {
     MediaManagement = "/media-management",
     MasterPage = "/master-page",
     SettingClearCache = "/setting/clear-cache",
+    GroupRoleManagement = "/group-role-management",
 }
 
 export enum ParamsEnum {

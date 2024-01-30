@@ -4,8 +4,7 @@ import { useNotification, useRouter } from "@/hooks"
 import { useMemo } from "react"
 import { NotificationMessageEnum, NotificationTypeEnum, ParamsEnum } from "@/enums"
 import { Button, Card, Col, Row } from "antd"
-import { usePostClearCacheApiMutation } from "@/services/common.service"
-import { usePostClearCacheFrontOfficeApiMutation } from "@/services/frontOffice.service"
+import { usePostClearCacheApiMutation, usePostClearCacheFOApiMutation } from "@/services/common.service"
 
 function SettingClearCache() {
     //HOOKS
@@ -15,7 +14,7 @@ function SettingClearCache() {
     //SERVICES
     const [postClearCacheApi, { isLoading: isLoadingClearCacheApi }] = usePostClearCacheApiMutation()
     const [postClearCacheFrontOfficeApi, { isLoading: isLoadingClearCacheFrontOfficeApi }] =
-        usePostClearCacheFrontOfficeApiMutation()
+        usePostClearCacheFOApiMutation()
 
     const isFormUserPage = useMemo(() => {
         return searchParams.has(ParamsEnum.ID)

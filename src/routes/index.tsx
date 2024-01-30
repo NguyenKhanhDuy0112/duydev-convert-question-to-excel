@@ -19,6 +19,7 @@ import { updateProfile } from "@/redux/modules/profile/profileSlice"
 //MODELS
 import { IUser } from "@/models"
 import SettingClearCache from "@/views/pages/SettingClearCache"
+import GroupRoleManagement from "@/views/pages/GroupRoleManagement"
 
 //COMPONENTS
 const Loader = lazy(() => import("@/components/Loader/Loader"))
@@ -89,6 +90,10 @@ const appRoutes: RouteObject[] = [
             {
                 path: "users-management",
                 element: <UserManagement />,
+            },
+            {
+                path: "group-role-management",
+                element: <GroupRoleManagement />,
             },
             {
                 path: "setting/clear-cache",

@@ -1,4 +1,4 @@
-import { DataResponse, ICategory, ICoupon, ICouponType, IRequestPaging, IRoleUser, IUser } from "@/models"
+import { DataResponse, ICategory, IRequestPaging, IRoleUser, IUser } from "@/models"
 import { baseQuery } from "./baseQuery.service"
 import { createApi } from "@reduxjs/toolkit/query/react"
 
@@ -12,6 +12,17 @@ export const userService = createApi({
                 params,
                 method: "GET",
             }),
+        }),
+        getGroupRolesApi: builder.query<DataResponse<IRoleUser[]>, void>({
+            query: () => ({
+                url: "/user/groups",
+                method: "GET",
+            }),
+            transformResponse: (rawData: IRoleUser[]) => {
+                return {
+                    data: rawData,
+                }
+            },
         }),
         getUserprofileApi: builder.query<DataResponse<IUser>, void>({
             query: () => ({
@@ -56,6 +67,9 @@ export const userService = createApi({
 export const {
     useGetUsersApiQuery,
     useLazyGetUsersApiQuery,
+
+    useGetGroupRolesApiQuery,
+    useLazyGetGroupRolesApiQuery,
 
     useGetUserprofileApiQuery,
     useLazyGetUserprofileApiQuery,
