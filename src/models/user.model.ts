@@ -10,6 +10,7 @@ export interface IUser {
     groups?: IRoleUser[]
     is_active?: boolean
     role?: RoleUserEnum
+    group_ids?: string[]
     created_at?: Date | null
     updated_at?: Date | null
     uUserGroup?: IUserGroup[]
@@ -51,4 +52,9 @@ export interface IPermission {
     is_active?: boolean
     created_at?: Date | null
     updated_at?: Date | null
+}
+
+export interface IRequestPutGroupRolesForUserApi {
+    group_ids?: string[]
+    user_id?: string
 }

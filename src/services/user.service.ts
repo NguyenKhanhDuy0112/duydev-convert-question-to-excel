@@ -1,4 +1,4 @@
-import { DataResponse, ICategory, IRequestPaging, IRoleUser, IUser } from "@/models"
+import { DataResponse, IRequestPaging, IRequestPutGroupRolesForUserApi, IRoleUser, IUser } from "@/models"
 import { baseQuery } from "./baseQuery.service"
 import { createApi } from "@reduxjs/toolkit/query/react"
 
@@ -24,6 +24,13 @@ export const userService = createApi({
                 }
             },
         }),
+        updateGroupRolesForUserApi: builder.mutation<string, IRequestPutGroupRolesForUserApi>({
+            query: (body) => ({
+                url: `/user/user-groups/${body?.user_id}`,
+                body,
+                method: "PUT",
+            }),
+        }),
         getUserprofileApi: builder.query<DataResponse<IUser>, void>({
             query: () => ({
                 url: "/user/profile",
@@ -42,21 +49,21 @@ export const userService = createApi({
             },
         }),
         createUserApi: builder.mutation<string, IUser>({
-            query: (body: ICategory) => ({
+            query: (body: IUser) => ({
                 url: "/user",
                 body,
                 method: "POST",
             }),
         }),
         updateUserApi: builder.mutation<string, IUser>({
-            query: (body: ICategory) => ({
+            query: (body: IUser) => ({
                 url: `/user/${body?.id}`,
                 body,
                 method: "PUT",
             }),
         }),
         deleteUserApi: builder.mutation<string, IUser>({
-            query: (body: ICategory) => ({
+            query: (body: IUser) => ({
                 url: `/user/${body.id}`,
                 method: "DELETE",
             }),
@@ -80,4 +87,6 @@ export const {
     useCreateUserApiMutation,
     useUpdateUserApiMutation,
     useDeleteUserApiMutation,
+
+    useUpdateGroupRolesForUserApiMutation,
 } = userService

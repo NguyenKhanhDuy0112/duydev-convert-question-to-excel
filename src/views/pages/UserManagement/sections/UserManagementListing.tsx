@@ -9,12 +9,13 @@ import { StatusEnum } from "@/enums"
 interface UserManagementListingProps {
     pagination: IRequestPaging
     data?: DataResponse<IUser[]>
+    loading?: boolean
     onDelete: (data: IUser) => void
     onActionForm: (data: IUser) => void
 }
 
 function UserManagementListing(props: UserManagementListingProps) {
-    const { data, pagination, onActionForm, onDelete } = props
+    const { data, loading, pagination, onActionForm, onDelete } = props
     const [currentRecord, setCurrentRecord] = useState<IUser>({})
 
     const items: MenuProps["items"] = [
@@ -120,6 +121,7 @@ function UserManagementListing(props: UserManagementListingProps) {
             <Table
                 columns={columns}
                 rowKey={"id"}
+                loading={loading}
                 scroll={{ x: 1000 }}
                 dataSource={data?.data || []}
                 pagination={{ current: pagination?.page, total: data?.total }}

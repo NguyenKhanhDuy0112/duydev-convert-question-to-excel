@@ -3,18 +3,19 @@ import { Form, FormInstance, Input } from "antd"
 
 interface GroupRoleFormProps {
     form: FormInstance<IRoleUser>
+    onSubmitForm: (value: IRoleUser) => void
 }
 
 function GroupRoleForm(props: GroupRoleFormProps) {
-    const { form } = props
+    const { form, onSubmitForm } = props
 
     const handleSubmitForm = (value: IRoleUser) => {
         console.log("Value: ", value)
     }
 
     return (
-        <Form form={form} onFinish={handleSubmitForm}>
-            <Form.Item>
+        <Form onFinish={onSubmitForm} labelAlign="left" autoComplete="off" layout="vertical" form={form}>
+            <Form.Item name={"name"}>
                 <Input placeholder="Name" />
             </Form.Item>
         </Form>
