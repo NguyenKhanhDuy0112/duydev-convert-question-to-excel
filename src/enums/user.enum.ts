@@ -4,6 +4,12 @@ export enum RoleUserEnum {
     Staff = "staff",
 }
 
+export enum GenderEnum {
+    Male = 1,
+    Female = 2,
+    Other = 3,
+}
+
 export enum PermissionUserEnum {
     MediaManagement = "media_management",
     UserManagement = "user_management",

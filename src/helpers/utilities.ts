@@ -1,3 +1,5 @@
+import { message } from "antd"
+import { RcFile } from "antd/es/upload"
 import moment from "moment"
 
 //convert file to base64
@@ -144,4 +146,16 @@ export const renderData = (data: any) => {
         return data
     }
     return "-"
+}
+
+export const beforeUpload = (file: RcFile, mb: number = 1) => {
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png"
+    if (!isJpgOrPng) {
+        message.error("You can only upload JPG/PNG file!")
+    }
+    const isCorrectSize = file.size / 1024 / 1024 < mb
+    if (!isCorrectSize) {
+        message.error(`Image must smaller than ${mb}MB!`)
+    }
+    return isJpgOrPng && isCorrectSize
 }

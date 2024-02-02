@@ -37,9 +37,27 @@ export const userService = createApi({
                 method: "GET",
             }),
         }),
-        getPermissionsApi: builder.query<DataResponse<IRoleUser[]>, void>({
+        getGroupPermissionsApi: builder.query<DataResponse<IRoleUser[]>, void>({
             query: () => ({
                 url: "/user/group-perms",
+                method: "GET",
+            }),
+            transformResponse: (rawData: IRoleUser[]) => {
+                return {
+                    data: rawData,
+                }
+            },
+        }),
+        updateGroupPermissionForRole: builder.mutation<DataResponse<IRoleUser>, IRoleUser>({
+            query: (body: IRoleUser) => ({
+                url: `/user/group-permissions/${body?.id}`,
+                body,
+                method: "PUT",
+            }),
+        }),
+        getPermissionsApi: builder.query<DataResponse<IRoleUser[]>, void>({
+            query: () => ({
+                url: "/user/permissions",
                 method: "GET",
             }),
             transformResponse: (rawData: IRoleUser[]) => {
@@ -81,6 +99,9 @@ export const {
     useGetUserprofileApiQuery,
     useLazyGetUserprofileApiQuery,
 
+    useGetGroupPermissionsApiQuery,
+    useLazyGetGroupPermissionsApiQuery,
+
     useGetPermissionsApiQuery,
     useLazyGetPermissionsApiQuery,
 
@@ -89,4 +110,6 @@ export const {
     useDeleteUserApiMutation,
 
     useUpdateGroupRolesForUserApiMutation,
+
+    useUpdateGroupPermissionForRoleMutation,
 } = userService

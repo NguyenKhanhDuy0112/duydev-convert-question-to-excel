@@ -1,5 +1,3 @@
-import { env } from "./env.constant"
-
 export const CookieStorageKey = {
     ACCESS_TOKEN: "access_token",
     REFRESH_TOKEN_SHARE: "refreshTokenShare",

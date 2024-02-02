@@ -109,3 +109,21 @@
 .ant-image {
     width: 100% !important;
 }
+
+.upload-avatar {
+    .ant-upload-select {
+        width: 150px !important;
+        height: 150px !important;
+
+        .ant-upload {
+            padding: 10px;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: contain;
+        }
+    }
+}

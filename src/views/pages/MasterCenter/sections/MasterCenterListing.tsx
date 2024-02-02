@@ -13,7 +13,6 @@ import { FormatDateEnum, StatusEnum } from "@/enums"
 
 //ICONS
 import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
-import { PlusOutlined } from "@ant-design/icons"
 
 //COMPONENTS
 import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"

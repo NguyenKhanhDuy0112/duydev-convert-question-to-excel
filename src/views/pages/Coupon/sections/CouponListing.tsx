@@ -1,9 +1,8 @@
 //MODELS
-import { Common, DataResponse, ICoupon, ICouponLang, ICouponType, IRequestPaging } from "@/models"
+import { Common, DataResponse, ICategoryType, ICoupon, ICouponLang, ICouponType, IRequestPaging } from "@/models"
 
 //UTILITIES
 import moment from "moment"
-import { replaceHttps } from "@/helpers/utilities"
 
 //HOOKS
 import { useState } from "react"
@@ -72,6 +71,32 @@ function CouponListing(props: CouponListingProps) {
                     <Tag color={value?.name === CouponTypeEnum.CODE ? "green-inverse" : "orange-inverse"}>
                         {Common.renderData(value?.name?.toUpperCase())}
                     </Tag>
+                )
+            },
+        },
+        {
+            title: "Category type",
+            dataIndex: "cate_types",
+            key: "cate_types",
+            render: (value: ICategoryType[]) => {
+                //how to random colors
+                const colors = ["blue", "green", "yellow", "purple", "orange", "pink", "black", "white", "brown"]
+                return (
+                    <Row gutter={[6, 6]}>
+                        {value?.map((item, index) => {
+                            let randomColor
+                            if (colors[index]) {
+                                randomColor = colors[index]
+                            } else {
+                                randomColor = colors[Math.floor(Math.random() * colors.length)]
+                            }
+                            return (
+                                <Col>
+                                    <Tag color={randomColor}>{Common.renderData(item.name)}</Tag>
+                                </Col>
+                            )
+                        })}
+                    </Row>
                 )
             },
         },

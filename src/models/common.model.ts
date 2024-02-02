@@ -20,3 +20,8 @@ export type DataResponse<T> = {
     message?: string
     status?: number
 }
+
+export interface SelectOption {
+    label: string
+    value: string
+}

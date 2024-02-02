@@ -1,12 +1,15 @@
-import { RoleUserEnum } from "@/enums"
+import { GenderEnum, RoleUserEnum } from "@/enums"
+import { UploadChangeParam, UploadFile } from "antd/es/upload"
 
 export interface IUser {
     id?: string
+    image?: string | UploadChangeParam<UploadFile>
     first_name?: string
     last_name?: string
     phone?: string
     email?: string
     birthday?: Date | null
+    gender?: GenderEnum
     groups?: IRoleUser[]
     is_active?: boolean
     role?: RoleUserEnum
@@ -31,6 +34,7 @@ export interface IRoleUser {
     name?: string
     is_active?: boolean
     permissions?: IPermission[]
+    permission_ids?: string[]
     uGroupPermission?: IGroupPermission[]
     created_at?: Date | null
     updated_at?: Date | null

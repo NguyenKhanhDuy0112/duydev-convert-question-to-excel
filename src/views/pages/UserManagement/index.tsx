@@ -1,21 +1,37 @@
-import PageWrapper from "@/components/PageWrapper"
+import dayjs from "dayjs"
+
+//CONSTANTS
+import { INIT_PAGINATION } from "@/constants"
+
+//HOOKS
 import { useModal, useNotification, useRouter } from "@/hooks"
-import { IUser } from "@/models"
 import { useEffect, useMemo, useState } from "react"
+
+//MODELS
+import { IUser } from "@/models"
+
+//ENUMS
+import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
+
+//COMPONENTS
+import { Button, Form } from "antd"
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
 import UserManagementListing from "./sections/UserManagementListing"
 import UserManagementForm from "./sections/UserManagementForm"
-import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
-import { Button, Form } from "antd"
+import PageWrapper from "@/components/PageWrapper"
+
+//ICONS
 import { SaveFilled } from "@ant-design/icons"
+
+//SERVICES
 import {
     useCreateUserApiMutation,
-    useGetPermissionsApiQuery,
+    useGetGroupPermissionsApiQuery,
     useGetUsersApiQuery,
     useUpdateGroupRolesForUserApiMutation,
     useUpdateUserApiMutation,
 } from "@/services/user.service"
-import { INIT_PAGINATION } from "@/constants"
+import { useCreateMediaApiMutation } from "@/services/media.service"
 
 function UserManagement() {
     //STATES
@@ -24,17 +40,18 @@ function UserManagement() {
     //HOOKS
     const { visible: visibleConfirmDelete, toggle: toggleConfirmDelete } = useModal()
     const { searchParams, navigate } = useRouter()
-    const [form] = Form.useForm()
+    const [form] = Form.useForm<IUser>()
     const { showNotification } = useNotification()
     const [detailUser, setDetailUser] = useState<IUser>()
 
     //SERVICES
     const { data, isLoading: isLoadingListUsers, refetch: refetchListUsers } = useGetUsersApiQuery(pagination)
-    const { data: dataPermissions } = useGetPermissionsApiQuery()
-    const [updateGroupRoleUserApi, { isLoading: isLoadingPutGroupRoleForUser }] =
+    const { data: roles } = useGetGroupPermissionsApiQuery()
+    const [updateGroupRoleUserApi, { isLoading: isLoadingPutGroupRoleForUser, isUninitialized }] =
         useUpdateGroupRolesForUserApiMutation()
     const [updateUserApi, { isLoading: isLoadingUpdateUser }] = useUpdateUserApiMutation()
     const [postUserApi, { isLoading: isLoadingCreateUser }] = useCreateUserApiMutation()
+    const [uploadImageApi, { isLoading: isLoadingCreateMedia }] = useCreateMediaApiMutation()
 
     useEffect(() => {
         if (searchParams.has(ParamsEnum.ID)) {
@@ -44,7 +61,8 @@ function UserManagement() {
                 if (userDetail?.id) {
                     form.setFieldsValue({
                         ...userDetail,
-                        group_ids: userDetail?.uUserGroup?.map((item) => item?.group_id),
+                        birthday: userDetail?.birthday ? dayjs(userDetail?.birthday) : null,
+                        group_ids: userDetail?.uUserGroup?.map((item) => item?.group_id) as string[],
                     })
                     setDetailUser(userDetail)
                 }
@@ -52,6 +70,9 @@ function UserManagement() {
         } else {
             form.resetFields()
             setDetailUser({})
+            if (!isUninitialized) {
+                refetchListUsers()
+            }
         }
     }, [searchParams])
 
@@ -71,23 +92,25 @@ function UserManagement() {
 
     const handleSubmitForm = async (value: IUser) => {
         const isEdit = detailUser?.id
-        try {
-            if (isEdit) {
-                // await updateUserApi({ ...detailUser, ...value }).unwrap()
-                await updateGroupRoleUserApi({
-                    group_ids: value?.group_ids,
-                    user_id: detailUser?.id,
-                }).unwrap()
+        const payload = { ...value }
 
-                showNotification({
-                    type: NotificationTypeEnum.Success,
-                    message: NotificationMessageEnum.CreateSuccess,
-                })
-            } else {
-                await postUserApi(value).unwrap()
+        try {
+            if (typeof payload?.image !== "string" && payload?.image) {
+                const resImage = await uploadImageApi(payload?.image?.file?.originFileObj as File).unwrap()
+                payload.image = resImage?.link_url
+            }
+
+            if (isEdit) {
+                await updateUserApi({ ...detailUser, ...payload }).unwrap()
                 showNotification({
                     type: NotificationTypeEnum.Success,
                     message: NotificationMessageEnum.UpdateSuccess,
+                })
+            } else {
+                await postUserApi(payload).unwrap()
+                showNotification({
+                    type: NotificationTypeEnum.Success,
+                    message: NotificationMessageEnum.CreateSuccess,
                 })
             }
             refetchListUsers()
@@ -100,6 +123,41 @@ function UserManagement() {
         }
     }
 
+    const handleUpdateRoleUser = async (value: string[]) => {
+        try {
+            await updateGroupRoleUserApi({
+                group_ids: value,
+                user_id: detailUser?.id,
+            }).unwrap()
+
+            showNotification({
+                type: NotificationTypeEnum.Success,
+                message: NotificationMessageEnum.UpdateSuccess,
+            })
+        } catch (err) {
+            showNotification({
+                type: NotificationTypeEnum.Error,
+                message: NotificationMessageEnum.UpdateError,
+            })
+        }
+    }
+
+    const handleUpdateStatusUser = async (value: IUser) => {
+        try {
+            await updateUserApi({ ...detailUser, ...value }).unwrap()
+            showNotification({
+                type: NotificationTypeEnum.Success,
+                message: NotificationMessageEnum.UpdateSuccess,
+            })
+            refetchListUsers()
+        } catch (err) {
+            showNotification({
+                type: NotificationTypeEnum.Error,
+                message: NotificationMessageEnum.UpdateError,
+            })
+        }
+    }
+
     return (
         <PageWrapper
             footer={
@@ -107,7 +165,12 @@ function UserManagement() {
                     <div className="d-flex items-center gap-4">
                         <Button type="dashed">Cancel</Button>
                         <Button
-                            loading={isLoadingUpdateUser || isLoadingCreateUser || isLoadingPutGroupRoleForUser}
+                            loading={
+                                isLoadingUpdateUser ||
+                                isLoadingCreateUser ||
+                                isLoadingPutGroupRoleForUser ||
+                                isLoadingCreateMedia
+                            }
                             icon={<SaveFilled />}
                             type="primary"
                             onClick={() => form.submit()}
@@ -126,6 +189,7 @@ function UserManagement() {
                     loading={isLoadingListUsers}
                     pagination={pagination}
                     onActionForm={handleRedirectForm}
+                    onSetStatusUser={handleUpdateStatusUser}
                     onDelete={(data) => toggleConfirmDelete()}
                 />
             )}
@@ -133,9 +197,10 @@ function UserManagement() {
             {isFormUserPage && (
                 <UserManagementForm
                     onSubmitForm={handleSubmitForm}
+                    onUpdateRoleUser={handleUpdateRoleUser}
                     data={detailUser}
                     form={form}
-                    permissions={dataPermissions?.data}
+                    roles={roles?.data}
                 />
             )}
 

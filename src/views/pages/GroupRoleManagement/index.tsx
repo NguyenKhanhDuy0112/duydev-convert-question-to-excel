@@ -1,18 +1,22 @@
 //MODELS
-import { IRoleUser, IUser } from "@/models"
+import { IPermission, IRoleUser, IUser } from "@/models"
 
 //HOOKS
 import { useEffect, useMemo, useState } from "react"
-import { useModal, useRouter } from "@/hooks"
+import { useModal, useNotification, useRouter } from "@/hooks"
 
 //ENUMS
-import { PageRoute, ParamsEnum } from "@/enums"
+import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
 
 //ICONS
 import { SaveFilled } from "@ant-design/icons"
 
 //SERVICES
-import { useGetGroupRolesApiQuery } from "@/services/user.service"
+import {
+    useGetGroupPermissionsApiQuery,
+    useGetPermissionsApiQuery,
+    useUpdateGroupPermissionForRoleMutation,
+} from "@/services/user.service"
 
 //CONSTANTS
 import { INIT_PAGINATION } from "@/constants"
@@ -30,25 +34,46 @@ function GroupRoleManagement() {
 
     //HOOKS
     const { visible: visibleConfirmDelete, toggle: toggleConfirmDelete } = useModal()
+    const { showNotification } = useNotification()
     const { searchParams, navigate } = useRouter()
     const [form] = Form.useForm<IRoleUser>()
+    const [detailRole, setDetailRole] = useState<IRoleUser>({})
 
     //SERVICES
-    const { data: roles, isLoading: isLoadingRoles } = useGetGroupRolesApiQuery()
+    const { data: roles, isLoading: isLoadingRoles, refetch: refetchListRoles } = useGetGroupPermissionsApiQuery()
+    const { data: permissions, isLoading: isLoadingPermission } = useGetPermissionsApiQuery()
+    const [updatePermissionsForRole, { isLoading: isLoadingUpdatePermissionForRole, isUninitialized }] =
+        useUpdateGroupPermissionForRoleMutation()
 
     useEffect(() => {
         if (searchParams.has(ParamsEnum.ID)) {
             const id = searchParams.get(ParamsEnum.ID)
             if (id) {
                 const roleDetail = roles?.data?.find((item) => item.id === id)
-                form.setFieldsValue({ ...roleDetail })
+                const uniqueNames = roleDetail?.permissions?.reduce((acc: IPermission[], item: IPermission) => {
+                    if (!acc.some((existingItem: IPermission) => existingItem?.name === item?.name)) {
+                        acc.push({ ...item })
+                    }
+                    return acc
+                }, [])
+
+                form.setFieldsValue({
+                    ...roleDetail,
+                    permission_ids: uniqueNames?.map((item) => item.id) as string[],
+                })
+                setDetailRole(roleDetail || {})
             }
         } else {
             form.resetFields()
-        }
-    }, [searchParams])
+            setDetailRole({})
 
-    const isFormUserPage = useMemo(() => {
+            if (!isUninitialized) {
+                refetchListRoles()
+            }
+        }
+    }, [searchParams, roles])
+
+    const isFormPage = useMemo(() => {
         return searchParams.has(ParamsEnum.ID)
     }, [searchParams])
 
@@ -64,14 +89,27 @@ function GroupRoleManagement() {
 
     const handleDeleteRole = (role?: IRoleUser) => {}
 
-    const handleSubmitForm = (value: IUser) => {
+    const handleSubmitForm = (value: IRoleUser) => {
         console.log("value: ", value)
+    }
+
+    const handleUpdatePermissionsForRole = async (value: string[]) => {
+        try {
+            await updatePermissionsForRole({
+                id: detailRole?.id,
+                permission_ids: value,
+            }).unwrap()
+            form.setFieldsValue({ permission_ids: value })
+            showNotification({ type: NotificationTypeEnum.Success, message: NotificationMessageEnum.UpdateSuccess })
+        } catch (err) {
+            showNotification({ type: NotificationTypeEnum.Error, message: NotificationMessageEnum.UpdateError })
+        }
     }
 
     return (
         <PageWrapper
             footer={
-                isFormUserPage && (
+                isFormPage && (
                     <div className="d-flex items-center gap-4">
                         <Button type="dashed">Cancel</Button>
                         <Button icon={<SaveFilled />} type="primary" onClick={() => form.submit()}>
@@ -80,18 +118,29 @@ function GroupRoleManagement() {
                     </div>
                 )
             }
-            hasBackBtn={isFormUserPage}
+            hasBackBtn={isFormPage}
             title="Group Role Management"
         >
-            <GroupRoleListing
-                isLoading={isLoadingRoles}
-                data={roles}
-                onActionForm={handleRedirectForm}
-                onDelete={handleDeleteRole}
-                pagination={pagination}
-            />
+            {!isFormPage && (
+                <GroupRoleListing
+                    isLoading={isLoadingRoles}
+                    data={roles}
+                    onActionForm={handleRedirectForm}
+                    onDelete={handleDeleteRole}
+                    pagination={pagination}
+                />
+            )}
 
-            {/* <GroupRoleForm form={form} /> */}
+            {isFormPage && (
+                <GroupRoleForm
+                    data={detailRole}
+                    isLoading={isLoadingPermission || isLoadingUpdatePermissionForRole}
+                    permissions={permissions?.data}
+                    onSubmitForm={handleSubmitForm}
+                    onUpdatePermissionForRole={handleUpdatePermissionsForRole}
+                    form={form}
+                />
+            )}
 
             <ModalConfirmDelete
                 visible={visibleConfirmDelete}

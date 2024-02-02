@@ -12,10 +12,11 @@ interface UserManagementListingProps {
     loading?: boolean
     onDelete: (data: IUser) => void
     onActionForm: (data: IUser) => void
+    onSetStatusUser: (data: IUser) => void
 }
 
 function UserManagementListing(props: UserManagementListingProps) {
-    const { data, loading, pagination, onActionForm, onDelete } = props
+    const { data, loading, pagination, onActionForm, onDelete, onSetStatusUser } = props
     const [currentRecord, setCurrentRecord] = useState<IUser>({})
 
     const items: MenuProps["items"] = [
@@ -24,7 +25,11 @@ function UserManagementListing(props: UserManagementListingProps) {
             key: "0",
         },
         {
-            label: <div>Activate</div>,
+            label: (
+                <div onClick={() => onSetStatusUser({ ...currentRecord, is_active: !currentRecord?.is_active })}>
+                    {currentRecord?.is_active ? StatusEnum.Deactivated : StatusEnum.Activated}
+                </div>
+            ),
             key: "1",
         },
         {
@@ -75,7 +80,17 @@ function UserManagementListing(props: UserManagementListingProps) {
             dataIndex: "uUserGroup",
             key: "uUserGroup",
             render: (_, record: IUser) => {
-                return <span>{Common.renderData(record?.uUserGroup![0]?.uGroups?.name)}</span>
+                return (
+                    <>
+                        {record?.uUserGroup?.map((item, index) => {
+                            return (
+                                <Tag color="" key={index}>
+                                    {Common.renderData(item?.uGroups?.name)}
+                                </Tag>
+                            )
+                        })}
+                    </>
+                )
             },
         },
         {
