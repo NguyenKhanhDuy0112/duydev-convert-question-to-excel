@@ -1,5 +1,5 @@
 //CONSTANTS
-import { TAB_LANGS } from "@/constants"
+import { CONTENT_STATUS_OPTIONS, TAB_LANGS } from "@/constants"
 
 //HOOKS
 import { useEffect } from "react"
@@ -9,7 +9,7 @@ import { useRouter } from "@/hooks"
 import { IContentDetail, IContentDetailForm } from "@/models"
 
 //COMPONENTS
-import { Button, Card, Col, Form, Input, Modal, Row, Tabs } from "antd"
+import { Button, Card, Col, Form, Input, Modal, Row, Select, Tabs } from "antd"
 import TextEditor from "@/components/TextEditor"
 
 interface ModalFormContentDetailProps {
@@ -30,6 +30,7 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
     useEffect(() => {
         if (data?.length) {
             const payload = {
+                status: data?.[0]?.status,
                 items: TAB_LANGS?.map((item) => data?.find((i) => i?.lang === item?.value)),
             }
             form.setFieldsValue(payload)
@@ -42,6 +43,7 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
         try {
             const payload: IContentDetailForm = {
                 items: values?.items,
+                status: values?.status,
                 master_content_id: data?.[0]?.master_content_id,
                 master_content_detail_id: data?.[0]?.master_content_detail_id,
             }
@@ -75,6 +77,17 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
                 form={form}
                 onFinish={handleSubmitForm}
             >
+                {data?.length ? (
+                    <Row>
+                        <Col xs={{ span: 24 }} lg={{ span: 12 }}>
+                            <Form.Item label="Status" name={"status"}>
+                                <Select placeholder="Select" options={CONTENT_STATUS_OPTIONS} />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                ) : (
+                    ""
+                )}
                 <Form.List name="items">
                     {(fields, { add, remove }) => (
                         <Tabs>

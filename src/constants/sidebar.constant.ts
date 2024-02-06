@@ -37,7 +37,7 @@ export const SIDE_BARS: SidebarItem[] = [
                 link: PageRoute.MasterPage,
                 label: "Master Page",
                 icon: AppstoreOutlined,
-                permission: PermissionUserEnum.CategoryManagement,
+                permission: PermissionUserEnum.PageManagement,
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
             },
             {

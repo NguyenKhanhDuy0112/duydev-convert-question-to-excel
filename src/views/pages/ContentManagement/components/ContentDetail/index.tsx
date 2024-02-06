@@ -5,25 +5,25 @@ import { Common, IContentDetail, IContentDetailList } from "@/models"
 import { useMemo } from "react"
 
 //ENUMS
-import { LangCodeEnum } from "@/enums"
+import { ContentStatusEnum, LangCodeEnum } from "@/enums"
 
 //ICONS
 import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 import { PlusOutlined } from "@ant-design/icons"
 
 //COMPONENTS
-import { Button, Dropdown, Table } from "antd"
-import { AssetsImages } from "@/assets/images"
+import { Button, Dropdown, Table, Tag } from "antd"
 
 interface ContentDetailProps {
     master_content_id?: string
     data?: IContentDetailList
+    onChangeStatus: (value: ContentStatusEnum, record?: IContentDetail) => void
     onActionForm: (data?: IContentDetail[], master_content_id?: string) => void
     onDeleteContentDetail: (data: IContentDetail[]) => void
 }
 
 function ContentDetail(props: ContentDetailProps) {
-    const { data, master_content_id, onDeleteContentDetail, onActionForm } = props
+    const { data, master_content_id, onDeleteContentDetail, onActionForm, onChangeStatus } = props
 
     const columns: any = useMemo(() => {
         return [
@@ -44,23 +44,18 @@ function ContentDetail(props: ContentDetailProps) {
                 },
             },
             {
-                title: "Languages",
-                dataIndex: "sub_title",
-                key: "sub_title",
-                render: (value: string, record: any) => {
+                title: "Status",
+                dataIndex: "status",
+                width: "20%",
+                key: "status",
+                render: (value: ContentStatusEnum) => {
                     return (
-                        <div className="d-flex gap-2 items-center">
-                            {record?.data?.map((item: IContentDetail) => (
-                                <img
-                                    width={25}
-                                    src={
-                                        item?.lang === LangCodeEnum.VI
-                                            ? AssetsImages.vietnamFlag
-                                            : AssetsImages.unitedStatesFlag
-                                    }
-                                />
-                            ))}
-                        </div>
+                        <Tag
+                            color={Common.getColorTagContentByStatus(value)?.color}
+                            className={Common.getColorTagContentByStatus(value)?.className}
+                        >
+                            {Common.renderData(value)}
+                        </Tag>
                     )
                 },
             },
@@ -108,7 +103,7 @@ function ContentDetail(props: ContentDetailProps) {
             <Table
                 columns={columns}
                 rowKey={"id"}
-                scroll={{ x: 1000 }}
+                scroll={{ x: "auto" }}
                 dataSource={Object.keys(data || {})?.map((item) => ({
                     ...data![item]?.find((el) => el?.lang === LangCodeEnum.EN),
                     data: data![item],

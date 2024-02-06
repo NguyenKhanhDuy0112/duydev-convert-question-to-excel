@@ -1,3 +1,6 @@
+import { ContentStatusEnum } from "@/enums"
+import { IContentType } from "./contentType.model"
+
 export interface IContentDetail {
     id?: string
     name?: string
@@ -12,6 +15,10 @@ export interface IContentDetail {
     updated_at?: Date | null
     is_active?: boolean
     position?: number
+    approve_by?: string
+    deleted_by?: string
+    type?: IContentType
+    status?: ContentStatusEnum
     master_content_detail_id?: string
     master_content_id?: string
 }
@@ -22,6 +29,7 @@ export interface IContentDetailList {
 
 export interface IContentDetailForm {
     items: IContentDetail[]
+    status?: ContentStatusEnum
     master_content_id?: string
     master_content_detail_id?: string
 }

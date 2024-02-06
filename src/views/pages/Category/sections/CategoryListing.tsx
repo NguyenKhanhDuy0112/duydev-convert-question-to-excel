@@ -141,8 +141,9 @@ function CategoryListing(props: CategoryListingProps) {
         {
             title: "Action",
             key: "id",
+            fixed: "right",
             align: "center",
-            width: "5%",
+            width: "8%",
             render: (_, record: ICategory) => (
                 <Dropdown overlayClassName="dropdown-action-table" menu={{ items }} trigger={["click"]}>
                     <Button onClick={() => setCurrentRecord(record)} type="text" className="dot-menu-action">

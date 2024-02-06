@@ -96,7 +96,9 @@ function UserManagement() {
 
         try {
             if (typeof payload?.image !== "string" && payload?.image) {
-                const resImage = await uploadImageApi(payload?.image?.file?.originFileObj as File).unwrap()
+                const formData = new FormData()
+                formData.append("file", payload?.image?.file?.originFileObj as File)
+                const resImage = await uploadImageApi(formData).unwrap()
                 payload.image = resImage?.link_url
             }
 

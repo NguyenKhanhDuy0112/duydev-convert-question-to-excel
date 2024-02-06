@@ -10,7 +10,7 @@ import { useAuth, useCookieStorage } from "@/hooks"
 import { useDispatch } from "react-redux"
 
 //SERVICES
-import { useGetUserprofileApiQuery } from "@/services/user.service"
+import { useGetUserProfileApiQuery } from "@/services/user.service"
 
 //REDUX
 import { login } from "@/redux/modules/auth/authSlice"
@@ -124,7 +124,7 @@ function ManageRoutes() {
     const { getCookie } = useCookieStorage()
     const { token } = useAuth()
 
-    const { data } = useGetUserprofileApiQuery(undefined, {
+    const { data } = useGetUserProfileApiQuery(undefined, {
         skip: !token,
     })
 
@@ -136,7 +136,7 @@ function ManageRoutes() {
     }, [])
 
     useEffect(() => {
-        dispatch(updateProfile(data as IUser))
+        dispatch(updateProfile({ ...data, permissions_name: data?.permissions?.map((item) => item?.name) } as IUser))
     }, [data])
 
     return <RouterProvider router={router} />

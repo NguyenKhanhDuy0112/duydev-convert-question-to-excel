@@ -1,7 +1,9 @@
-import { LangCodeEnum, MasterCateEnum } from "@/enums"
+import { ContentStatusEnum, LangCodeEnum, MasterCateEnum } from "@/enums"
 import { IContentDetailList } from "./contentDetail.model"
+import { IContentType } from "./contentType.model"
 
 export interface IContent {
+    id?: string
     name: string
     description: string
     image: string
@@ -12,6 +14,10 @@ export interface IContent {
     type_id: string
     cate_type_id: string
     master_content_id?: string
+    approve_by?: string
+    deleted_by?: string
+    type?: IContentType
+    status?: ContentStatusEnum
     created_at?: Date | null
     updated_at?: Date | null
 }
@@ -20,6 +26,7 @@ export interface IContentForm {
     items: IContent[]
     cate_type_id: string
     type_id: string
+    status?: string
     master_type: MasterCateEnum
     master_content_id?: string
 }

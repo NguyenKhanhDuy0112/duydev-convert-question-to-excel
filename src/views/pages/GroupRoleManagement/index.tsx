@@ -13,9 +13,11 @@ import { SaveFilled } from "@ant-design/icons"
 
 //SERVICES
 import {
+    useCreateRoleApiMutation,
     useGetGroupPermissionsApiQuery,
     useGetPermissionsApiQuery,
     useUpdateGroupPermissionForRoleMutation,
+    useUpdateRoleApiMutation,
 } from "@/services/user.service"
 
 //CONSTANTS
@@ -44,12 +46,14 @@ function GroupRoleManagement() {
     const { data: permissions, isLoading: isLoadingPermission } = useGetPermissionsApiQuery()
     const [updatePermissionsForRole, { isLoading: isLoadingUpdatePermissionForRole, isUninitialized }] =
         useUpdateGroupPermissionForRoleMutation()
+    const [createRoleApi, { isLoading: isLoadingCreateRole }] = useCreateRoleApiMutation()
+    const [updateRoleApi, { isLoading: isLoadingUpdateRole }] = useUpdateRoleApiMutation()
 
     useEffect(() => {
         if (searchParams.has(ParamsEnum.ID)) {
             const id = searchParams.get(ParamsEnum.ID)
             if (id) {
-                const roleDetail = roles?.data?.find((item) => item.id === id)
+                const roleDetail = roles?.data?.find((item: IRoleUser) => item.id === id)
                 const uniqueNames = roleDetail?.permissions?.reduce((acc: IPermission[], item: IPermission) => {
                     if (!acc.some((existingItem: IPermission) => existingItem?.name === item?.name)) {
                         acc.push({ ...item })
@@ -89,8 +93,25 @@ function GroupRoleManagement() {
 
     const handleDeleteRole = (role?: IRoleUser) => {}
 
-    const handleSubmitForm = (value: IRoleUser) => {
-        console.log("value: ", value)
+    const handleSubmitForm = async (value: IRoleUser) => {
+        const isEdit = detailRole?.id
+        try {
+            if (isEdit) {
+                await updateRoleApi(value)
+            } else {
+                await createRoleApi(value)
+            }
+            showNotification({
+                type: NotificationTypeEnum.Success,
+                message: isEdit ? NotificationMessageEnum.UpdateSuccess : NotificationMessageEnum.CreateSuccess,
+            })
+            refetchListRoles()
+        } catch (err) {
+            showNotification({
+                type: NotificationTypeEnum.Error,
+                message: isEdit ? NotificationMessageEnum.UpdateError : NotificationMessageEnum.CreateError,
+            })
+        }
     }
 
     const handleUpdatePermissionsForRole = async (value: string[]) => {

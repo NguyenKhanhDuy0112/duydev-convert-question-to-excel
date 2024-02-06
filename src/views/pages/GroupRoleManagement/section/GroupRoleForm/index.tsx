@@ -11,7 +11,7 @@ interface GroupRoleFormProps {
 }
 
 function GroupRoleForm(props: GroupRoleFormProps) {
-    const { isLoading, permissions, form, onSubmitForm, onUpdatePermissionForRole } = props
+    const { data, isLoading, permissions, form, onSubmitForm, onUpdatePermissionForRole } = props
 
     return (
         <Spin spinning={isLoading}>
@@ -27,19 +27,21 @@ function GroupRoleForm(props: GroupRoleFormProps) {
                             <Input placeholder="Description" />
                         </Form.Item>
                     </Col>
-                    <Col span={24}>
-                        <Form.Item label="Permissions" name={"permission_ids"}>
-                            <Checkbox.Group onChange={(value) => onUpdatePermissionForRole(value as string[])}>
-                                <Row gutter={[8, 8]}>
-                                    {permissions?.map((permission) => (
-                                        <Col span={8} key={permission.id}>
-                                            <Checkbox value={permission.id}>{permission.desc}</Checkbox>
-                                        </Col>
-                                    ))}
-                                </Row>
-                            </Checkbox.Group>
-                        </Form.Item>
-                    </Col>
+                    {data?.id && (
+                        <Col span={24}>
+                            <Form.Item label="Permissions" name={"permission_ids"}>
+                                <Checkbox.Group onChange={(value) => onUpdatePermissionForRole(value as string[])}>
+                                    <Row gutter={[8, 8]}>
+                                        {permissions?.map((permission) => (
+                                            <Col span={8} key={permission.id}>
+                                                <Checkbox value={permission.id}>{permission.desc}</Checkbox>
+                                            </Col>
+                                        ))}
+                                    </Row>
+                                </Checkbox.Group>
+                            </Form.Item>
+                        </Col>
+                    )}
                 </Row>
             </Form>
         </Spin>

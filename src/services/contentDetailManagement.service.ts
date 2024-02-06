@@ -26,6 +26,13 @@ export const contentDetailManagementService = createApi({
                 method: "PUT",
             }),
         }),
+        updateStatusContentDetailManagementApi: builder.mutation<string, IContentDetailForm>({
+            query: (body: IContentDetailForm) => ({
+                url: `/content-detail-mn/approve-reject/${body?.master_content_detail_id}`,
+                body,
+                method: "PUT",
+            }),
+        }),
         deleteContentDetailManagementApi: builder.mutation<string, { master_content_detail_id: string }>({
             query: (body) => ({
                 url: `/content-detail-mn/${body.master_content_detail_id}`,
@@ -44,4 +51,6 @@ export const {
     useUpdateContentDetailManagementApiMutation,
 
     useDeleteContentDetailManagementApiMutation,
+
+    useUpdateStatusContentDetailManagementApiMutation,
 } = contentDetailManagementService

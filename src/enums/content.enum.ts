@@ -5,3 +5,9 @@ export enum ContentTypeEnum {
     CONTENT = "content",
     PAGE = "page",
 }
+
+export enum ContentStatusEnum {
+    WAITING = "WAITING",
+    APPROVED = "APPROVED",
+    REJECTED = "REJECTED",
+}

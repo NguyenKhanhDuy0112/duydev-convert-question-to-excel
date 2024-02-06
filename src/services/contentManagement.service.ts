@@ -78,6 +78,13 @@ export const contentManagementService = createApi({
                 method: "PUT",
             }),
         }),
+        updateStatusContentManagementApi: builder.mutation<string, IContentForm>({
+            query: (body: IContentForm) => ({
+                url: `/content-mn/approve-reject/${body?.master_content_id}`,
+                body,
+                method: "PUT",
+            }),
+        }),
         deleteContentManagementApi: builder.mutation<string, { master_content_id: string }>({
             query: (body) => ({
                 url: `/content-mn/${body.master_content_id}`,
@@ -108,4 +115,6 @@ export const {
     useUpdateContentManagementApiMutation,
 
     useDeleteContentManagementApiMutation,
+
+    useUpdateStatusContentManagementApiMutation,
 } = contentManagementService

@@ -1,10 +1,10 @@
 import { AssetsImages } from "@/assets/images"
 
 //MODELS
-import { IContentDetail, IContentItem } from "@/models"
+import { Common, IContent, IContentDetail, IContentItem } from "@/models"
 
 //ENUMS
-import { LangCodeEnum } from "@/enums"
+import { ContentStatusEnum, LangCodeEnum } from "@/enums"
 
 //HOOKS
 import { useMemo, useState } from "react"
@@ -13,20 +13,30 @@ import { useMemo, useState } from "react"
 import { useGetContentTypeManagementApiQuery } from "@/services/contentManagement.service"
 
 //COMPONENTS
-import { Badge, Button, Card, Dropdown, MenuProps } from "antd"
+import { Badge, Button, Card, Dropdown, MenuProps, Select, Tag } from "antd"
 import ContentDetail from "../ContentDetail"
 import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
+import { CONTENT_STATUS_OPTIONS } from "@/constants"
 
 interface ContentProps {
     data?: IContentItem
     onDeleteContent: (data?: IContentItem) => void
     onEditContent: (data?: IContentItem) => void
+    onChangeStatusContent: (status: ContentStatusEnum, record?: IContent) => void
     onEditContentDetail: (data?: IContentDetail[]) => void
     onDeleteContentDetail: (data: IContentDetail[]) => void
+    onChangeStatusContentDetail: (status: ContentStatusEnum, record?: IContentDetail) => void
 }
 
 function Content(props: ContentProps) {
-    const { data, onEditContent, onDeleteContent, onEditContentDetail, onDeleteContentDetail } = props
+    const {
+        data,
+        onEditContent,
+        onDeleteContent,
+        onEditContentDetail,
+        onDeleteContentDetail,
+        onChangeStatusContentDetail,
+    } = props
 
     const [currentLang, setCurrentLang] = useState<LangCodeEnum>(LangCodeEnum.EN)
 
@@ -53,36 +63,32 @@ function Content(props: ContentProps) {
     return (
         <Badge.Ribbon
             placement="start"
-            text={contentTypes?.data?.find((item) => item?.id === displayContent?.type_id)?.name}
+            text={
+                <div className="">
+                    <span>{contentTypes?.data?.find((item) => item?.id === displayContent?.type_id)?.name}</span>
+                    <Tag
+                        className={`m-1 ${
+                            Common.getColorTagContentByStatus(displayContent?.status as ContentStatusEnum)?.className
+                        }`}
+                        color={Common.getColorTagContentByStatus(displayContent?.status as ContentStatusEnum)?.color}
+                    >
+                        {displayContent?.status}
+                    </Tag>
+                </div>
+            }
         >
             <Card
-                className="card__content"
-                title={
-                    <div className="d-flex gap-4">
-                        {displayContent?.name}
-                        <div className="d-flex gap-2">
-                            <img
-                                onClick={() => setCurrentLang(LangCodeEnum.EN)}
-                                width={25}
-                                className="cursor-pointer"
-                                src={AssetsImages.unitedStatesFlag}
-                            />
-                            <img
-                                onClick={() => setCurrentLang(LangCodeEnum.VI)}
-                                width={25}
-                                className="cursor-pointer"
-                                src={AssetsImages.vietnamFlag}
-                            />
-                        </div>
-                    </div>
-                }
+                className={`card__content`}
+                title={displayContent?.name}
                 size="default"
                 extra={
-                    <Dropdown overlayClassName="dropdown-action-table" menu={{ items }} trigger={["click"]}>
-                        <Button type="text" className="dot-menu-action">
-                            <DotMenuIc />
-                        </Button>
-                    </Dropdown>
+                    <>
+                        <Dropdown overlayClassName="dropdown-action-table" menu={{ items }} trigger={["click"]}>
+                            <Button type="text" className="dot-menu-action">
+                                <DotMenuIc />
+                            </Button>
+                        </Dropdown>
+                    </>
                 }
             >
                 <ContentDetail
@@ -90,6 +96,7 @@ function Content(props: ContentProps) {
                     data={data?.items}
                     onActionForm={onEditContentDetail}
                     onDeleteContentDetail={onDeleteContentDetail}
+                    onChangeStatus={onChangeStatusContentDetail}
                 />
             </Card>
         </Badge.Ribbon>

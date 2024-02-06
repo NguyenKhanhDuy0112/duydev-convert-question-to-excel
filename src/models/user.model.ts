@@ -18,6 +18,7 @@ export interface IUser {
     updated_at?: Date | null
     uUserGroup?: IUserGroup[]
     permissions?: IPermission[]
+    permissions_name?: string[]
 }
 
 export interface IUserGroup {

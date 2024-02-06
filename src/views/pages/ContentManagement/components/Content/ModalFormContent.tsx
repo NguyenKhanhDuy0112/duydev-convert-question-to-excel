@@ -1,11 +1,11 @@
 //CONSTANTS
-import { TAB_LANGS } from "@/constants"
+import { CONTENT_STATUS_OPTIONS, TAB_LANGS } from "@/constants"
 
 //ENUMS
-import { ContentTypeEnum, LangCodeEnum, MasterCateEnum, MessageValidateForm } from "@/enums"
+import { ContentTypeEnum, LangCodeEnum, MasterCateEnum, MessageValidateForm, PermissionUserEnum } from "@/enums"
 
 //HOOKS
-import { useRouter } from "@/hooks"
+import { useProfile, useRouter } from "@/hooks"
 import { useEffect } from "react"
 
 //MODELS
@@ -15,7 +15,7 @@ import { IContentForm, IContentItem } from "@/models"
 import { useGetContentTypeManagementApiQuery } from "@/services/contentManagement.service"
 
 //COMPONENTS
-import { Button, Card, Col, Form, Input, Modal, Row, Select, Tabs } from "antd"
+import { Button, Col, Form, Input, Modal, Row, Select, Tabs } from "antd"
 import TextEditor from "@/components/TextEditor"
 
 interface ModalFormContentProps {
@@ -34,6 +34,7 @@ function ModalFormContent(props: ModalFormContentProps) {
 
     //HOOKS
     const { params } = useRouter()
+    const { permissions_name } = useProfile()
 
     //SERVICES
     const { data: contentTypes } = useGetContentTypeManagementApiQuery()
@@ -55,6 +56,7 @@ function ModalFormContent(props: ModalFormContentProps) {
             items: values?.items,
             cate_type_id: params?.cateTypeID as string,
             type_id: values?.type_id,
+            status: values?.status,
             master_type: MasterCateEnum.COUPON_MASTER_CATE,
             master_content_id: data && data[LangCodeEnum.EN] ? data[LangCodeEnum.EN].master_content_id : undefined,
         }
@@ -101,6 +103,13 @@ function ModalFormContent(props: ModalFormContentProps) {
                             </Select>
                         </Form.Item>
                     </Col>
+                    {data?.en?.id && permissions_name?.includes(PermissionUserEnum.ApprovalManagement) && (
+                        <Col xs={{ span: 24 }} lg={{ span: 12 }}>
+                            <Form.Item label="Status" name={`status`}>
+                                <Select placeholder="Select status" options={CONTENT_STATUS_OPTIONS} />
+                            </Form.Item>
+                        </Col>
+                    )}
                 </Row>
                 <Form.List name="items">
                     {(fields, { add, remove }) => (

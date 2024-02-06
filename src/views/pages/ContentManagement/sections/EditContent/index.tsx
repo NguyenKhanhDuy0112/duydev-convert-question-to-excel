@@ -3,20 +3,24 @@ import { useState } from "react"
 import { useModal, useNotification } from "@/hooks"
 
 //MODELS
-import { IContentDetail, IContentDetailForm, IContentForm, IContentItem, IContentList } from "@/models"
+import { IContent, IContentDetail, IContentDetailForm, IContentForm, IContentItem, IContentList } from "@/models"
 
 //SERVICES
 import {
     useCreateContentManagementApiMutation,
     useDeleteContentManagementApiMutation,
     useUpdateContentManagementApiMutation,
+    useUpdateStatusContentManagementApiMutation,
 } from "@/services/contentManagement.service"
 import {
     useCreateContentDetailManagementApiMutation,
     useDeleteContentDetailManagementApiMutation,
     useUpdateContentDetailManagementApiMutation,
+    useUpdateStatusContentDetailManagementApiMutation,
 } from "@/services/contentDetailManagement.service"
-import { NotificationMessageEnum, NotificationTypeEnum } from "@/enums"
+
+//ENUMS
+import { ContentStatusEnum, LangCodeEnum, NotificationMessageEnum, NotificationTypeEnum } from "@/enums"
 
 //ICONS
 import { PlusOutlined, EyeOutlined } from "@ant-design/icons"
@@ -50,11 +54,15 @@ function EditContent(props: EditContentProps) {
 
     //SERVICES
     const [createContentApi, { isLoading: isLoadingCreateContent }] = useCreateContentManagementApiMutation()
+    const [updateStatusContentApi, { isLoading: isLoadingUpdateStatusContent }] =
+        useUpdateStatusContentManagementApiMutation()
     const [updateContentApi, { isLoading: isLoadingUpdateContent }] = useUpdateContentManagementApiMutation()
     const [deleteContentApi, { isLoading: isLoadingDeleteContent }] = useDeleteContentManagementApiMutation()
 
     const [createContentDetailApi, { isLoading: isLoadingCreateContentDetail }] =
         useCreateContentDetailManagementApiMutation()
+    const [updateStatusContentDetailApi, { isLoading: isLoadingUpdateStatusContentDetail }] =
+        useUpdateStatusContentDetailManagementApiMutation()
     const [updateContentDetailApi, { isLoading: isLoadingUpdateContentDetail }] =
         useUpdateContentDetailManagementApiMutation()
     const [deleteContentDetailApi, { isLoading: isLoadingDeleteContentDetail }] =
@@ -91,6 +99,10 @@ function EditContent(props: EditContentProps) {
         try {
             if (currentContent?.en) {
                 await updateContentApi(values)
+
+                if (currentContent?.en?.status !== values?.status) {
+                    await updateStatusContentApi(values)
+                }
             } else {
                 await createContentApi(values)
             }
@@ -111,6 +123,7 @@ function EditContent(props: EditContentProps) {
 
     const handleSubmitFormContentDetail = async (values: IContentDetailForm) => {
         const isEdit = currentContentDetail.length > 0
+
         try {
             const formValues: IContentDetailForm = {
                 ...values,
@@ -119,6 +132,7 @@ function EditContent(props: EditContentProps) {
 
             if (currentContentDetail.length > 0) {
                 await updateContentDetailApi(formValues)
+                await updateStatusContentDetailApi(values)
             } else {
                 await createContentDetailApi(formValues)
             }
@@ -182,6 +196,10 @@ function EditContent(props: EditContentProps) {
         }
     }
 
+    const handleChangeStatusContentDetail = (status: ContentStatusEnum, record?: IContentDetail) => {}
+
+    const handleChangeStatusContent = (status: ContentStatusEnum, record?: IContent) => {}
+
     return (
         <>
             <div className="d-flex justify-between m-b-4 gap-4">
@@ -200,15 +218,17 @@ function EditContent(props: EditContentProps) {
                             key={key}
                             onEditContent={handleToggleModalEditContent}
                             onDeleteContent={handleToggleModalDeleteContent}
+                            onChangeStatusContent={handleChangeStatusContent}
                             onEditContentDetail={handleToggleModalEditContentDetail}
                             onDeleteContentDetail={handleToggleModalDeleteContentDetail}
+                            onChangeStatusContentDetail={handleChangeStatusContentDetail}
                         />
                     )
                 })}
             </Space>
 
             <ModalFormContent
-                isLoading={isLoadingCreateContent || isLoadingUpdateContent}
+                isLoading={isLoadingCreateContent || isLoadingUpdateContent || isLoadingUpdateStatusContent}
                 data={currentContent}
                 show={visibleModalEditContent}
                 onClose={toggleModalEditContent}
@@ -216,7 +236,9 @@ function EditContent(props: EditContentProps) {
             />
 
             <ModalFormContentDetail
-                isLoading={isLoadingCreateContentDetail || isLoadingUpdateContentDetail}
+                isLoading={
+                    isLoadingCreateContentDetail || isLoadingUpdateContentDetail || isLoadingUpdateStatusContentDetail
+                }
                 data={currentContentDetail}
                 show={visibleModalEditContentDetail}
                 onClose={toggleModalEditContentDetail}
