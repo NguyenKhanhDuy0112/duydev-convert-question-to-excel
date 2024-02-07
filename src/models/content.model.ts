@@ -26,7 +26,7 @@ export interface IContentForm {
     items: IContent[]
     cate_type_id: string
     type_id: string
-    status?: string
+    status?: ContentStatusEnum
     master_type: MasterCateEnum
     master_content_id?: string
 }

@@ -1,5 +1,3 @@
-import { AssetsImages } from "@/assets/images"
-
 //MODELS
 import { Common, IContent, IContentDetail, IContentItem } from "@/models"
 
@@ -13,10 +11,9 @@ import { useMemo, useState } from "react"
 import { useGetContentTypeManagementApiQuery } from "@/services/contentManagement.service"
 
 //COMPONENTS
-import { Badge, Button, Card, Dropdown, MenuProps, Select, Tag } from "antd"
+import { Badge, Button, Card, Dropdown, MenuProps, Tag } from "antd"
 import ContentDetail from "../ContentDetail"
 import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
-import { CONTENT_STATUS_OPTIONS } from "@/constants"
 
 interface ContentProps {
     data?: IContentItem

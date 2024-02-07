@@ -7,14 +7,14 @@ import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 import { PlusOutlined } from "@ant-design/icons"
 
 //ENUMS
-import { PageRoute, ParamsEnum } from "@/enums"
+import { ContentStatusEnum, PageRoute, ParamsEnum } from "@/enums"
 
 //HOOKS
 import { useMemo, useState } from "react"
 import { useRouter } from "@/hooks"
 
 //COMPONENTS
-import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table } from "antd"
+import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
 
 interface CategoryListingProps {
     data?: DataResponse<ICategory[]>
@@ -128,6 +128,21 @@ function CategoryListing(props: CategoryListingProps) {
             key: "name_localize",
             render: (value: string) => {
                 return <span>{Common.renderData(value)}</span>
+            },
+        },
+        {
+            title: "Status",
+            dataIndex: "is_wait_approve",
+            key: "is_wait_approve",
+            render: (value: boolean) => {
+                const status = Common.getColorTagContentByStatus(
+                    value ? ContentStatusEnum.WAITING : ContentStatusEnum.APPROVED
+                )
+                return (
+                    <Tag color={status?.color} className={status?.className}>
+                        {status?.name}
+                    </Tag>
+                )
             },
         },
         {

@@ -19,7 +19,7 @@ export class Common {
                 color = "red-inverse"
                 break
         }
-        return { color, className }
+        return { color, className, name: status }
     }
 }
 

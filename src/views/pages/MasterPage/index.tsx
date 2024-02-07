@@ -3,10 +3,11 @@ import { useModal, useNotification, useRouter } from "@/hooks"
 import { useEffect, useMemo, useState } from "react"
 
 //MODELS
-import { ICategoryType, IContent, ICoupon, IMasterPage, IMasterPageForm, IRequestPaging } from "@/models"
+import { ICategoryType, IContent, IContentForm, ICoupon, IMasterPage, IMasterPageForm, IRequestPaging } from "@/models"
 
 //ENUMS
 import {
+    ContentStatusEnum,
     ContentTypeEnum,
     MasterCateEnum,
     NotificationMessageEnum,
@@ -31,6 +32,7 @@ import {
     useGetContentManagementMasterPageApiQuery,
     useGetContentTypeManagementApiQuery,
     useUpdateContentManagementApiMutation,
+    useUpdateStatusContentManagementApiMutation,
 } from "@/services/contentManagement.service"
 
 //ICONS
@@ -73,10 +75,11 @@ function MasterPage() {
     const [updateMasterPageApi, { isLoading: isLoadingUpdate }] = useUpdateMasterPageApiMutation()
     const [deleteMasterPageApi, { isLoading: isLoadingDelete }] = useDeleteMasterPageApiMutation()
 
-    //SERVICES
     const [createContentApi, { isLoading: isLoadingCreateContent }] = useCreateContentManagementApiMutation()
     const [updateContentApi, { isLoading: isLoadingUpdateContent }] = useUpdateContentManagementApiMutation()
     const [deleteContentApi, { isLoading: isLoadingDeleteContent }] = useDeleteContentManagementApiMutation()
+    const [updateStatusContentApi, { isLoading: isLoadingUpdateStatusContent }] =
+        useUpdateStatusContentManagementApiMutation()
 
     //ANTD
     const [form] = Form.useForm()
@@ -95,6 +98,7 @@ function MasterPage() {
                     setDataDetail(masterPageDetail)
                     form.setFieldsValue({
                         ...masterPageDetail,
+                        status: items?.length ? items[0]?.status : "",
                         items: items?.length ? items : TAB_LANGS.map((item) => ({ lang: item?.value })),
                     })
                 }
@@ -111,7 +115,10 @@ function MasterPage() {
             Object.keys(contentMasterPage?.data || {})?.forEach((item) => {
                 items = [...items, ...(contentMasterPage?.data![item] || [])]
             })
-            form.setFieldsValue({ items: items?.length ? items : TAB_LANGS.map((item) => ({ lang: item?.value })) })
+            form.setFieldsValue({
+                status: items?.length ? items[0]?.status : "",
+                items: items?.length ? items : TAB_LANGS.map((item) => ({ lang: item?.value })),
+            })
         }
     }, [contentMasterPage])
 
@@ -159,10 +166,16 @@ function MasterPage() {
                 delete formValues.route
                 delete formValues.name_localize
                 delete formValues.name
+                await updateStatusContentApi({
+                    master_content_id: values?.items![0]?.master_content_id || "",
+                    status: values?.status as ContentStatusEnum,
+                } as IContentForm)
+
                 await updateContentApi({
                     ...formValues,
-                    master_content_id: values?.items[0]?.master_content_id || "",
-                })
+                    master_content_id: values?.items![0]?.master_content_id || "",
+                } as IContentForm)
+
                 refetchContentMasterPage()
             } else {
                 const response = await createMasterPageApi(formValues).unwrap()
@@ -172,7 +185,7 @@ function MasterPage() {
                 delete formValues.name
                 await createContentApi({
                     ...formValues,
-                })
+                } as IContentForm)
             }
 
             showNotification({

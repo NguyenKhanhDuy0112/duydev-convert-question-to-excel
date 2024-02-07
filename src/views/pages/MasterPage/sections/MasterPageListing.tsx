@@ -9,7 +9,7 @@ import { Common, DataResponse, ICategoryType, IMasterPage, IRequestPaging } from
 import { ColumnsType } from "antd/es/table"
 
 //ENUMS
-import { FormatDateEnum } from "@/enums"
+import { ContentStatusEnum, FormatDateEnum } from "@/enums"
 
 //ICONS
 import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
@@ -66,6 +66,21 @@ function MasterPageListing(props: MasterCenterListingProps) {
             key: "route",
             render: (value: string) => {
                 return <span>{Common.renderData(value)}</span>
+            },
+        },
+        {
+            title: "Status",
+            dataIndex: "is_wait_approve",
+            key: "is_wait_approve",
+            render: (value: boolean) => {
+                const status = Common.getColorTagContentByStatus(
+                    value ? ContentStatusEnum.WAITING : ContentStatusEnum.APPROVED
+                )
+                return (
+                    <Tag color={status?.color} className={status?.className}>
+                        {status?.name}
+                    </Tag>
+                )
             },
         },
         {

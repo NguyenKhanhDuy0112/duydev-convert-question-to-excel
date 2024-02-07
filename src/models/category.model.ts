@@ -6,6 +6,7 @@ export interface ICategory {
     name_localize?: string
     project_id?: string
     cate_type_id?: string
+    is_wait_approve?: boolean
     items?: ICategory[]
     subs?: ICategory[]
     is_active?: boolean

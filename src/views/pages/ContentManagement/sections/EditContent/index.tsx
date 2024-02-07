@@ -1,5 +1,5 @@
 //HOOKS
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useModal, useNotification } from "@/hooks"
 
 //MODELS
@@ -67,6 +67,12 @@ function EditContent(props: EditContentProps) {
         useUpdateContentDetailManagementApiMutation()
     const [deleteContentDetailApi, { isLoading: isLoadingDeleteContentDetail }] =
         useDeleteContentDetailManagementApiMutation()
+
+    useEffect(() => {
+        setCurrentContent({})
+        setCurrentContentDetail([])
+        setCurrentMasterContentId("")
+    }, [data])
 
     const handleToggleModalEditContent = (data?: IContentItem) => {
         toggleModalEditContent()
