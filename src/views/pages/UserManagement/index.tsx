@@ -26,6 +26,7 @@ import { SaveFilled } from "@ant-design/icons"
 //SERVICES
 import {
     useCreateUserApiMutation,
+    useDeleteUserApiMutation,
     useGetGroupPermissionsApiQuery,
     useGetUsersApiQuery,
     useUpdateGroupRolesForUserApiMutation,
@@ -45,11 +46,17 @@ function UserManagement() {
     const [detailUser, setDetailUser] = useState<IUser>()
 
     //SERVICES
-    const { data, isLoading: isLoadingListUsers, refetch: refetchListUsers } = useGetUsersApiQuery(pagination)
+    const {
+        data,
+        isLoading: isLoadingListUsers,
+        isFetching: isFetchingListUsers,
+        refetch: refetchListUsers,
+    } = useGetUsersApiQuery(pagination)
     const { data: roles } = useGetGroupPermissionsApiQuery()
     const [updateGroupRoleUserApi, { isLoading: isLoadingPutGroupRoleForUser, isUninitialized }] =
         useUpdateGroupRolesForUserApiMutation()
     const [updateUserApi, { isLoading: isLoadingUpdateUser }] = useUpdateUserApiMutation()
+    const [deleteUserApi, { isLoading: isLoadingDeleteUserApi }] = useDeleteUserApiMutation()
     const [postUserApi, { isLoading: isLoadingCreateUser }] = useCreateUserApiMutation()
     const [uploadImageApi, { isLoading: isLoadingCreateMedia }] = useCreateMediaApiMutation()
 
@@ -79,8 +86,6 @@ function UserManagement() {
     const isFormUserPage = useMemo(() => {
         return searchParams.has(ParamsEnum.ID)
     }, [searchParams])
-
-    const handleConfirmDelete = () => {}
 
     const handleRedirectForm = (values?: IUser) => {
         if (values?.id) {
@@ -125,6 +130,24 @@ function UserManagement() {
         }
     }
 
+    const handleConfirmDelete = async () => {
+        try {
+            await deleteUserApi({ id: detailUser?.id }).unwrap()
+            showNotification({
+                type: NotificationTypeEnum.Success,
+                message: NotificationMessageEnum.DeleteSuccess,
+            })
+            toggleConfirmDelete()
+            setDetailUser({})
+            refetchListUsers()
+        } catch (err) {
+            showNotification({
+                type: NotificationTypeEnum.Error,
+                message: NotificationMessageEnum.DeleteError,
+            })
+        }
+    }
+
     const handleUpdateRoleUser = async (value: string[]) => {
         try {
             await updateGroupRoleUserApi({
@@ -165,7 +188,9 @@ function UserManagement() {
             footer={
                 isFormUserPage && (
                     <div className="d-flex items-center gap-4">
-                        <Button type="dashed">Cancel</Button>
+                        <Button type="dashed" onClick={() => navigate(-1)}>
+                            Cancel
+                        </Button>
                         <Button
                             loading={
                                 isLoadingUpdateUser ||
@@ -188,11 +213,14 @@ function UserManagement() {
             {!isFormUserPage && (
                 <UserManagementListing
                     data={data}
-                    loading={isLoadingListUsers}
+                    loading={isLoadingListUsers || isFetchingListUsers}
                     pagination={pagination}
                     onActionForm={handleRedirectForm}
                     onSetStatusUser={handleUpdateStatusUser}
-                    onDelete={(data) => toggleConfirmDelete()}
+                    onDelete={(data) => {
+                        toggleConfirmDelete()
+                        setDetailUser(data)
+                    }}
                 />
             )}
 
@@ -209,6 +237,7 @@ function UserManagement() {
             <ModalConfirmDelete
                 visible={visibleConfirmDelete}
                 onClose={toggleConfirmDelete}
+                isLoading={isLoadingDeleteUserApi}
                 onConfirm={handleConfirmDelete}
             />
         </PageWrapper>

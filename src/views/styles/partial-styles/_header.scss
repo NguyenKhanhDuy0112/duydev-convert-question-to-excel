@@ -40,18 +40,29 @@
     }
 
     &__profile {
-        width: 40px;
+        background-color: $secondary-400;
+        padding: 0.5rem;
         height: 40px;
-        border-radius: 50%;
         cursor: pointer;
+        border-radius: 24px;
         @include flex-center();
         @include border(1px, $primary);
 
         img {
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             object-fit: cover;
+        }
+
+        &-name {
+            font-size: 14px;
+            margin-left: 0.5rem;
+        }
+
+        &-arrow {
+            font-size: 12px;
+            margin-left: 0.5rem;
         }
     }
 }

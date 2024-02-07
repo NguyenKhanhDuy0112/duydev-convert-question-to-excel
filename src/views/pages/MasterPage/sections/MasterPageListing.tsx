@@ -109,7 +109,7 @@ function MasterPageListing(props: MasterCenterListingProps) {
                 rowKey={"id"}
                 loading={loading}
                 dataSource={data?.data || []}
-                scroll={{ x: 1000 }}
+                scroll={{ x: "auto" }}
                 onChange={(pagination) => {
                     console.log("Pagination: ", pagination)
                 }}

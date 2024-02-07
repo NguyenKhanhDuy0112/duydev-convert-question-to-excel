@@ -37,7 +37,7 @@ function UserManagementListing(props: UserManagementListingProps) {
             key: "2",
         },
         {
-            label: <div onClick={() => onDelete({})}>Delete</div>,
+            label: <div onClick={() => onDelete({ ...currentRecord })}>Delete</div>,
             key: "3",
         },
     ]
@@ -81,15 +81,15 @@ function UserManagementListing(props: UserManagementListingProps) {
             key: "uUserGroup",
             render: (_, record: IUser) => {
                 return (
-                    <>
+                    <div>
                         {record?.uUserGroup?.map((item, index) => {
                             return (
-                                <Tag color="" key={index}>
+                                <Tag color="" className="m-1" key={index}>
                                     {Common.renderData(item?.uGroups?.name)}
                                 </Tag>
                             )
                         })}
-                    </>
+                    </div>
                 )
             },
         },
@@ -137,7 +137,7 @@ function UserManagementListing(props: UserManagementListingProps) {
                 columns={columns}
                 rowKey={"id"}
                 loading={loading}
-                scroll={{ x: 1000 }}
+                scroll={{ x: "auto" }}
                 dataSource={data?.data || []}
                 pagination={{ current: pagination?.page, total: data?.total }}
             />

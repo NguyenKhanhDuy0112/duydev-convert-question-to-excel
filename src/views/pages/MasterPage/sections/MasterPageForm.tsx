@@ -5,8 +5,8 @@ import { MessageValidateForm } from "@/enums"
 import { IMasterPageForm } from "@/models"
 
 //COMPONENTS
-import { Col, Form, FormInstance, Input, Row, Tabs } from "antd"
-import { TAB_LANGS } from "@/constants"
+import { Col, Form, FormInstance, Input, Row, Select, Tabs } from "antd"
+import { CONTENT_STATUS_OPTIONS, TAB_LANGS } from "@/constants"
 import TextEditor from "@/components/TextEditor"
 
 interface MasterPageFormProps {
@@ -68,6 +68,20 @@ function MasterPageForm(props: MasterPageFormProps) {
                         name={"route"}
                     >
                         <Input placeholder="Route" />
+                    </Form.Item>
+                </Col>
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                    <Form.Item
+                        label="Status"
+                        rules={[
+                            {
+                                required: true,
+                                message: MessageValidateForm.Required,
+                            },
+                        ]}
+                        name={"status"}
+                    >
+                        <Select placeholder="Select" options={CONTENT_STATUS_OPTIONS} />
                     </Form.Item>
                 </Col>
             </Row>

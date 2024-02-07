@@ -1,22 +1,33 @@
+//CONSTANTS
 import { GENDER_OPTIONS } from "@/constants"
+
+//ENUMS
 import { MessageValidateForm } from "@/enums"
+
+//UTILITIES
 import { beforeUpload, getBase64 } from "@/helpers/utilities"
-import { IRoleUser, IUser } from "@/models"
-import { Checkbox, Col, DatePicker, Form, FormInstance, Input, Row, Select, Upload } from "antd"
-import { RcFile, UploadChangeParam, UploadFile, UploadProps } from "antd/es/upload"
+
+//MODELS
+import { IUser } from "@/models"
+import { RcFile, UploadChangeParam, UploadFile } from "antd/es/upload"
+
+//COMPONENTS
+import { Col, DatePicker, Form, FormInstance, Input, Row, Select, Upload, UploadProps } from "antd"
+
+//HOOKS
 import { useEffect, useMemo, useState } from "react"
+
+//ICONS
 import { UploadOutlined } from "@ant-design/icons"
 
-interface UserManagementFormProps {
-    data?: IUser
-    roles?: IRoleUser[]
-    onUpdateRoleUser: (value: string[]) => void
+interface ProfileFormProps {
+    data: IUser
     form: FormInstance<IUser>
     onSubmitForm: (value: IUser) => void
 }
 
-function UserManagementForm(props: UserManagementFormProps) {
-    const { data, roles, form, onSubmitForm, onUpdateRoleUser } = props
+function ProfileForm(props: ProfileFormProps) {
+    const { data, form, onSubmitForm } = props
     const [image, setImage] = useState<string>("")
 
     useEffect(() => {
@@ -74,7 +85,7 @@ function UserManagementForm(props: UserManagementFormProps) {
                         ]}
                         name={"email"}
                     >
-                        <Input disabled={Boolean(data?.id)} placeholder="Email" />
+                        <Input disabled={true} placeholder="Email" />
                     </Form.Item>
                 </Col>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
@@ -120,24 +131,9 @@ function UserManagementForm(props: UserManagementFormProps) {
                         <Select placeholder="Select" options={GENDER_OPTIONS} />
                     </Form.Item>
                 </Col>
-                {data?.id && (
-                    <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                        <Form.Item label="Roles" name={"group_ids"}>
-                            <Checkbox.Group onChange={(checkedValue) => onUpdateRoleUser(checkedValue as string[])}>
-                                <Row gutter={[6, 6]}>
-                                    {roles?.map((item) => (
-                                        <Col span={12}>
-                                            <Checkbox value={item?.id}>{item?.name}</Checkbox>
-                                        </Col>
-                                    ))}
-                                </Row>
-                            </Checkbox.Group>
-                        </Form.Item>
-                    </Col>
-                )}
             </Row>
         </Form>
     )
 }
 
-export default UserManagementForm
+export default ProfileForm

@@ -20,7 +20,7 @@ import {
 } from "@/services/contentDetailManagement.service"
 
 //ENUMS
-import { ContentStatusEnum, LangCodeEnum, NotificationMessageEnum, NotificationTypeEnum } from "@/enums"
+import { ContentStatusEnum, NotificationMessageEnum, NotificationTypeEnum } from "@/enums"
 
 //ICONS
 import { PlusOutlined, EyeOutlined } from "@ant-design/icons"

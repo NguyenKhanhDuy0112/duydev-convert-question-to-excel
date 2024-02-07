@@ -148,7 +148,7 @@ function CouponListing(props: CouponListingProps) {
                 columns={columns}
                 rowKey={"id"}
                 loading={isLoading}
-                scroll={{ x: 1000 }}
+                scroll={{ x: "auto" }}
                 dataSource={data?.data || []}
                 pagination={{ current: pagination?.page, total: data?.total, pageSize: pagination?.limit }}
             />

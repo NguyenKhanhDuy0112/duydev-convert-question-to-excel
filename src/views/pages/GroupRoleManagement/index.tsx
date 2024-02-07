@@ -97,15 +97,16 @@ function GroupRoleManagement() {
         const isEdit = detailRole?.id
         try {
             if (isEdit) {
-                await updateRoleApi(value)
+                await updateRoleApi({ ...detailRole, ...value })
             } else {
-                await createRoleApi(value)
+                await createRoleApi({ ...detailRole, ...value })
             }
             showNotification({
                 type: NotificationTypeEnum.Success,
                 message: isEdit ? NotificationMessageEnum.UpdateSuccess : NotificationMessageEnum.CreateSuccess,
             })
             refetchListRoles()
+            navigate(-1)
         } catch (err) {
             showNotification({
                 type: NotificationTypeEnum.Error,
@@ -132,7 +133,9 @@ function GroupRoleManagement() {
             footer={
                 isFormPage && (
                     <div className="d-flex items-center gap-4">
-                        <Button type="dashed">Cancel</Button>
+                        <Button onClick={() => navigate(-1)} type="dashed">
+                            Cancel
+                        </Button>
                         <Button icon={<SaveFilled />} type="primary" onClick={() => form.submit()}>
                             Save
                         </Button>

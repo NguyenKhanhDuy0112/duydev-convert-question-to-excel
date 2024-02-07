@@ -218,7 +218,7 @@ function CategoryListing(props: CategoryListingProps) {
                 rowKey={"id"}
                 dataSource={data?.data ? data?.data : []}
                 loading={isLoading}
-                scroll={{ x: 1000 }}
+                scroll={{ x: "auto" }}
                 pagination={{ current: data?.page, total: data?.total }}
                 expandable={{
                     expandedRowRender: (record: ICategory) => {

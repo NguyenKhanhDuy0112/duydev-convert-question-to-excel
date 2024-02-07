@@ -1,6 +1,7 @@
 export enum PageRoute {
     Dashboard = "/dashboard",
     Login = "/login",
+    Profile = "/profile",
     Categories = "/categories",
     Coupons = "/coupons",
     Settings = "/settings",

@@ -81,7 +81,7 @@ function GroupRoleListing(props: GroupRoleListingProps) {
             <Table
                 columns={columns}
                 rowKey={"id"}
-                scroll={{ x: 1000 }}
+                scroll={{ x: "auto" }}
                 loading={isLoading}
                 dataSource={data?.data || []}
                 pagination={{ current: pagination?.page, total: data?.total }}

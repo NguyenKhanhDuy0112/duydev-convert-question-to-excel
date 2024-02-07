@@ -38,6 +38,7 @@ const Coupon = lazy(() => import("@/views/pages/Coupon"))
 const ContentManagement = lazy(() => import("@/views/pages/ContentManagement"))
 const UserManagement = lazy(() => import("@/views/pages/UserManagement"))
 const MasterCenter = lazy(() => import("@/views/pages/MasterCenter"))
+const Profile = lazy(() => import("@/views/pages/Profile"))
 const MasterPage = lazy(() => import("@/views/pages/MasterPage"))
 const MediaManagement = lazy(() => import("@/views/pages/MediaManagement"))
 
@@ -54,6 +55,10 @@ const appRoutes: RouteObject[] = [
             {
                 index: true,
                 element: <Dashboard />,
+            },
+            {
+                path: "profile",
+                element: <Profile />,
             },
             {
                 path: "dashboard",

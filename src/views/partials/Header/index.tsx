@@ -1,10 +1,8 @@
-import { Avatar, Button, Dropdown, Layout, MenuProps, Select, theme } from "antd"
-import { useRouter } from "@/hooks"
+import { Avatar, Button, Dropdown, Layout, MenuProps, Select } from "antd"
+import { useProfile, useRouter } from "@/hooks"
 import { PageRoute } from "@/enums"
-import { useGetCategoriesApiQuery } from "@/services/category.service"
-import { INIT_PAGINATION } from "@/constants"
 import { useDispatch } from "react-redux"
-import { MenuOutlined } from "@ant-design/icons"
+import { MenuOutlined, DownOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons"
 import { logout } from "@/redux/modules/auth/authSlice"
 
 const { Header: HeaderAntd } = Layout
@@ -18,21 +16,24 @@ interface HeaderProps {
 
 function Header(props: HeaderProps) {
     const { collapsed, onCollapsed } = props
-    const dispatch = useDispatch()
 
-    //ANTD
-    const {
-        token: { colorBgContainer },
-    } = theme.useToken()
+    //HOOKS
     const { pathname, navigate } = useRouter()
-
-    //SERVICES
-    const { data } = useGetCategoriesApiQuery(INIT_PAGINATION)
+    const dispatch = useDispatch()
+    const profileUser = useProfile()
 
     const items: MenuProps["items"] = [
         {
+            label: "Profile",
+            key: "2",
+            icon: <UserOutlined />,
+            style: { minWidth: "150px" },
+            onClick: () => navigate(PageRoute.Profile),
+        },
+        {
             label: "Logout",
             key: "3",
+            icon: <LogoutOutlined />,
             style: { minWidth: "150px" },
             onClick: () => handleLogout(),
         },
@@ -61,9 +62,23 @@ function Header(props: HeaderProps) {
                 </div>
             )}
             <Dropdown menu={{ items }} trigger={["click"]}>
-                <article className="header__profile">
-                    <Avatar size={40} src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" />
-                </article>
+                <button className="header__profile">
+                    <Avatar
+                        size={30}
+                        className="header__profile-avatar"
+                        src={`${
+                            profileUser?.image
+                                ? profileUser?.image
+                                : "https://xsgames.co/randomusers/avatar.php?g=pixel&key=1"
+                        }`}
+                    />
+                    <h2 className="header__profile-name">
+                        {profileUser?.first_name || ""} {profileUser?.last_name}
+                    </h2>
+                    <span className="header__profile-arrow">
+                        <DownOutlined />
+                    </span>
+                </button>
             </Dropdown>
         </HeaderAntd>
     )
