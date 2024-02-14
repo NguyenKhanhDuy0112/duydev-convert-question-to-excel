@@ -54,6 +54,7 @@ export interface IPermission {
     id?: string
     name?: string
     desc?: string
+    group?: string
     is_active?: boolean
     created_at?: Date | null
     updated_at?: Date | null
@@ -62,4 +63,10 @@ export interface IPermission {
 export interface IRequestPutGroupRolesForUserApi {
     group_ids?: string[]
     user_id?: string
+}
+
+export interface IUserChangePasswordForm {
+    current_password: string
+    new_password: string
+    confirm_password: string
 }

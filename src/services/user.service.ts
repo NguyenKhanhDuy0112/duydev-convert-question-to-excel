@@ -1,4 +1,11 @@
-import { DataResponse, IRequestPaging, IRequestPutGroupRolesForUserApi, IRoleUser, IUser } from "@/models"
+import {
+    DataResponse,
+    IRequestPaging,
+    IRequestPutGroupRolesForUserApi,
+    IRoleUser,
+    IUser,
+    IUserChangePasswordForm,
+} from "@/models"
 import { baseQuery } from "./baseQuery.service"
 import { createApi } from "@reduxjs/toolkit/query/react"
 
@@ -80,7 +87,7 @@ export const userService = createApi({
                 }
             },
         }),
-        createUserApi: builder.mutation<string, IUser>({
+        createUserApi: builder.mutation<{ genPass: string }, IUser>({
             query: (body: IUser) => ({
                 url: "/user",
                 body,
@@ -90,6 +97,20 @@ export const userService = createApi({
         updateUserApi: builder.mutation<string, IUser>({
             query: (body: IUser) => ({
                 url: `/user/${body?.id}`,
+                body,
+                method: "PUT",
+            }),
+        }),
+        resetPasswordUserApi: builder.mutation<{ genPass: string }, IUser>({
+            query: (body: IUser) => ({
+                url: `/user/reset-pass/${body?.id}`,
+                body,
+                method: "PUT",
+            }),
+        }),
+        changePasswordUserApi: builder.mutation<{ genPass: string }, IUserChangePasswordForm>({
+            query: (body: IUserChangePasswordForm) => ({
+                url: `/user/change-pass`,
                 body,
                 method: "PUT",
             }),
@@ -122,6 +143,8 @@ export const {
     useCreateUserApiMutation,
     useUpdateUserApiMutation,
     useDeleteUserApiMutation,
+    useResetPasswordUserApiMutation,
+    useChangePasswordUserApiMutation,
 
     useUpdateGroupRolesForUserApiMutation,
 

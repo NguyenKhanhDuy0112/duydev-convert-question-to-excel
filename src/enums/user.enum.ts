@@ -23,4 +23,6 @@ export enum PermissionUserEnum {
     GroupRoleManagement = "group_role_management",
     ApprovalManagement = "approval_management",
     PageManagement = "page_management",
+    ListMediaManagement = "list_media_management",
+    ViewMedia = "view_media",
 }

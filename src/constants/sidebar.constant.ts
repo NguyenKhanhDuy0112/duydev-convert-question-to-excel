@@ -14,14 +14,14 @@ export const SIDE_BARS: SidebarItem[] = [
         key: PageRoute.ContentManagements,
         label: "Content Management",
         icon: InboxOutlined,
-        permission: PermissionUserEnum.CategoryManagement,
+        permission: PermissionUserEnum.ContentManagement,
         children: [
             {
                 key: PermissionUserEnum.CategoryManagement,
                 link: PageRoute.Categories,
                 label: "Category",
                 icon: AppstoreOutlined,
-                permission: PermissionUserEnum.CategoryManagement,
+                permission: PermissionUserEnum.ContentManagement,
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
             },
             {
@@ -29,7 +29,7 @@ export const SIDE_BARS: SidebarItem[] = [
                 link: PageRoute.MasterCenter,
                 label: "Master Center",
                 icon: AppstoreOutlined,
-                permission: PermissionUserEnum.CategoryManagement,
+                permission: PermissionUserEnum.ContentManagement,
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
             },
             {
@@ -37,7 +37,7 @@ export const SIDE_BARS: SidebarItem[] = [
                 link: PageRoute.MasterPage,
                 label: "Master Page",
                 icon: AppstoreOutlined,
-                permission: PermissionUserEnum.PageManagement,
+                permission: PermissionUserEnum.ContentManagement,
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
             },
             {
@@ -53,7 +53,7 @@ export const SIDE_BARS: SidebarItem[] = [
                 link: PageRoute.MediaManagement,
                 label: "Media Management",
                 icon: AppstoreOutlined,
-                permission: PermissionUserEnum.CategoryManagement,
+                permission: PermissionUserEnum.CouponManagement,
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
             },
         ],

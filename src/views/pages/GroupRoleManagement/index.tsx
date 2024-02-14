@@ -65,7 +65,7 @@ function GroupRoleManagement() {
                     ...roleDetail,
                     permission_ids: uniqueNames?.map((item) => item.id) as string[],
                 })
-                setDetailRole(roleDetail || {})
+                setDetailRole({ ...roleDetail, permission_ids: uniqueNames?.map((item) => item.id) as string[] } || {})
             }
         } else {
             form.resetFields()
@@ -115,13 +115,22 @@ function GroupRoleManagement() {
         }
     }
 
-    const handleUpdatePermissionsForRole = async (value: string[]) => {
+    const handleUpdatePermissionsForRole = async (value: string) => {
         try {
+            const newPermission = [...(detailRole?.permission_ids || [])]
+            if (newPermission?.includes(value)) {
+                const index = newPermission?.indexOf(value)
+                newPermission?.splice(index, 1)
+            } else {
+                newPermission?.push(value)
+            }
+
             await updatePermissionsForRole({
                 id: detailRole?.id,
-                permission_ids: value,
+                permission_ids: newPermission,
             }).unwrap()
-            form.setFieldsValue({ permission_ids: value })
+            form.setFieldsValue({ permission_ids: newPermission })
+            setDetailRole({ ...detailRole, permission_ids: newPermission })
             showNotification({ type: NotificationTypeEnum.Success, message: NotificationMessageEnum.UpdateSuccess })
         } catch (err) {
             showNotification({ type: NotificationTypeEnum.Error, message: NotificationMessageEnum.UpdateError })

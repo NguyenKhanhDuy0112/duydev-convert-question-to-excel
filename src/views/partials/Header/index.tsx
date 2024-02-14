@@ -42,6 +42,7 @@ function Header(props: HeaderProps) {
     const handleLogout = () => {
         navigate(PageRoute.Login)
         dispatch(logout())
+        window.location.reload()
     }
 
     return (

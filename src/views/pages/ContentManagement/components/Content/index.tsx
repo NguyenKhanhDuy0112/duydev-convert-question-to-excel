@@ -14,6 +14,7 @@ import { useGetContentTypeManagementApiQuery } from "@/services/contentManagemen
 import { Badge, Button, Card, Dropdown, MenuProps, Tag } from "antd"
 import ContentDetail from "../ContentDetail"
 import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
+import { AssetsImages } from "@/assets/images"
 
 interface ContentProps {
     data?: IContentItem
@@ -76,7 +77,15 @@ function Content(props: ContentProps) {
         >
             <Card
                 className={`card__content`}
-                title={displayContent?.name}
+                title={
+                    <div className="d-flex gap-2 m-t-2">
+                        <p>{displayContent?.name}</p>
+                        <div className="d-flex gap-2">
+                            {data?.en?.id && <img width={25} height={25} src={AssetsImages.unitedStatesFlag} alt="" />}
+                            {data?.vi?.id && <img width={25} height={25} src={AssetsImages.vietnamFlag} alt="" />}
+                        </div>
+                    </div>
+                }
                 size="default"
                 extra={
                     <>

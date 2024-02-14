@@ -1,9 +1,10 @@
 import JoditEditor from "jodit-react"
 import ModalMedia from "../ModalMedia"
-import { useModal } from "@/hooks"
+import { useModal, useProfile } from "@/hooks"
 import { useRef } from "react"
 import { Button } from "antd"
 import { PictureOutlined } from "@ant-design/icons"
+import { PermissionUserEnum } from "@/enums"
 
 interface TextEditorProps {
     value: string
@@ -22,6 +23,7 @@ function TextEditor(props: TextEditorProps) {
     const { value, onChange } = props
     const { visible: visible, toggle: onToggle } = useModal()
     const editor = useRef<any>(null)
+    const { permissions_name } = useProfile()
 
     const config: any = {
         height: 600,
@@ -69,12 +71,15 @@ function TextEditor(props: TextEditorProps) {
     return (
         <>
             <div className="textEditor">
-                <Button
-                    onClick={onToggle}
-                    className="textEditor__gallery-btn"
-                    type="primary"
-                    icon={<PictureOutlined />}
-                ></Button>
+                {permissions_name?.includes(PermissionUserEnum.ViewMedia as string) && (
+                    <Button
+                        onClick={onToggle}
+                        className="textEditor__gallery-btn"
+                        type="primary"
+                        icon={<PictureOutlined />}
+                    ></Button>
+                )}
+
                 <JoditEditor ref={editor} value={value} config={config} onBlur={(newValue) => onChange(newValue)} />
             </div>
             <ModalMedia show={visible} onClose={onToggle} onSelectImage={handleSelectImage} />

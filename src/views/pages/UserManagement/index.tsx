@@ -29,6 +29,7 @@ import {
     useDeleteUserApiMutation,
     useGetGroupPermissionsApiQuery,
     useGetUsersApiQuery,
+    useResetPasswordUserApiMutation,
     useUpdateGroupRolesForUserApiMutation,
     useUpdateUserApiMutation,
 } from "@/services/user.service"
@@ -57,6 +58,7 @@ function UserManagement() {
         useUpdateGroupRolesForUserApiMutation()
     const [updateUserApi, { isLoading: isLoadingUpdateUser }] = useUpdateUserApiMutation()
     const [deleteUserApi, { isLoading: isLoadingDeleteUserApi }] = useDeleteUserApiMutation()
+    const [resetPasswordApi, { isLoading: isLoadingResetPassword }] = useResetPasswordUserApiMutation()
     const [postUserApi, { isLoading: isLoadingCreateUser }] = useCreateUserApiMutation()
     const [uploadImageApi, { isLoading: isLoadingCreateMedia }] = useCreateMediaApiMutation()
 
@@ -114,10 +116,10 @@ function UserManagement() {
                     message: NotificationMessageEnum.UpdateSuccess,
                 })
             } else {
-                await postUserApi(payload).unwrap()
+                const res = await postUserApi(payload).unwrap()
                 showNotification({
                     type: NotificationTypeEnum.Success,
-                    message: NotificationMessageEnum.CreateSuccess,
+                    message: `Password: ${res?.genPass}`,
                 })
             }
             refetchListUsers()
@@ -183,6 +185,22 @@ function UserManagement() {
         }
     }
 
+    const handleResetPassword = async (user: IUser) => {
+        try {
+            const res = await resetPasswordApi({ ...user }).unwrap()
+            showNotification({
+                type: NotificationTypeEnum.Success,
+                message: `Password: ${res?.genPass}`,
+            })
+            refetchListUsers()
+        } catch (err) {
+            showNotification({
+                type: NotificationTypeEnum.Error,
+                message: NotificationMessageEnum.ResetPasswordError,
+            })
+        }
+    }
+
     return (
         <PageWrapper
             footer={
@@ -213,7 +231,7 @@ function UserManagement() {
             {!isFormUserPage && (
                 <UserManagementListing
                     data={data}
-                    loading={isLoadingListUsers || isFetchingListUsers}
+                    loading={isLoadingListUsers || isFetchingListUsers || isLoadingResetPassword}
                     pagination={pagination}
                     onActionForm={handleRedirectForm}
                     onSetStatusUser={handleUpdateStatusUser}
@@ -221,6 +239,7 @@ function UserManagement() {
                         toggleConfirmDelete()
                         setDetailUser(data)
                     }}
+                    onResetPassword={handleResetPassword}
                 />
             )}
 

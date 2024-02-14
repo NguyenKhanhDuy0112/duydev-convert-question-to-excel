@@ -1,5 +1,6 @@
 import { IPermission, IRoleUser } from "@/models"
-import { Checkbox, Col, Form, FormInstance, Input, Row, Spin } from "antd"
+import { Checkbox, Col, Collapse, Form, FormInstance, Input, Row, Spin } from "antd"
+import { useMemo } from "react"
 
 interface GroupRoleFormProps {
     data: IRoleUser
@@ -7,11 +8,26 @@ interface GroupRoleFormProps {
     permissions?: IPermission[]
     form: FormInstance<IRoleUser>
     onSubmitForm: (value: IRoleUser) => void
-    onUpdatePermissionForRole: (value: string[]) => void
+    onUpdatePermissionForRole: (value: string) => void
 }
 
 function GroupRoleForm(props: GroupRoleFormProps) {
     const { data, isLoading, permissions, form, onSubmitForm, onUpdatePermissionForRole } = props
+
+    const groupPermission = useMemo(() => {
+        const groupedData = permissions?.reduce((acc: any, currentItem: IPermission) => {
+            const { group, ...rest } = currentItem
+            if (acc[group || ""]) {
+                acc[group || ""].push(currentItem)
+            } else {
+                acc[group || ""] = [currentItem]
+            }
+            return acc
+        }, {})
+        return groupedData
+    }, [permissions])
+
+    console.log("Data", data)
 
     return (
         <Spin spinning={isLoading}>
@@ -27,21 +43,46 @@ function GroupRoleForm(props: GroupRoleFormProps) {
                             <Input placeholder="Description" />
                         </Form.Item>
                     </Col>
-                    {data?.id && (
-                        <Col span={24}>
-                            <Form.Item label="Permissions" name={"permission_ids"}>
-                                <Checkbox.Group onChange={(value) => onUpdatePermissionForRole(value as string[])}>
-                                    <Row gutter={[8, 8]}>
-                                        {permissions?.map((permission) => (
-                                            <Col span={8} key={permission.id}>
-                                                <Checkbox value={permission.id}>{permission.desc}</Checkbox>
-                                            </Col>
-                                        ))}
-                                    </Row>
-                                </Checkbox.Group>
-                            </Form.Item>
-                        </Col>
-                    )}
+                    <Col span={24}>
+                        <Form.Item className="w-100" name={"permission_ids"}>
+                            <Row gutter={[16, 16]}>
+                                {Object.keys(groupPermission)?.map((item) => (
+                                    <Col span={24}>
+                                        <Collapse
+                                            className="w-100"
+                                            key={item}
+                                            items={[
+                                                {
+                                                    label: item,
+                                                    children: (
+                                                        <Checkbox.Group className="w-100" value={data?.permission_ids}>
+                                                            <Row gutter={[8, 8]}>
+                                                                {groupPermission[item]?.map((item: IPermission) => (
+                                                                    <Col span={8} key={item.id}>
+                                                                        <Checkbox
+                                                                            className={`${item?.id}`}
+                                                                            value={item.id}
+                                                                            onChange={() =>
+                                                                                onUpdatePermissionForRole(
+                                                                                    item?.id || ""
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            {item.desc}
+                                                                        </Checkbox>
+                                                                    </Col>
+                                                                ))}
+                                                            </Row>
+                                                        </Checkbox.Group>
+                                                    ),
+                                                },
+                                            ]}
+                                        />
+                                    </Col>
+                                ))}
+                            </Row>
+                        </Form.Item>
+                    </Col>
                 </Row>
             </Form>
         </Spin>

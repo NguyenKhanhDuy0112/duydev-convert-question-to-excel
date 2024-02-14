@@ -8,6 +8,7 @@ export enum MessageValidateForm {
     InvalidUrl = "Please enter a valid url.",
     InvalidEmail = "Please enter a valid email address",
     RequiredUpload = "Please upload file",
+    ConfirmPassword = "New passwords and confirming passwords are not the same.",
 }
 
 export enum NotificationTypeEnum {
@@ -34,6 +35,11 @@ export enum NotificationMessageEnum {
 
     ClearCacheSuccess = "Clear cache successfully",
     ClearCacheError = "Clear cache failed",
+
+    ResetPasswordError = "Reset password failed",
+
+    ChangePasswordSuccess = "Change password successfully",
+    ChangePasswordError = "Change password failed",
 }
 
 export enum NotificationTitleEnum {

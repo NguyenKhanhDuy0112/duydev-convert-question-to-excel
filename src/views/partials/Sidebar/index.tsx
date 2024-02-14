@@ -68,10 +68,7 @@ function Sidebar(props: SidebarProps) {
             SIDE_BARS.forEach((option: SidebarItem) => {
                 if (option.children) {
                     const itemsChildren = option.children
-                        .filter(
-                            (item: SidebarItem) =>
-                                mapPermissions.includes(item?.permission || "") && item?.roles?.includes(role)
-                        )
+                        .filter((item: SidebarItem) => mapPermissions.includes(item?.permission || ""))
                         .map((item) => {
                             if (item.link === pathname) {
                                 setDefaultSelectedKey(item.key)

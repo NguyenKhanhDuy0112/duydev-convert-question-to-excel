@@ -12,11 +12,12 @@ interface UserManagementListingProps {
     loading?: boolean
     onDelete: (data: IUser) => void
     onActionForm: (data: IUser) => void
+    onResetPassword: (data: IUser) => void
     onSetStatusUser: (data: IUser) => void
 }
 
 function UserManagementListing(props: UserManagementListingProps) {
-    const { data, loading, pagination, onActionForm, onDelete, onSetStatusUser } = props
+    const { data, loading, pagination, onActionForm, onDelete, onSetStatusUser, onResetPassword } = props
     const [currentRecord, setCurrentRecord] = useState<IUser>({})
 
     const items: MenuProps["items"] = [
@@ -33,7 +34,7 @@ function UserManagementListing(props: UserManagementListingProps) {
             key: "1",
         },
         {
-            label: <div>Reset password</div>,
+            label: <div onClick={() => onResetPassword(currentRecord)}>Reset password</div>,
             key: "2",
         },
         {
