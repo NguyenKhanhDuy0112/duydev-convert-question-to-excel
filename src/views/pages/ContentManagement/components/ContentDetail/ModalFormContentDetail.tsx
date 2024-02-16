@@ -3,7 +3,7 @@ import { CONTENT_STATUS_OPTIONS, TAB_LANGS } from "@/constants"
 
 //HOOKS
 import { useEffect } from "react"
-import { useRouter } from "@/hooks"
+import { useProfile, useRouter } from "@/hooks"
 
 //MODELS
 import { IContentDetail, IContentDetailForm } from "@/models"
@@ -11,6 +11,7 @@ import { IContentDetail, IContentDetailForm } from "@/models"
 //COMPONENTS
 import { Button, Card, Col, Form, Input, Modal, Row, Select, Tabs } from "antd"
 import TextEditor from "@/components/TextEditor"
+import { PermissionUserEnum } from "@/enums"
 
 interface ModalFormContentDetailProps {
     isLoading?: boolean
@@ -26,6 +27,7 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
     //ANTD
     const [form] = Form.useForm()
     const { params } = useRouter()
+    const { permissions_name } = useProfile()
 
     useEffect(() => {
         if (data?.length) {
@@ -37,7 +39,7 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
         } else {
             form.resetFields()
         }
-    }, [data])
+    }, [data, show])
 
     const handleSubmitForm = async (values: IContentDetailForm) => {
         try {
@@ -81,7 +83,11 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
                     <Row>
                         <Col xs={{ span: 24 }} lg={{ span: 12 }}>
                             <Form.Item label="Status" name={"status"}>
-                                <Select placeholder="Select" options={CONTENT_STATUS_OPTIONS} />
+                                <Select
+                                    disabled={!permissions_name?.includes(PermissionUserEnum.ApprovalManagement)}
+                                    placeholder="Select"
+                                    options={CONTENT_STATUS_OPTIONS}
+                                />
                             </Form.Item>
                         </Col>
                     </Row>

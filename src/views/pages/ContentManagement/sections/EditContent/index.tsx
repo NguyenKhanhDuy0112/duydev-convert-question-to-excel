@@ -31,6 +31,7 @@ import ModalFormContentDetail from "../../components/ContentDetail/ModalFormCont
 import ModalFormContent from "../../components/Content/ModalFormContent"
 import Content from "../../components/Content"
 import { Button, Space } from "antd"
+import ModalConfirm from "@/components/ModalConfirm"
 
 interface EditContentProps {
     data?: IContentList
@@ -45,12 +46,14 @@ function EditContent(props: EditContentProps) {
     const { visible: visibleModalDeleteContent, toggle: toggleModalDeleteContent } = useModal()
     const { visible: visibleModalDeleteContentDetail, toggle: toggleModalDeleteContentDetail } = useModal()
     const { visible: visibleModalEditContentDetail, toggle: toggleModalEditContentDetail } = useModal()
+    const { visible: visibleModalConfirm, toggle: toggleModalConfirm } = useModal()
 
     const { showNotification } = useNotification()
 
     const [currentMasterContentId, setCurrentMasterContentId] = useState<string>("")
     const [currentContent, setCurrentContent] = useState<IContentItem>()
     const [currentContentDetail, setCurrentContentDetail] = useState<IContentDetail[]>([])
+    const [dataSubmit, setDataSubmit] = useState<IContentForm | IContentDetailForm>()
 
     //SERVICES
     const [createContentApi, { isLoading: isLoadingCreateContent }] = useCreateContentManagementApiMutation()
@@ -100,19 +103,25 @@ function EditContent(props: EditContentProps) {
         setCurrentContent({})
     }
 
-    const handleSubmitFormContent = async (values: IContentForm) => {
+    const handleSubmitFormContent = async (values: IContentForm, isSkipCheckStatus?: boolean) => {
         const isEdit = currentContent?.en
+        const currentStatus = currentContent?.en?.status || currentContent?.vi?.status
+        setDataSubmit(values)
         try {
             if (currentContent?.en) {
+                if (!isSkipCheckStatus && currentStatus !== values?.status) {
+                    toggleModalConfirm()
+                    return
+                }
                 await updateContentApi(values)
 
-                if (currentContent?.en?.status !== values?.status) {
+                if (currentStatus !== values?.status) {
                     await updateStatusContentApi(values)
                 }
             } else {
                 await createContentApi(values)
             }
-
+            setDataSubmit(undefined)
             showNotification({
                 type: NotificationTypeEnum.Success,
                 message: isEdit ? NotificationMessageEnum.UpdateSuccess : NotificationMessageEnum.CreateSuccess,
@@ -127,8 +136,9 @@ function EditContent(props: EditContentProps) {
         }
     }
 
-    const handleSubmitFormContentDetail = async (values: IContentDetailForm) => {
+    const handleSubmitFormContentDetail = async (values: IContentDetailForm, isSkipCheckStatus?: boolean) => {
         const isEdit = currentContentDetail.length > 0
+        setDataSubmit({ ...values, master_content_id: currentMasterContentId })
 
         try {
             const formValues: IContentDetailForm = {
@@ -137,12 +147,21 @@ function EditContent(props: EditContentProps) {
             }
 
             if (currentContentDetail.length > 0) {
+                const currentStatus = currentContentDetail[0]?.status
+
+                if (!isSkipCheckStatus && currentStatus !== values?.status) {
+                    toggleModalConfirm()
+                    return
+                }
+
                 await updateContentDetailApi(formValues)
-                await updateStatusContentDetailApi(values)
+                if (currentStatus !== values?.status) {
+                    await updateStatusContentDetailApi(values)
+                }
             } else {
                 await createContentDetailApi(formValues)
             }
-
+            setDataSubmit(undefined)
             showNotification({
                 type: NotificationTypeEnum.Success,
                 message: isEdit ? NotificationMessageEnum.UpdateSuccess : NotificationMessageEnum.CreateSuccess,
@@ -206,6 +225,16 @@ function EditContent(props: EditContentProps) {
 
     const handleChangeStatusContent = (status: ContentStatusEnum, record?: IContent) => {}
 
+    const handleConfirmChangeStatus = (data: any) => {
+        if (visibleModalEditContent) {
+            toggleModalConfirm()
+            handleSubmitFormContent(data, true)
+        } else if (visibleModalEditContentDetail) {
+            toggleModalConfirm()
+            handleSubmitFormContentDetail(data, true)
+        }
+    }
+
     return (
         <>
             <div className="d-flex justify-between m-b-4 gap-4">
@@ -263,6 +292,16 @@ function EditContent(props: EditContentProps) {
                 isLoading={isLoadingDeleteContentDetail}
                 onClose={toggleModalDeleteContentDetail}
                 onConfirm={handleConfirmDeleteContentDetail}
+            />
+
+            <ModalConfirm
+                visible={visibleModalConfirm}
+                data={dataSubmit}
+                isLoading={isLoadingUpdateStatusContentDetail || isLoadingUpdateStatusContent}
+                onClose={toggleModalConfirm}
+                title="Change status content"
+                description={`Are you sure you want to change the content status to ${dataSubmit?.status}?`}
+                onConfirm={handleConfirmChangeStatus}
             />
         </>
     )

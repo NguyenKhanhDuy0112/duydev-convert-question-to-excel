@@ -56,7 +56,7 @@ function Content(props: ContentProps) {
                 key: "3",
             },
         ]
-    }, [])
+    }, [data])
 
     return (
         <Badge.Ribbon

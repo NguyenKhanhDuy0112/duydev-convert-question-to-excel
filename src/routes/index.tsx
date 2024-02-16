@@ -13,13 +13,14 @@ import { useDispatch } from "react-redux"
 import { useGetUserProfileApiQuery } from "@/services/user.service"
 
 //REDUX
-import { login } from "@/redux/modules/auth/authSlice"
+import { login, logout } from "@/redux/modules/auth/authSlice"
 import { updateProfile } from "@/redux/modules/profile/profileSlice"
 
 //MODELS
 import { IUser } from "@/models"
 import SettingClearCache from "@/views/pages/SettingClearCache"
 import GroupRoleManagement from "@/views/pages/GroupRoleManagement"
+import { PageRoute } from "@/enums"
 
 //COMPONENTS
 const Loader = lazy(() => import("@/components/Loader/Loader"))
@@ -137,6 +138,11 @@ function ManageRoutes() {
         const accessToken = getCookie(CookieStorageKey.ACCESS_TOKEN)
         if (Boolean(accessToken)) {
             dispatch(login({ token: String(accessToken) }))
+        } else {
+            dispatch(logout())
+            if (window.location.pathname !== PageRoute.Login) {
+                window.location.href = PageRoute.Login
+            }
         }
     }, [])
 

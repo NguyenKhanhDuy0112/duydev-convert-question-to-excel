@@ -91,7 +91,7 @@ function ContentDetail(props: ContentDetailProps) {
                 ),
             },
         ]
-    }, [])
+    }, [data])
 
     return (
         <>

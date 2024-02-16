@@ -48,8 +48,9 @@ function ModalFormContent(props: ModalFormContentProps) {
             }
             form.setFieldsValue(payload)
         } else {
+            form.resetFields()
         }
-    }, [data])
+    }, [data, show])
 
     const handleSubmitForm = async (values: IContentForm) => {
         const payload: IContentForm = {
@@ -103,10 +104,14 @@ function ModalFormContent(props: ModalFormContentProps) {
                             </Select>
                         </Form.Item>
                     </Col>
-                    {data?.en?.id && permissions_name?.includes(PermissionUserEnum.ApprovalManagement) && (
+                    {(data?.en?.id || data?.vi?.id) && (
                         <Col xs={{ span: 24 }} lg={{ span: 12 }}>
                             <Form.Item label="Status" name={`status`}>
-                                <Select placeholder="Select status" options={CONTENT_STATUS_OPTIONS} />
+                                <Select
+                                    disabled={!permissions_name?.includes(PermissionUserEnum.ApprovalManagement)}
+                                    placeholder="Select status"
+                                    options={CONTENT_STATUS_OPTIONS}
+                                />
                             </Form.Item>
                         </Col>
                     )}
