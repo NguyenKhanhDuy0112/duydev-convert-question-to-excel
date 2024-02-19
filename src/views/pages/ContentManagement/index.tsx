@@ -34,7 +34,7 @@ function ContentManagement() {
                 <EditContent data={data?.data} refetchContent={refetch} onViewContent={toggle} />
                 <PreviewDevice
                     ref={iframeDevice}
-                    path={`${env.FO_URL}/draft/collection`}
+                    path={`${env.FO_URL}/en/draft/collection`}
                     show={visible}
                     onClose={toggle}
                 />

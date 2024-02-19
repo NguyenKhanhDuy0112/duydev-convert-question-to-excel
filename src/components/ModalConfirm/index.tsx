@@ -28,6 +28,7 @@ function ModalConfirm(props: ModalConfirmProps) {
     return (
         <Modal
             centered
+            zIndex={9999}
             className="modalConfirmDelete"
             footer={
                 <Space align="center" size={"middle"} className="justify-center">

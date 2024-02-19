@@ -68,6 +68,7 @@ function ModalFormContent(props: ModalFormContentProps) {
     return (
         <Modal
             width={"100vw"}
+            zIndex={9998}
             open={show}
             onCancel={onClose}
             footer={

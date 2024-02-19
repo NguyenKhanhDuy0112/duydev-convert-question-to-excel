@@ -7,6 +7,7 @@ export interface IMasterPage {
     name_localize?: string
     route?: string
     project_id?: string
+    status?: ContentStatusEnum
     is_wait_approve?: boolean
 }
 

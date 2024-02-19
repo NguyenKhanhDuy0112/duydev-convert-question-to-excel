@@ -44,16 +44,19 @@ import PageWrapper from "@/components/PageWrapper"
 import { Button, Form, Spin } from "antd"
 import MasterPageListing from "./sections/MasterPageListing"
 import MasterPageForm from "./sections/MasterPageForm"
+import ModalConfirm from "@/components/ModalConfirm"
 
 function MasterPage() {
     //HOOKS
     const { visible: visibleConfirmDelete, toggle: toggleConfirmDelete } = useModal()
+    const { visible: visibleConfirmStatus, toggle: toggleConfirmStatus } = useModal()
     const { searchParams, navigate } = useRouter()
     const { showNotification } = useNotification()
 
     //STATES
     const [pagination, setPagination] = useState<IRequestPaging>(INIT_PAGINATION)
     const [dataDetail, setDataDetail] = useState<IMasterPage | undefined>({})
+    const [dataSubmit, setDataSubmit] = useState<IMasterPageForm>({})
 
     //SERVICES
     const { data: contentTypes } = useGetContentTypeManagementApiQuery()
@@ -95,7 +98,10 @@ function MasterPage() {
                         items = [...items, ...(contentMasterPage?.data![item] || [])]
                     })
 
-                    setDataDetail(masterPageDetail)
+                    setDataDetail({
+                        ...masterPageDetail,
+                        status: items?.length ? items[0]?.status : ("" as ContentStatusEnum),
+                    })
                     form.setFieldsValue({
                         ...masterPageDetail,
                         status: items?.length ? items[0]?.status : "",
@@ -151,8 +157,10 @@ function MasterPage() {
         setDataDetail(values)
         return navigate(`${PageRoute.MasterPage}?id=${values?.id ? values?.id : ""}`)
     }
+    console.log("Data detail: ", dataDetail)
 
-    const handleSubmitForm = async (values: IMasterPageForm) => {
+    const handleSubmitForm = async (values: IMasterPageForm, isSkipCheckStatus: boolean = false) => {
+        setDataSubmit(values)
         const formValues = { ...dataDetail, ...values, project_id: ProjectIDs.Project_1 }
         const isEdit = formValues?.id
 
@@ -161,15 +169,23 @@ function MasterPage() {
 
         try {
             if (isEdit) {
+                if (!isSkipCheckStatus && values?.status !== dataDetail?.status) {
+                    toggleConfirmStatus()
+                    return
+                }
+
                 const response = await updateMasterPageApi(formValues).unwrap()
                 formValues.cate_type_id = response?.id || ""
                 delete formValues.route
                 delete formValues.name_localize
                 delete formValues.name
-                await updateStatusContentApi({
-                    master_content_id: values?.items![0]?.master_content_id || "",
-                    status: values?.status as ContentStatusEnum,
-                } as IContentForm)
+
+                if (values?.status !== dataDetail?.status) {
+                    await updateStatusContentApi({
+                        master_content_id: values?.items![0]?.master_content_id || "",
+                        status: values?.status as ContentStatusEnum,
+                    } as IContentForm)
+                }
 
                 await updateContentApi({
                     ...formValues,
@@ -200,6 +216,11 @@ function MasterPage() {
                 message: isEdit ? NotificationMessageEnum.UpdateError : NotificationMessageEnum.CreateError,
             })
         }
+    }
+
+    const handleConfirmChangeStatus = (values: IMasterPageForm) => {
+        toggleConfirmStatus()
+        handleSubmitForm(values, true)
     }
 
     const isFormPage = useMemo(() => {
@@ -251,6 +272,16 @@ function MasterPage() {
                 isLoading={isLoadingDelete}
                 onClose={toggleConfirmDelete}
                 onConfirm={handleConfirmDelete}
+            />
+
+            <ModalConfirm
+                visible={visibleConfirmStatus}
+                data={dataSubmit}
+                isLoading={isLoadingUpdateStatusContent}
+                onClose={toggleConfirmStatus}
+                title="Change status content"
+                description={`Are you sure you want to change the content status to ${dataSubmit?.status}?`}
+                onConfirm={handleConfirmChangeStatus}
             />
         </PageWrapper>
     )

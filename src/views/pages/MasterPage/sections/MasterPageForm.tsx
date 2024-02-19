@@ -1,8 +1,11 @@
 //ENUMS
-import { MessageValidateForm } from "@/enums"
+import { MessageValidateForm, PermissionUserEnum } from "@/enums"
 
 //MODELS
 import { IMasterPageForm } from "@/models"
+
+//HOOKS
+import { useProfile } from "@/hooks"
 
 //COMPONENTS
 import { Col, Form, FormInstance, Input, Row, Select, Tabs } from "antd"
@@ -16,6 +19,7 @@ interface MasterPageFormProps {
 
 function MasterPageForm(props: MasterPageFormProps) {
     const { form, onSubmitForm } = props
+    const { permissions_name } = useProfile()
 
     return (
         <Form
@@ -81,7 +85,11 @@ function MasterPageForm(props: MasterPageFormProps) {
                         ]}
                         name={"status"}
                     >
-                        <Select placeholder="Select" options={CONTENT_STATUS_OPTIONS} />
+                        <Select
+                            disabled={!permissions_name?.includes(PermissionUserEnum.ApprovalManagement)}
+                            placeholder="Select"
+                            options={CONTENT_STATUS_OPTIONS}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
@@ -98,6 +106,15 @@ function MasterPageForm(props: MasterPageFormProps) {
                                             name={[field.name, "name"]}
                                             fieldKey={[field.fieldKey || 0, "name"]}
                                             rules={[{ required: true, message: MessageValidateForm.Required }]}
+                                        >
+                                            <Input placeholder="Name" />
+                                        </Form.Item>
+                                        <Form.Item
+                                            {...field}
+                                            hidden
+                                            label="Master content ID"
+                                            name={[field.name, "master_content_id"]}
+                                            fieldKey={[field.fieldKey || 0, "master_content_id"]}
                                         >
                                             <Input placeholder="Name" />
                                         </Form.Item>
