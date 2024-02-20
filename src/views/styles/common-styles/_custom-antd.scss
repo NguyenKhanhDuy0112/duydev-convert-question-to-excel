@@ -200,3 +200,40 @@
         }
     }
 }
+
+.custom__modal {
+    .ant-modal-content {
+        max-height: 85vh;
+        padding: 0 !important;
+
+        .ant-modal-header {
+            padding: 12px 24px;
+            margin-bottom: 12px;
+        }
+
+        .ant-modal-body {
+            max-height: 65vh;
+            padding: 12px 24px;
+            overflow-y: scroll;
+
+            &::-webkit-scrollbar-thumb {
+                width: 8px;
+                background-color: $gray-d9d;
+                border-radius: 4px;
+            }
+
+            &::-webkit-scrollbar-button {
+                width: 8px;
+                border-radius: 4px;
+            }
+
+            &::-webkit-scrollbar {
+                width: 8px;
+            }
+        }
+
+        .ant-modal-footer {
+            padding: 12px 24px;
+        }
+    }
+}

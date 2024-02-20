@@ -267,7 +267,11 @@ function EditContent(props: EditContentProps) {
                 data={currentContent}
                 show={visibleModalEditContent}
                 onClose={toggleModalEditContent}
-                onSubmitForm={handleSubmitFormContent}
+                onSubmitForm={(value) =>
+                    setTimeout(() => {
+                        handleSubmitFormContent(value)
+                    }, 200)
+                }
             />
 
             <ModalFormContentDetail

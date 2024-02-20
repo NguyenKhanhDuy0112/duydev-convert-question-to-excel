@@ -55,24 +55,25 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
     }
 
     return (
-        <Spin spinning={isLoading}>
-            <Modal
-                width={2000}
-                zIndex={9998}
-                open={show}
-                onCancel={onClose}
-                footer={
-                    <>
-                        <Button type="dashed" onClick={onClose}>
-                            Cancel
-                        </Button>
-                        <Button loading={isLoading} onClick={() => form.submit()} type="primary">
-                            Save
-                        </Button>
-                    </>
-                }
-                title="Content Detail"
-            >
+        <Modal
+            width={2000}
+            zIndex={9998}
+            className="custom__modal"
+            open={show}
+            onCancel={onClose}
+            footer={
+                <>
+                    <Button type="dashed" onClick={onClose}>
+                        Cancel
+                    </Button>
+                    <Button loading={isLoading} onClick={() => form.submit()} type="primary">
+                        Save
+                    </Button>
+                </>
+            }
+            title="Content Detail"
+        >
+            <Spin spinning={isLoading}>
                 <Form
                     initialValues={{
                         items: TAB_LANGS?.map((item) => ({ lang: item?.value, title: "", sub_title: "", content: "" })),
@@ -147,8 +148,8 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
                         )}
                     </Form.List>
                 </Form>
-            </Modal>
-        </Spin>
+            </Spin>
+        </Modal>
     )
 }
 

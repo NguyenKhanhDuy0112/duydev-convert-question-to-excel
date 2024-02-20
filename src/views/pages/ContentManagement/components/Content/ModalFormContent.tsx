@@ -66,24 +66,25 @@ function ModalFormContent(props: ModalFormContentProps) {
     }
 
     return (
-        <Spin spinning={isLoading}>
-            <Modal
-                width={"100vw"}
-                zIndex={9998}
-                open={show}
-                onCancel={onClose}
-                footer={
-                    <>
-                        <Button type="dashed" onClick={onClose}>
-                            Cancel
-                        </Button>
-                        <Button loading={isLoading} onClick={() => form.submit()} type="primary">
-                            Save
-                        </Button>
-                    </>
-                }
-                title="Content"
-            >
+        <Modal
+            width={"100vw"}
+            zIndex={9998}
+            className="custom__modal"
+            open={show}
+            onCancel={onClose}
+            footer={
+                <>
+                    <Button type="dashed" onClick={onClose}>
+                        Cancel
+                    </Button>
+                    <Button loading={isLoading} onClick={() => form.submit()} type="primary">
+                        Save
+                    </Button>
+                </>
+            }
+            title="Content"
+        >
+            <Spin spinning={isLoading}>
                 <Form
                     layout="vertical"
                     form={form}
@@ -158,8 +159,8 @@ function ModalFormContent(props: ModalFormContentProps) {
                         )}
                     </Form.List>
                 </Form>
-            </Modal>
-        </Spin>
+            </Spin>
+        </Modal>
     )
 }
 

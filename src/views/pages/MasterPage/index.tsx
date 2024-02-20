@@ -262,7 +262,10 @@ function MasterPage() {
 
             {isFormPage && (
                 <Spin spinning={isLoadingContentMasterPage}>
-                    <MasterPageForm form={form} onSubmitForm={handleSubmitForm} />
+                    <MasterPageForm
+                        form={form}
+                        onSubmitForm={(value) => setTimeout(() => handleSubmitForm(value), 100)}
+                    />
                 </Spin>
             )}
 
