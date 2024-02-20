@@ -195,6 +195,21 @@ function CategoryListing(props: CategoryListingProps) {
             },
         },
         {
+            title: "Status",
+            dataIndex: "is_wait_approve",
+            key: "is_wait_approve",
+            render: (value: boolean) => {
+                const status = Common.getColorTagContentByStatus(
+                    value ? ContentStatusEnum.WAITING : ContentStatusEnum.APPROVED
+                )
+                return (
+                    <Tag color={status?.color} className={status?.className}>
+                        {status?.name}
+                    </Tag>
+                )
+            },
+        },
+        {
             title: "Action",
             key: "id",
             align: "center",

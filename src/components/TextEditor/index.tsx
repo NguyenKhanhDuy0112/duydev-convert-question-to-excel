@@ -1,10 +1,17 @@
-import JoditEditor from "jodit-react"
-import ModalMedia from "../ModalMedia"
+//HOOKS
 import { useModal, useProfile } from "@/hooks"
 import { useRef } from "react"
-import { Button } from "antd"
+
+//ICONS
 import { PictureOutlined } from "@ant-design/icons"
+
+//ENUMS
 import { PermissionUserEnum } from "@/enums"
+
+//COMPONENTS
+import JoditEditor from "jodit-react"
+import ModalMedia from "../ModalMedia"
+import { Button } from "antd"
 
 interface TextEditorProps {
     value: string
@@ -28,6 +35,13 @@ function TextEditor(props: TextEditorProps) {
     const config: any = {
         height: 600,
         subject: "Text Editor", // Add the subject prop
+        tabIndex: 1,
+        readonly: false,
+        askBeforePasteHTML: false,
+        askBeforePasteFromWord: false,
+        defaultActionOnPaste: "insert_clear_html",
+
+        beautyHTML: true,
         // uploader: {
         //     url: `${env.API_BO_ENDPOINT}/media`,
         //     headers: {
@@ -80,7 +94,7 @@ function TextEditor(props: TextEditorProps) {
                     ></Button>
                 )}
 
-                <JoditEditor ref={editor} value={value} config={config} onBlur={(newValue) => onChange(newValue)} />
+                <JoditEditor value={value} ref={editor} config={config} onBlur={(newValue) => onChange(newValue)} />
             </div>
             <ModalMedia show={visible} onClose={onToggle} onSelectImage={handleSelectImage} />
         </>

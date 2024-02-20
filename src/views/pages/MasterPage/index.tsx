@@ -157,7 +157,6 @@ function MasterPage() {
         setDataDetail(values)
         return navigate(`${PageRoute.MasterPage}?id=${values?.id ? values?.id : ""}`)
     }
-    console.log("Data detail: ", dataDetail)
 
     const handleSubmitForm = async (values: IMasterPageForm, isSkipCheckStatus: boolean = false) => {
         setDataSubmit(values)
@@ -180,17 +179,17 @@ function MasterPage() {
                 delete formValues.name_localize
                 delete formValues.name
 
+                await updateContentApi({
+                    ...formValues,
+                    master_content_id: values?.items![0]?.master_content_id || "",
+                } as IContentForm)
+
                 if (values?.status !== dataDetail?.status) {
                     await updateStatusContentApi({
                         master_content_id: values?.items![0]?.master_content_id || "",
                         status: values?.status as ContentStatusEnum,
                     } as IContentForm)
                 }
-
-                await updateContentApi({
-                    ...formValues,
-                    master_content_id: values?.items![0]?.master_content_id || "",
-                } as IContentForm)
 
                 refetchContentMasterPage()
             } else {
