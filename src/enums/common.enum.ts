@@ -40,6 +40,8 @@ export enum NotificationMessageEnum {
 
     ChangePasswordSuccess = "Change password successfully",
     ChangePasswordError = "Change password failed",
+
+    UpdateStatusContentError = "Update status content failed",
 }
 
 export enum NotificationTitleEnum {

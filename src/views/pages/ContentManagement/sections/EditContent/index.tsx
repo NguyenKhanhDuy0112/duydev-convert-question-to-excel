@@ -113,13 +113,20 @@ function EditContent(props: EditContentProps) {
                     toggleModalConfirm()
                     return
                 }
-                await updateContentApi(values)
+                await updateContentApi(values).unwrap()
 
                 if (currentStatus !== values?.status) {
-                    await updateStatusContentApi(values)
+                    try {
+                        await updateStatusContentApi(values).unwrap()
+                    } catch (err) {
+                        showNotification({
+                            type: NotificationTypeEnum.Error,
+                            message: NotificationMessageEnum.UpdateStatusContentError,
+                        })
+                    }
                 }
             } else {
-                await createContentApi(values)
+                await createContentApi(values).unwrap()
             }
             setDataSubmit(undefined)
             showNotification({
@@ -154,12 +161,20 @@ function EditContent(props: EditContentProps) {
                     return
                 }
 
-                await updateContentDetailApi(formValues)
+                await updateContentDetailApi(formValues).unwrap()
+
                 if (currentStatus !== values?.status) {
-                    await updateStatusContentDetailApi(values)
+                    try {
+                        await updateStatusContentDetailApi(values).unwrap()
+                    } catch (err) {
+                        showNotification({
+                            type: NotificationTypeEnum.Error,
+                            message: NotificationMessageEnum.UpdateStatusContentError,
+                        })
+                    }
                 }
             } else {
-                await createContentDetailApi(formValues)
+                await createContentDetailApi(formValues).unwrap()
             }
             setDataSubmit(undefined)
             showNotification({

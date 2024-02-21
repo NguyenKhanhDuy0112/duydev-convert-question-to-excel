@@ -185,10 +185,17 @@ function MasterPage() {
                 } as IContentForm)
 
                 if (values?.status !== dataDetail?.status) {
-                    await updateStatusContentApi({
-                        master_content_id: values?.items![0]?.master_content_id || "",
-                        status: values?.status as ContentStatusEnum,
-                    } as IContentForm)
+                    try {
+                        await updateStatusContentApi({
+                            master_content_id: values?.items![0]?.master_content_id || "",
+                            status: values?.status as ContentStatusEnum,
+                        } as IContentForm).unwrap()
+                    } catch (err) {
+                        showNotification({
+                            type: NotificationTypeEnum.Error,
+                            message: NotificationMessageEnum.UpdateStatusContentError,
+                        })
+                    }
                 }
 
                 refetchContentMasterPage()
@@ -200,7 +207,7 @@ function MasterPage() {
                 delete formValues.name
                 await createContentApi({
                     ...formValues,
-                } as IContentForm)
+                } as IContentForm).unwrap()
             }
 
             showNotification({

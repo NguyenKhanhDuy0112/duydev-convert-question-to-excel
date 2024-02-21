@@ -97,9 +97,9 @@ function GroupRoleManagement() {
         const isEdit = detailRole?.id
         try {
             if (isEdit) {
-                await updateRoleApi({ ...detailRole, ...value })
+                await updateRoleApi({ ...detailRole, ...value }).unwrap()
             } else {
-                await createRoleApi({ ...detailRole, ...value })
+                await createRoleApi({ ...detailRole, ...value }).unwrap()
             }
             showNotification({
                 type: NotificationTypeEnum.Success,
