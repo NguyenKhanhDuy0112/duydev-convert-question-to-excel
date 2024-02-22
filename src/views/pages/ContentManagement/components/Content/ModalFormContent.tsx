@@ -68,7 +68,7 @@ function ModalFormContent(props: ModalFormContentProps) {
     return (
         <Modal
             width={"100vw"}
-            zIndex={9998}
+            zIndex={100}
             className="custom__modal"
             open={show}
             onCancel={onClose}

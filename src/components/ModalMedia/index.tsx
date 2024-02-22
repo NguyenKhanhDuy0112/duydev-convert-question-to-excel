@@ -30,6 +30,7 @@ function ModalMedia(props: ModalMediaProps) {
         <>
             <Modal
                 footer={null}
+                zIndex={300}
                 title={
                     <Button onClick={onToggleMediaForm} icon={<CloudUploadOutlined />} type="primary">
                         Upload

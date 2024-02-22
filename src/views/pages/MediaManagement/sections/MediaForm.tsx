@@ -81,6 +81,7 @@ function MediaForm(props: MediaFormProps) {
         <Modal
             open={show}
             onCancel={onClose}
+            zIndex={500}
             okText="Save"
             onOk={() => form.submit()}
             confirmLoading={isLoadingUploadImage}
