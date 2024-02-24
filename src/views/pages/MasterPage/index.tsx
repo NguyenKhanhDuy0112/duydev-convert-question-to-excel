@@ -1,5 +1,5 @@
 //HOOKS
-import { useModal, useNotification, useRouter } from "@/hooks"
+import { useCommon, useModal, useNotification, useRouter } from "@/hooks"
 import { useEffect, useMemo, useState } from "react"
 
 //MODELS
@@ -17,7 +17,7 @@ import {
 } from "@/enums"
 
 //CONSTANTS
-import { INIT_PAGINATION, ProjectIDs, TAB_LANGS } from "@/constants"
+import { INIT_PAGINATION, ProjectIDs } from "@/constants"
 
 //SERVICES
 import {
@@ -52,6 +52,7 @@ function MasterPage() {
     const { visible: visibleConfirmStatus, toggle: toggleConfirmStatus } = useModal()
     const { searchParams, navigate } = useRouter()
     const { showNotification } = useNotification()
+    const { languages } = useCommon()
 
     //STATES
     const [pagination, setPagination] = useState<IRequestPaging>(INIT_PAGINATION)
@@ -105,7 +106,13 @@ function MasterPage() {
                     form.setFieldsValue({
                         ...masterPageDetail,
                         status: items?.length ? items[0]?.status : "",
-                        items: items?.length ? items : TAB_LANGS.map((item) => ({ lang: item?.value })),
+                        items: languages.map((item) => {
+                            const findData = items?.find((i) => i.lang === item?.locale)
+                            if (findData?.id) {
+                                return findData
+                            }
+                            return { lang: item?.locale }
+                        }),
                     })
                 }
             } else {
@@ -123,7 +130,13 @@ function MasterPage() {
             })
             form.setFieldsValue({
                 status: items?.length ? items[0]?.status : "",
-                items: items?.length ? items : TAB_LANGS.map((item) => ({ lang: item?.value })),
+                items: languages.map((item) => {
+                    const findData = items?.find((i) => i.lang === item?.locale)
+                    if (findData?.id) {
+                        return findData
+                    }
+                    return { lang: item?.locale }
+                }),
             })
         }
     }, [contentMasterPage])

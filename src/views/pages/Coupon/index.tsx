@@ -5,7 +5,7 @@ import { ICoupon, IRequestPaging } from "@/models"
 import dayjs from "dayjs"
 
 //HOOKS
-import { useModal, useNotification, useRouter } from "@/hooks"
+import { useCommon, useModal, useNotification, useRouter } from "@/hooks"
 import { useEffect, useMemo, useState } from "react"
 
 //ENUMS
@@ -21,7 +21,7 @@ import {
 import { useCreateMediaApiMutation } from "@/services/media.service"
 
 //CONSTANTS
-import { INIT_PAGINATION, TAB_LANGS } from "@/constants"
+import { INIT_PAGINATION } from "@/constants"
 
 //ICONS
 import { SaveFilled } from "@ant-design/icons"
@@ -38,6 +38,7 @@ function Coupon() {
     const { visible: visibleConfirmDelete, toggle: toggleConfirmDelete } = useModal()
     const { searchParams, navigate } = useRouter()
     const { showNotification } = useNotification()
+    const { languages } = useCommon()
 
     //STATES
     const [pagination, setPagination] = useState<IRequestPaging>(INIT_PAGINATION)
@@ -63,9 +64,13 @@ function Coupon() {
                     form.setFieldsValue({
                         ...couponDetail,
                         expire_date: dayjs(couponDetail?.expire_date),
-                        langs: couponDetail?.langs?.length
-                            ? couponDetail?.langs
-                            : TAB_LANGS?.map((item) => ({ lang: item?.value })),
+                        langs: languages?.map((item) => {
+                            const lang = couponDetail?.langs?.find((lang) => lang.lang === item?.locale)
+                            if (lang?.id) {
+                                return lang
+                            }
+                            return { lang: item?.locale }
+                        }),
                     })
                 }
             } else {

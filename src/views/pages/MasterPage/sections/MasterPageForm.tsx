@@ -5,11 +5,11 @@ import { MessageValidateForm, PermissionUserEnum } from "@/enums"
 import { IMasterPageForm } from "@/models"
 
 //HOOKS
-import { useProfile } from "@/hooks"
+import { useCommon, useProfile } from "@/hooks"
 
 //COMPONENTS
 import { Col, Form, FormInstance, Input, Row, Select, Tabs } from "antd"
-import { CONTENT_STATUS_OPTIONS, TAB_LANGS } from "@/constants"
+import { CONTENT_STATUS_OPTIONS } from "@/constants"
 import TextEditor from "@/components/TextEditor"
 
 interface MasterPageFormProps {
@@ -20,13 +20,14 @@ interface MasterPageFormProps {
 function MasterPageForm(props: MasterPageFormProps) {
     const { form, onSubmitForm } = props
     const { permissions_name } = useProfile()
+    const { languages } = useCommon()
 
     return (
         <Form
             onFinish={onSubmitForm}
             autoComplete="off"
             layout="vertical"
-            initialValues={{ items: TAB_LANGS?.map((item) => ({ lang: item?.value, name: "", description: "" })) }}
+            initialValues={{ items: languages?.map((item) => ({ lang: item?.locale, name: "", description: "" })) }}
             labelAlign="left"
             wrapperCol={{ span: 24 }}
             form={form}
@@ -97,7 +98,7 @@ function MasterPageForm(props: MasterPageFormProps) {
                 {(fields, { add, remove }) => (
                     <Tabs>
                         {fields.map((field, index) => (
-                            <Tabs.TabPane tab={TAB_LANGS[index].label} key={TAB_LANGS[index].value}>
+                            <Tabs.TabPane tab={languages[index]?.name} key={languages[index]?.id}>
                                 <Row gutter={16}>
                                     <Col span={24}>
                                         <Form.Item

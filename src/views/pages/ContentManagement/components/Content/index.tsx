@@ -6,6 +6,7 @@ import { ContentStatusEnum, LangCodeEnum } from "@/enums"
 
 //HOOKS
 import { useMemo, useState } from "react"
+import { useCommon } from "@/hooks"
 
 //SERVICES
 import { useGetContentTypeManagementApiQuery } from "@/services/contentManagement.service"
@@ -14,7 +15,6 @@ import { useGetContentTypeManagementApiQuery } from "@/services/contentManagemen
 import { Badge, Button, Card, Dropdown, MenuProps, Tag } from "antd"
 import ContentDetail from "../ContentDetail"
 import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
-import { AssetsImages } from "@/assets/images"
 
 interface ContentProps {
     data?: IContentItem
@@ -37,12 +37,13 @@ function Content(props: ContentProps) {
     } = props
 
     const [currentLang, setCurrentLang] = useState<LangCodeEnum>(LangCodeEnum.EN)
+    const { languages } = useCommon()
 
     //SERVICES
     const { data: contentTypes } = useGetContentTypeManagementApiQuery()
 
     const displayContent = useMemo(() => {
-        return data![currentLang]
+        return data![currentLang as LangCodeEnum]
     }, [data, currentLang])
 
     const items = useMemo<MenuProps["items"]>(() => {
@@ -81,8 +82,11 @@ function Content(props: ContentProps) {
                     <div className="d-flex gap-2 m-t-2">
                         <p>{displayContent?.name}</p>
                         <div className="d-flex gap-2">
-                            {data?.en?.id && <img width={25} height={25} src={AssetsImages.unitedStatesFlag} alt="" />}
-                            {data?.vi?.id && <img width={25} height={25} src={AssetsImages.vietnamFlag} alt="" />}
+                            {languages?.map((item) => {
+                                if (data![item?.locale as LangCodeEnum]?.id) {
+                                    return <img width={25} height={25} src={item?.image} alt="" />
+                                }
+                            })}
                         </div>
                     </div>
                 }

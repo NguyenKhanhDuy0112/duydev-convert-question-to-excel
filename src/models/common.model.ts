@@ -44,3 +44,19 @@ export interface SelectOption {
     label: string
     value: string
 }
+
+export interface ILanguage {
+    id?: string
+    name?: string
+    locale?: string
+    project_id?: string
+    iso_code?: string
+    image?: string
+    is_active?: boolean
+    created_at?: Date | null
+    updated_at?: Date | null
+}
+
+export interface ICommonStore {
+    languages: ILanguage[]
+}

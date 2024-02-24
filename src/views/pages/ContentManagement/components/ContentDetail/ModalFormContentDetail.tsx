@@ -1,9 +1,9 @@
 //CONSTANTS
-import { CONTENT_STATUS_OPTIONS, TAB_LANGS } from "@/constants"
+import { CONTENT_STATUS_OPTIONS } from "@/constants"
 
 //HOOKS
 import { useEffect } from "react"
-import { useProfile, useRouter } from "@/hooks"
+import { useCommon, useProfile } from "@/hooks"
 
 //MODELS
 import { IContentDetail, IContentDetailForm } from "@/models"
@@ -12,6 +12,7 @@ import { IContentDetail, IContentDetailForm } from "@/models"
 import { Button, Col, Form, Input, Modal, Row, Select, Spin, Tabs } from "antd"
 import TextEditor from "@/components/TextEditor"
 import { PermissionUserEnum } from "@/enums"
+import { CloseOutlined } from "@ant-design/icons"
 
 interface ModalFormContentDetailProps {
     isLoading?: boolean
@@ -26,14 +27,26 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
 
     //ANTD
     const [form] = Form.useForm()
-    const { params } = useRouter()
     const { permissions_name } = useProfile()
+    const { languages } = useCommon()
 
     useEffect(() => {
         if (data?.length) {
             const payload = {
                 status: data?.[0]?.status,
-                items: TAB_LANGS?.map((item) => data?.find((i) => i?.lang === item?.value)),
+                items: languages?.map((item) => {
+                    const findData = data?.find((i) => i?.lang === item?.locale)
+                    if (findData?.id) {
+                        return findData
+                    } else {
+                        return {
+                            lang: item?.locale,
+                            title: "",
+                            sub_title: "",
+                            content: "",
+                        }
+                    }
+                }),
             }
             form.setFieldsValue(payload)
         } else {
@@ -60,7 +73,8 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
             zIndex={100}
             className="custom__modal"
             open={show}
-            onCancel={onClose}
+            closeIcon={<CloseOutlined onClick={onClose} />}
+            onCancel={() => {}}
             footer={
                 <>
                     <Button type="dashed" onClick={onClose}>
@@ -76,7 +90,12 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
             <Spin spinning={isLoading}>
                 <Form
                     initialValues={{
-                        items: TAB_LANGS?.map((item) => ({ lang: item?.value, title: "", sub_title: "", content: "" })),
+                        items: languages?.map((item) => ({
+                            lang: item?.locale,
+                            title: "",
+                            sub_title: "",
+                            content: "",
+                        })),
                     }}
                     layout="vertical"
                     form={form}
@@ -101,7 +120,7 @@ function ModalFormContentDetail(props: ModalFormContentDetailProps) {
                         {(fields, { add, remove }) => (
                             <Tabs>
                                 {fields.map((field, index) => (
-                                    <Tabs.TabPane tab={TAB_LANGS[index].label} key={TAB_LANGS[index].value}>
+                                    <Tabs.TabPane tab={languages[index]?.name} key={languages[index]?.id}>
                                         <Row gutter={16}>
                                             <Col span={24}>
                                                 <Row gutter={24}>

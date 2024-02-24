@@ -3,24 +3,28 @@ import { Suspense, lazy, useEffect } from "react"
 import { RouteObject, createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
 
 //CONSTANTS
-import { CookieStorageKey } from "@/constants"
+import { CookieStorageKey, ProjectIDs } from "@/constants"
 
 //HOOKS
 import { useAuth, useCookieStorage } from "@/hooks"
 import { useDispatch } from "react-redux"
 
+//ENUMS
+import { PageRoute } from "@/enums"
+
 //SERVICES
 import { useGetUserProfileApiQuery } from "@/services/user.service"
+import { useGetLanguagesApiQuery } from "@/services/common.service"
 
 //REDUX
 import { login, logout } from "@/redux/modules/auth/authSlice"
 import { updateProfile } from "@/redux/modules/profile/profileSlice"
+import { updateState } from "@/redux/modules/common/commonSlice"
 
 //MODELS
 import { IUser } from "@/models"
 import SettingClearCache from "@/views/pages/SettingClearCache"
 import GroupRoleManagement from "@/views/pages/GroupRoleManagement"
-import { PageRoute } from "@/enums"
 
 //COMPONENTS
 const Loader = lazy(() => import("@/components/Loader/Loader"))
@@ -125,11 +129,13 @@ const router = createBrowserRouter([
 ])
 
 function ManageRoutes() {
+    //HOOKS
     const dispatch = useDispatch()
-
     const { getCookie } = useCookieStorage()
     const { token } = useAuth()
 
+    //SERVICES
+    const { data: languages } = useGetLanguagesApiQuery({ project_id: ProjectIDs.Project_1 })
     const { data } = useGetUserProfileApiQuery(undefined, {
         skip: !token,
     })
@@ -145,6 +151,10 @@ function ManageRoutes() {
             }
         }
     }, [])
+
+    useEffect(() => {
+        dispatch(updateState({ languages: languages?.data || [] }))
+    }, [languages?.data])
 
     useEffect(() => {
         dispatch(updateProfile({ ...data, permissions_name: data?.permissions?.map((item) => item?.name) } as IUser))

@@ -1,8 +1,11 @@
 //CONSTANTS
-import { INIT_PAGINATION, TAB_LANGS } from "@/constants"
+import { INIT_PAGINATION } from "@/constants"
 
 //ENUMS
 import { FormatDateEnum, StatusCoupon, UploadTypeEnum } from "@/enums"
+
+//HOOKS
+import { useCommon } from "@/hooks"
 
 //MODELS
 import { ICategory, ICoupon } from "@/models"
@@ -24,6 +27,9 @@ interface CouponFormProps {
 function CouponForm(props: CouponFormProps) {
     const { form, onSubmitForm } = props
 
+    //HOOKS
+    const { languages } = useCommon()
+
     //SERVICES
     const { data: dataCategories } = useGetCategoriesApiQuery(INIT_PAGINATION)
     const { data: dataCouponType } = useGetCouponsTypeApiQuery()
@@ -37,7 +43,7 @@ function CouponForm(props: CouponFormProps) {
             wrapperCol={{ span: 24 }}
             form={form}
             initialValues={{
-                langs: TAB_LANGS?.map((item) => ({ lang: item?.value })),
+                langs: languages?.map((item) => ({ lang: item?.locale })),
                 is_verify: true,
             }}
         >
@@ -105,7 +111,7 @@ function CouponForm(props: CouponFormProps) {
                 {(fields, { add, remove }) => (
                     <Tabs>
                         {fields.map((field, index) => (
-                            <Tabs.TabPane tab={TAB_LANGS[index].label} key={TAB_LANGS[index].value}>
+                            <Tabs.TabPane tab={languages[index]?.name} key={languages[index]?.id}>
                                 <Row gutter={16}>
                                     <Col span={24}>
                                         <Row gutter={24}>

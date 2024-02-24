@@ -202,17 +202,29 @@
 }
 
 .custom__modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+
     .ant-modal-content {
-        max-height: 85vh;
+        max-height: 100vh;
         padding: 0 !important;
+        border-radius: 0 !important;
 
         .ant-modal-header {
+            border-radius: 0 !important;
             padding: 12px 24px;
             margin-bottom: 12px;
         }
 
         .ant-modal-body {
-            max-height: 65vh;
+            max-height: calc(100vh - 140px);
             padding: 12px 24px;
             overflow-y: scroll;
 

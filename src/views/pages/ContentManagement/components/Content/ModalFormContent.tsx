@@ -1,11 +1,11 @@
 //CONSTANTS
-import { CONTENT_STATUS_OPTIONS, TAB_LANGS } from "@/constants"
+import { CONTENT_STATUS_OPTIONS } from "@/constants"
 
 //ENUMS
 import { ContentTypeEnum, LangCodeEnum, MasterCateEnum, MessageValidateForm, PermissionUserEnum } from "@/enums"
 
 //HOOKS
-import { useProfile, useRouter } from "@/hooks"
+import { useCommon, useProfile, useRouter } from "@/hooks"
 import { useEffect } from "react"
 
 //MODELS
@@ -17,6 +17,7 @@ import { useGetContentTypeManagementApiQuery } from "@/services/contentManagemen
 //COMPONENTS
 import { Button, Col, Form, Input, Modal, Row, Select, Spin, Tabs } from "antd"
 import TextEditor from "@/components/TextEditor"
+import { CloseOutlined } from "@ant-design/icons"
 
 interface ModalFormContentProps {
     isLoading?: boolean
@@ -35,16 +36,20 @@ function ModalFormContent(props: ModalFormContentProps) {
     //HOOKS
     const { params } = useRouter()
     const { permissions_name } = useProfile()
+    const { languages } = useCommon()
 
     //SERVICES
     const { data: contentTypes } = useGetContentTypeManagementApiQuery()
 
     useEffect(() => {
-        if (data?.en || data?.vi) {
+        if (data?.en) {
             const payload = {
                 ...data?.en,
-                ...data?.vi,
-                items: TAB_LANGS?.map((item) => data?.[item?.value]),
+                items: languages?.map((item) =>
+                    data?.[item?.locale as LangCodeEnum]
+                        ? data?.[item?.locale as LangCodeEnum]
+                        : { lang: item?.locale, name: "", description: "" }
+                ),
             }
             form.setFieldsValue(payload)
         } else {
@@ -70,8 +75,9 @@ function ModalFormContent(props: ModalFormContentProps) {
             width={"100vw"}
             zIndex={100}
             className="custom__modal"
+            closeIcon={<CloseOutlined onClick={onClose} />}
             open={show}
-            onCancel={onClose}
+            onCancel={() => {}}
             footer={
                 <>
                     <Button type="dashed" onClick={onClose}>
@@ -89,7 +95,7 @@ function ModalFormContent(props: ModalFormContentProps) {
                     layout="vertical"
                     form={form}
                     initialValues={{
-                        items: TAB_LANGS?.map((item) => ({ lang: item?.value, name: "", description: "" })),
+                        items: languages?.map((item) => ({ lang: item?.locale, name: "", description: "" })),
                     }}
                     onFinish={handleSubmitForm}
                 >
@@ -125,7 +131,7 @@ function ModalFormContent(props: ModalFormContentProps) {
                         {(fields, { add, remove }) => (
                             <Tabs>
                                 {fields.map((field, index) => (
-                                    <Tabs.TabPane tab={TAB_LANGS[index].label} key={TAB_LANGS[index].value}>
+                                    <Tabs.TabPane tab={languages[index]?.name} key={languages[index]?.id}>
                                         <Row gutter={16}>
                                             <Col span={24}>
                                                 <Form.Item
