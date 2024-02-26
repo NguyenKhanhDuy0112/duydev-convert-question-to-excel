@@ -13,6 +13,7 @@ import { INIT_PAGINATION } from "@/constants"
 
 //SERVICES
 import {
+    useCreateContentTypeApiMutation,
     useDeleteContentTypeApiMutation,
     useGetContentTypeApiQuery,
     useUpdateContentTypeApiMutation,
@@ -40,6 +41,7 @@ function MasterCenter() {
 
     //SERVICES
     const { data, isFetching: isFetchingList, refetch } = useGetContentTypeApiQuery(pagination)
+    const [createContentTypeApi, { isLoading: isLoadingCreate }] = useCreateContentTypeApiMutation()
     const [updateContentTypeApi, { isLoading: isLoadingUpdate }] = useUpdateContentTypeApiMutation()
     const [deleteContentTypeApi, { isLoading: isLoadingDelete }] = useDeleteContentTypeApiMutation()
 
@@ -123,6 +125,14 @@ function MasterCenter() {
                 })
                 refetch()
                 navigate(-1)
+            } else {
+                await createContentTypeApi(formValues).unwrap()
+                showNotification({
+                    type: NotificationTypeEnum.Success,
+                    message: isEdit ? NotificationMessageEnum.UpdateSuccess : NotificationMessageEnum.CreateSuccess,
+                })
+                refetch()
+                navigate(-1)
             }
         } catch (err) {
             showNotification({
@@ -145,7 +155,7 @@ function MasterCenter() {
                             Cancel
                         </Button>
                         <Button
-                            loading={isLoadingUpdate}
+                            loading={isLoadingUpdate || isLoadingCreate}
                             icon={<SaveFilled />}
                             type="primary"
                             onClick={() => form.submit()}

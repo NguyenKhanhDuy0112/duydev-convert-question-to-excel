@@ -131,6 +131,19 @@ function CategoryListing(props: CategoryListingProps) {
             },
         },
         {
+            title: "Number of content",
+            dataIndex: "name_localize",
+            key: "name_localize",
+            render: (_: string, record: ICategory) => {
+                return (
+                    <span>
+                        {Number(record?.items?.reduce((cur, item) => cur + (item?.cate_type_id ? 1 : 0), 0) || 0) + 1}/
+                        {Number(record?.items?.reduce((cur, item) => cur + (item?.id ? 1 : 0), 0) || 0) + 1}
+                    </span>
+                )
+            },
+        },
+        {
             title: "Status",
             dataIndex: "is_wait_approve",
             key: "is_wait_approve",
