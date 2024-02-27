@@ -137,8 +137,9 @@ function CategoryListing(props: CategoryListingProps) {
             render: (_: string, record: ICategory) => {
                 return (
                     <span>
-                        {Number(record?.items?.reduce((cur, item) => cur + (item?.cate_type_id ? 1 : 0), 0) || 0) + 1}/
-                        {Number(record?.items?.reduce((cur, item) => cur + (item?.id ? 1 : 0), 0) || 0) + 1}
+                        {Number(record?.items?.reduce((cur, item) => cur + (item?.cate_type_id ? 1 : 0), 0) || 0) +
+                            (record?.cate_type_id ? 1 : 0)}
+                        /{Number(record?.items?.reduce((cur, item) => cur + (item?.id ? 1 : 0), 0) || 0) + 1}
                     </span>
                 )
             },
@@ -224,9 +225,9 @@ function CategoryListing(props: CategoryListingProps) {
         },
         {
             title: "Action",
-            key: "id",
             align: "center",
             fixed: "right",
+            key: "id",
             width: "8%",
             render: (_, record: ICategory) => (
                 <Dropdown
@@ -271,6 +272,7 @@ function CategoryListing(props: CategoryListingProps) {
                                     className="tableWrapper__table-detail"
                                     pagination={false}
                                     columns={columnsDetail}
+                                    scroll={{ x: "auto" }}
                                     dataSource={
                                         record?.items
                                             ? record?.items?.map((item) => ({
