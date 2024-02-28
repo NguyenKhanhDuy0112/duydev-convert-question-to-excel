@@ -12,7 +12,7 @@ push-container:
         - docker:18-dind
     script:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
-        - docker build --network host -t $REGISTRY_URI/$NAMESPACE:coupon_web_bo-$CI_COMMIT_SHA . --no-cache
+        - docker build --network host NODE_ENV=production -t $REGISTRY_URI/$NAMESPACE:coupon_web_bo-$CI_COMMIT_SHA . --no-cache
         - docker push $REGISTRY_URI/$NAMESPACE:coupon_web_bo-$CI_COMMIT_SHA
         - echo coupon_web_bo-$CI_COMMIT_SHA
     only:
