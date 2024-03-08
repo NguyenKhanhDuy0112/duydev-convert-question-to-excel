@@ -100,7 +100,9 @@ function CouponForm(props: CouponFormProps) {
                                     })) || []
                             }
                             onChange={(value: any) => form.setFieldsValue({ cate_types: value?.checked })}
-                            selectedKeys={form.getFieldValue("cate_types") || []}
+                            selectedKeys={(form.getFieldValue("cate_types") || [])?.map((item: any) =>
+                                typeof item === "string" ? item : item?.id
+                            )}
                         />
                     </Form.Item>
                 </Col>

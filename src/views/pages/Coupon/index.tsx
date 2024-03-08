@@ -116,6 +116,7 @@ function Coupon() {
             cate_types: values?.cate_types?.filter((item) => item),
             expire_date: dayjs(values?.expire_date).toDate(),
         }
+
         const isEdit = formValues?.id
 
         if (values?.image && typeof values?.image !== "string") {
