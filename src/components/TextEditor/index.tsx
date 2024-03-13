@@ -9,8 +9,9 @@ import { PictureOutlined } from "@ant-design/icons"
 import { PermissionUserEnum } from "@/enums"
 
 //COMPONENTS
-import JoditEditor from "jodit-react"
+// import JoditEditor from "jodit-react"
 import ModalMedia from "../ModalMedia"
+import { Editor } from "@tinymce/tinymce-react"
 import { Button } from "antd"
 
 interface TextEditorProps {
@@ -29,7 +30,7 @@ interface TextEditorProps {
 function TextEditor(props: TextEditorProps) {
     const { value, onChange } = props
     const { visible: visible, toggle: onToggle } = useModal()
-    const editor = useRef<any>(null)
+    const editorRef = useRef<any>(null)
     const { permissions_name } = useProfile()
 
     const config: any = {
@@ -82,6 +83,8 @@ function TextEditor(props: TextEditorProps) {
         onToggle()
     }
 
+    console.log("Editor ref: ", editorRef.current)
+
     return (
         <>
             <div className="textEditor">
@@ -93,8 +96,48 @@ function TextEditor(props: TextEditorProps) {
                         icon={<PictureOutlined />}
                     ></Button>
                 )}
-
-                <JoditEditor value={value} ref={editor} config={config} onBlur={(newValue) => onChange(newValue)} />
+                {/* 33zdcoyg44objqjg22kk9ha4rk764f4fme6553mai148qmh9 */}
+                {/* <JoditEditor value={value} ref={editor} config={config} onBlur={(newValue) => onChange(newValue)} /> */}
+                <Editor
+                    onInit={(evt, editor) => {
+                        editorRef.current = editor
+                    }}
+                    onChange={(newValue: any, editor) => {
+                        onChange(newValue?.level?.content)
+                    }}
+                    initialValue={value}
+                    apiKey="33zdcoyg44objqjg22kk9ha4rk764f4fme6553mai148qmh9"
+                    value={value}
+                    init={{
+                        height: 500,
+                        menubar: true,
+                        plugins: [
+                            "advlist",
+                            "autolink",
+                            "lists",
+                            "link",
+                            "image",
+                            "charmap",
+                            "anchor",
+                            "searchreplace",
+                            "visualblocks",
+                            "code",
+                            "fullscreen",
+                            "insertdatetime",
+                            "media",
+                            "table",
+                            "preview",
+                            "help",
+                            "wordcount",
+                        ],
+                        toolbar:
+                            "undo redo | blocks | " +
+                            "bold italic forecolor | alignleft aligncenter " +
+                            "alignright alignjustify | bullist numlist outdent indent | " +
+                            "removeformat | help",
+                        content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                    }}
+                />
             </div>
             <ModalMedia show={visible} onClose={onToggle} onSelectImage={handleSelectImage} />
         </>

@@ -1,7 +1,7 @@
 import { MessageValidateForm, NotificationMessageEnum, NotificationTypeEnum, PageRoute } from "@/enums"
 
 //COMPONENTS
-import { Button, Card, Col, Divider, Form, Input, Row } from "antd"
+import { Button, Card, Col, Form, Input, Row } from "antd"
 import LogoIc from "@/assets/icons/logo.svg"
 
 //MODELS
@@ -10,11 +10,12 @@ import { IFormLogin } from "@/models"
 
 //SERVICES
 import { useLoginApiMutation } from "@/services/auth.service"
+
+//HOOKS
 import { useDispatch } from "react-redux"
+
+//REDUX
 import { login } from "@/redux/modules/auth/authSlice"
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
-import { authentication } from "@/configs/firebase"
-import { AssetsImages } from "@/assets/images"
 
 function Login() {
     const [form] = Form.useForm<IFormLogin>()
@@ -29,7 +30,6 @@ function Login() {
         try {
             const response = await loginApi(value).unwrap()
 
-            console.log("response?.access_token: ", response?.access_token)
             dispatch(login({ token: response?.access_token || "" }))
             showNotification({
                 type: NotificationTypeEnum.Success,
@@ -42,34 +42,6 @@ function Login() {
                 message: NotificationMessageEnum.LoginError,
             })
         }
-    }
-
-    const handleAuth = async (auth_data: any) => {
-        const user = auth_data.user
-        let token = ""
-
-        await user.getIdToken().then(async (result_token: any) => {
-            token = result_token
-        })
-
-        console.log("Token: ", token)
-        console.log("Auth data: ", auth_data)
-    }
-
-    const handleSignInWithGoogle = () => {
-        const provider = new GoogleAuthProvider()
-
-        provider.setCustomParameters({
-            prompt: "select_account",
-        })
-
-        signInWithPopup(authentication, provider)
-            .then((result) => {
-                handleAuth(result)
-            })
-            .catch((error) => {
-                console.log("Login failed google: ", error)
-            })
     }
 
     return (
@@ -111,11 +83,6 @@ function Login() {
                         Login
                     </Button>
                 </Form>
-                <Divider>Or</Divider>
-                <Button onClick={handleSignInWithGoogle} className="login__btn login__btn-google" type="primary">
-                    <img src={AssetsImages.GoogleImg} alt="" />
-                    <span>Sign in with Google</span>
-                </Button>
             </Card>
         </section>
     )
