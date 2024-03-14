@@ -106,7 +106,7 @@ function TextEditor(props: TextEditorProps) {
                     apiKey="33zdcoyg44objqjg22kk9ha4rk764f4fme6553mai148qmh9"
                     value={value}
                     init={{
-                        height: 500,
+                        height: 800,
                         relative_urls: false,
                         remove_script_host: false,
                         convert_urls: true,

@@ -20,6 +20,7 @@ export enum PageRoute {
 export enum ParamsEnum {
     ID = "id",
     CATE_TYPE_ID = "cate_type_id",
+    CATE_TYPE_NAME = "cate_type_name",
     CATEGORY_ID = "category_id",
     SUB_CATEGORY_ID = "sub_category_id",
     CAT_SLUG = "cat_slug",

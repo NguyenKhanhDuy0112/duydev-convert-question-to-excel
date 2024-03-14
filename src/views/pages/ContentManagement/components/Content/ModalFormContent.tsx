@@ -2,7 +2,14 @@
 import { CONTENT_STATUS_OPTIONS, REL_OPTIONS } from "@/constants"
 
 //ENUMS
-import { ContentTypeEnum, LangCodeEnum, MasterCateEnum, MessageValidateForm, PermissionUserEnum } from "@/enums"
+import {
+    ContentTypeEnum,
+    LangCodeEnum,
+    MasterCateEnum,
+    MessageValidateForm,
+    ParamsEnum,
+    PermissionUserEnum,
+} from "@/enums"
 
 //HOOKS
 import { useCommon, useProfile, useRouter } from "@/hooks"
@@ -35,7 +42,7 @@ function ModalFormContent(props: ModalFormContentProps) {
     const [form] = Form.useForm()
 
     //HOOKS
-    const { params } = useRouter()
+    const { params, searchParams } = useRouter()
     const { permissions_name } = useProfile()
     const { languages } = useCommon()
 
@@ -127,19 +134,21 @@ function ModalFormContent(props: ModalFormContentProps) {
                                 </Form.Item>
                             </Col>
                         )}
-                        <Col xs={{ span: 24 }} lg={{ span: 12 }}>
-                            <Form.Item
-                                rules={[{ required: true, message: MessageValidateForm.Required }]}
-                                label="Rel"
-                                name={`rel`}
-                            >
-                                <SelectAddItem
-                                    value={form.getFieldValue("rel")}
-                                    onChange={(value) => form.setFieldsValue({ rel: value })}
-                                    options={REL_OPTIONS}
-                                />
-                            </Form.Item>
-                        </Col>
+                        {searchParams.get(ParamsEnum.CATE_TYPE_NAME) === ContentTypeEnum.CONTENT && (
+                            <Col xs={{ span: 24 }} lg={{ span: 12 }}>
+                                <Form.Item
+                                    rules={[{ required: true, message: MessageValidateForm.Required }]}
+                                    label="Rel"
+                                    name={`rel`}
+                                >
+                                    <SelectAddItem
+                                        value={form.getFieldValue("rel")}
+                                        onChange={(value) => form.setFieldsValue({ rel: value })}
+                                        options={REL_OPTIONS}
+                                    />
+                                </Form.Item>
+                            </Col>
+                        )}
                     </Row>
                     <Form.List name="items">
                         {(fields, { add, remove }) => (

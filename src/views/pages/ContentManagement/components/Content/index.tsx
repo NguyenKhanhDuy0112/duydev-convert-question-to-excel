@@ -2,11 +2,11 @@
 import { Common, IContent, IContentDetail, IContentItem } from "@/models"
 
 //ENUMS
-import { ContentStatusEnum, LangCodeEnum } from "@/enums"
+import { ContentStatusEnum, LangCodeEnum, ParamsEnum } from "@/enums"
 
 //HOOKS
 import { useMemo, useState } from "react"
-import { useCommon } from "@/hooks"
+import { useCommon, useRouter } from "@/hooks"
 
 //SERVICES
 import { useGetContentTypeManagementApiQuery } from "@/services/contentManagement.service"
@@ -38,6 +38,7 @@ function Content(props: ContentProps) {
 
     const [currentLang, setCurrentLang] = useState<LangCodeEnum>(LangCodeEnum.EN)
     const { languages } = useCommon()
+    const { setSearchParams } = useRouter()
 
     //SERVICES
     const { data: contentTypes } = useGetContentTypeManagementApiQuery()
@@ -49,7 +50,16 @@ function Content(props: ContentProps) {
     const items = useMemo<MenuProps["items"]>(() => {
         return [
             {
-                label: <div onClick={() => onEditContent(data)}>Edit</div>,
+                label: (
+                    <div
+                        onClick={() => {
+                            onEditContent(data)
+                            setSearchParams({ [ParamsEnum.CATE_TYPE_NAME]: displayContent?.type?.name as string })
+                        }}
+                    >
+                        Edit
+                    </div>
+                ),
                 key: "0",
             },
             {
