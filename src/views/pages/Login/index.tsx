@@ -2,7 +2,7 @@ import { MessageValidateForm, NotificationMessageEnum, NotificationTypeEnum, Pag
 
 //COMPONENTS
 import { Button, Card, Col, Form, Input, Row } from "antd"
-import LogoIc from "@/assets/icons/logo.svg"
+import LogoDarkIc from "@/assets/icons/logo_dark_icon.svg"
 
 //MODELS
 import { useNotification, useRouter } from "@/hooks"
@@ -50,7 +50,7 @@ function Login() {
                 <Row justify={"center"} gutter={16}>
                     <Col span={24}>
                         <div className="d-flex justify-center items-center">
-                            <LogoIc />
+                            <LogoDarkIc />
                         </div>
                     </Col>
                     <Col span={24}>

@@ -7,11 +7,11 @@ import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 import { PlusOutlined } from "@ant-design/icons"
 
 //ENUMS
-import { ContentStatusEnum, PageRoute, ParamsEnum } from "@/enums"
+import { ContentStatusEnum, PageRoute, ParamsEnum, PermissionUserEnum } from "@/enums"
 
 //HOOKS
 import { useMemo, useState } from "react"
-import { useRouter } from "@/hooks"
+import { useProfile, useRouter } from "@/hooks"
 
 //COMPONENTS
 import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
@@ -26,6 +26,7 @@ interface CategoryListingProps {
 function CategoryListing(props: CategoryListingProps) {
     const { data, isLoading, onActionForm, onDelete } = props
     const { navigate } = useRouter()
+    const { permissions_name } = useProfile()
     const [currentRecord, setCurrentRecord] = useState<ICategory>({})
 
     const items = useMemo(() => {
@@ -251,10 +252,23 @@ function CategoryListing(props: CategoryListingProps) {
                 <Col lg={{ span: 8 }} xs={{ span: 24 }} md={{ span: 12 }}>
                     <Input.Search type="primary" placeholder="Search category" />
                 </Col>
-                <Col lg={{ span: 6 }} xl={{ span: 4 }} md={{ span: 6 }} xs={{ span: 24 }}>
-                    <Button onClick={() => onActionForm({})} icon={<PlusOutlined />} className="w-100" type="primary">
-                        Create New
-                    </Button>
+                <Col span={"auto"}>
+                    <div className="d-flex gap-4">
+                        {permissions_name?.includes(PermissionUserEnum.ContentManagement) && (
+                            <Button onClick={() => onActionForm({})} className="w-100" type="primary">
+                                Master center
+                            </Button>
+                        )}
+
+                        <Button
+                            onClick={() => onActionForm({})}
+                            icon={<PlusOutlined />}
+                            className="w-100"
+                            type="primary"
+                        >
+                            Create New
+                        </Button>
+                    </div>
                 </Col>
             </Row>
             <Table

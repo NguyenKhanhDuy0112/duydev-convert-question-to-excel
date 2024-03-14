@@ -1,4 +1,4 @@
-import { ContentStatusEnum, LangCodeEnum, MasterCateEnum } from "@/enums"
+import { ContentStatusEnum, LangCodeEnum, MasterCateEnum, RelEnum } from "@/enums"
 import { IContentDetailList } from "./contentDetail.model"
 import { IContentType } from "./contentType.model"
 
@@ -29,6 +29,7 @@ export interface IContentForm {
     status?: ContentStatusEnum
     master_type: MasterCateEnum
     master_content_id?: string
+    rel?: RelEnum
 }
 
 export interface IContentItem {

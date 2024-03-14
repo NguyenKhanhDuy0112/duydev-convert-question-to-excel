@@ -1,4 +1,4 @@
-import { LangCodeEnum } from "@/enums"
+import { LangCodeEnum, RelEnum } from "@/enums"
 import { ProjectIDs } from "./project.constant"
 
 export const INIT_PAGINATION = {
@@ -17,5 +17,20 @@ export const TAB_LANGS = [
     {
         label: "Vietnamese",
         value: LangCodeEnum.VI,
+    },
+]
+
+export const REL_OPTIONS = [
+    {
+        label: RelEnum.CANONICAL,
+        value: RelEnum.CANONICAL,
+    },
+    {
+        label: RelEnum.DO_FOLLOW,
+        value: RelEnum.DO_FOLLOW,
+    },
+    {
+        label: RelEnum.NO_FOLLOW,
+        value: RelEnum.NO_FOLLOW,
     },
 ]

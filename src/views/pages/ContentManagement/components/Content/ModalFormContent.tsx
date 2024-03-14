@@ -1,5 +1,5 @@
 //CONSTANTS
-import { CONTENT_STATUS_OPTIONS } from "@/constants"
+import { CONTENT_STATUS_OPTIONS, REL_OPTIONS } from "@/constants"
 
 //ENUMS
 import { ContentTypeEnum, LangCodeEnum, MasterCateEnum, MessageValidateForm, PermissionUserEnum } from "@/enums"
@@ -18,6 +18,7 @@ import { useGetContentTypeManagementApiQuery } from "@/services/contentManagemen
 import { Button, Col, Form, Input, Modal, Row, Select, Spin, Tabs } from "antd"
 import TextEditor from "@/components/TextEditor"
 import { CloseOutlined } from "@ant-design/icons"
+import SelectAddItem from "@/components/SelectAddItem"
 
 interface ModalFormContentProps {
     isLoading?: boolean
@@ -64,9 +65,9 @@ function ModalFormContent(props: ModalFormContentProps) {
             type_id: values?.type_id,
             status: values?.status,
             master_type: MasterCateEnum.COUPON_MASTER_CATE,
+            rel: values?.rel,
             master_content_id: data && data[LangCodeEnum.EN] ? data[LangCodeEnum.EN].master_content_id : undefined,
         }
-
         onSubmitForm(payload)
     }
 
@@ -126,6 +127,19 @@ function ModalFormContent(props: ModalFormContentProps) {
                                 </Form.Item>
                             </Col>
                         )}
+                        <Col xs={{ span: 24 }} lg={{ span: 12 }}>
+                            <Form.Item
+                                rules={[{ required: true, message: MessageValidateForm.Required }]}
+                                label="Rel"
+                                name={`rel`}
+                            >
+                                <SelectAddItem
+                                    value={form.getFieldValue("rel")}
+                                    onChange={(value) => form.setFieldsValue({ rel: value })}
+                                    options={REL_OPTIONS}
+                                />
+                            </Form.Item>
+                        </Col>
                     </Row>
                     <Form.List name="items">
                         {(fields, { add, remove }) => (

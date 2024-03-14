@@ -9,7 +9,6 @@ import { PictureOutlined } from "@ant-design/icons"
 import { PermissionUserEnum } from "@/enums"
 
 //COMPONENTS
-// import JoditEditor from "jodit-react"
 import ModalMedia from "../ModalMedia"
 import { Editor } from "@tinymce/tinymce-react"
 import { Button } from "antd"
@@ -83,8 +82,6 @@ function TextEditor(props: TextEditorProps) {
         onToggle()
     }
 
-    console.log("Editor ref: ", editorRef.current)
-
     return (
         <>
             <div className="textEditor">
@@ -97,19 +94,23 @@ function TextEditor(props: TextEditorProps) {
                     ></Button>
                 )}
                 {/* 33zdcoyg44objqjg22kk9ha4rk764f4fme6553mai148qmh9 */}
-                {/* <JoditEditor value={value} ref={editor} config={config} onBlur={(newValue) => onChange(newValue)} /> */}
+                {/* <JoditEditor value={value} ref={editorRef} config={config} onBlur={(newValue) => onChange(newValue)} /> */}
                 <Editor
                     onInit={(evt, editor) => {
                         editorRef.current = editor
                     }}
-                    onChange={(newValue: any, editor) => {
-                        onChange(newValue?.level?.content)
+                    textareaName="content"
+                    onEditorChange={(newValue, editor) => {
+                        onChange(newValue)
                     }}
-                    initialValue={value}
                     apiKey="33zdcoyg44objqjg22kk9ha4rk764f4fme6553mai148qmh9"
                     value={value}
                     init={{
                         height: 500,
+                        relative_urls: false,
+                        remove_script_host: false,
+                        convert_urls: true,
+                        fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt",
                         menubar: true,
                         plugins: [
                             "advlist",

@@ -25,14 +25,6 @@ export const SIDE_BARS: SidebarItem[] = [
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
             },
             {
-                key: PermissionUserEnum.MasterCenter,
-                link: PageRoute.MasterCenter,
-                label: "Master Center",
-                icon: AppstoreOutlined,
-                permission: PermissionUserEnum.ContentManagement,
-                roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
-            },
-            {
                 key: PermissionUserEnum.MasterPage,
                 link: PageRoute.MasterPage,
                 label: "Master Page",

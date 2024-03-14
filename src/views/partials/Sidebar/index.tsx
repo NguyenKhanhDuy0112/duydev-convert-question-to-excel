@@ -45,7 +45,7 @@ function Sidebar(props: SidebarProps) {
     const { collapsed, onCollapse } = props
     const [defaultSelectedKey, setDefaultSelectedKey] = useState<string>("")
     const [keys, setKeys] = useState<any>()
-    const { permissions, groups } = useProfile()
+    const { permissions } = useProfile()
     const { pathname } = useRouter()
     const { width } = useWindowSize()
 
@@ -63,7 +63,6 @@ function Sidebar(props: SidebarProps) {
         const menus: any = []
         const keysItem: any = []
         const mapPermissions = permissions?.map((item) => item?.name)
-        const role = groups?.find((item) => item?.name)?.name || ""
         if (mapPermissions && mapPermissions?.length > 0) {
             SIDE_BARS.forEach((option: SidebarItem) => {
                 if (option.children) {

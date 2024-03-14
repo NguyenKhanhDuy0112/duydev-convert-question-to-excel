@@ -1,5 +1,5 @@
 //ENUMS
-import { MessageValidateForm, PermissionUserEnum } from "@/enums"
+import { MessageValidateForm, PermissionUserEnum, RelEnum } from "@/enums"
 
 //MODELS
 import { IMasterPageForm } from "@/models"
@@ -9,8 +9,9 @@ import { useCommon, useProfile } from "@/hooks"
 
 //COMPONENTS
 import { Col, Form, FormInstance, Input, Row, Select, Tabs } from "antd"
-import { CONTENT_STATUS_OPTIONS } from "@/constants"
+import { CONTENT_STATUS_OPTIONS, REL_OPTIONS } from "@/constants"
 import TextEditor from "@/components/TextEditor"
+import SelectAddItem from "@/components/SelectAddItem"
 
 interface MasterPageFormProps {
     form: FormInstance<IMasterPageForm>
@@ -73,6 +74,24 @@ function MasterPageForm(props: MasterPageFormProps) {
                         name={"route"}
                     >
                         <Input placeholder="Route" />
+                    </Form.Item>
+                </Col>
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                    <Form.Item
+                        label="Rel"
+                        rules={[
+                            {
+                                required: true,
+                                message: MessageValidateForm.Required,
+                            },
+                        ]}
+                        name={"rel"}
+                    >
+                        <SelectAddItem
+                            value={form.getFieldValue("rel")}
+                            onChange={(value) => form.setFieldsValue({ rel: value as RelEnum })}
+                            options={REL_OPTIONS}
+                        />
                     </Form.Item>
                 </Col>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>

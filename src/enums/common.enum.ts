@@ -192,3 +192,9 @@ export enum DeviceTypeEnum {
     Desktop = "Desktop",
     Tablet = "Tablet",
 }
+
+export enum RelEnum {
+    NO_FOLLOW = "nofollow",
+    DO_FOLLOW = "dofollow",
+    CANONICAL = "canonical",
+}

@@ -1,4 +1,4 @@
-import { ContentStatusEnum, MasterCateEnum } from "@/enums"
+import { ContentStatusEnum, MasterCateEnum, RelEnum } from "@/enums"
 import { IContent } from "./content.model"
 
 export interface IMasterPage {
@@ -18,4 +18,5 @@ export interface IMasterPageForm extends IMasterPage {
     status?: ContentStatusEnum
     master_type?: MasterCateEnum
     master_content_id?: string
+    rel?: RelEnum
 }
