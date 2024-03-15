@@ -1,5 +1,3 @@
-import dayjs from "dayjs"
-
 //CONSTANTS
 import { INIT_PAGINATION } from "@/constants"
 
@@ -8,7 +6,7 @@ import { useModal, useNotification, useRouter } from "@/hooks"
 import { useEffect, useMemo, useState } from "react"
 
 //MODELS
-import { IUser } from "@/models"
+import { ILoyaltyCategory } from "@/models"
 
 //ENUMS
 import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
@@ -17,23 +15,19 @@ import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } 
 import { Button, Form } from "antd"
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
 import PageWrapper from "@/components/PageWrapper"
-import LoyaltyProductCategoryListing from "../LoyaltyProduct/sections/LoyaltyProductListing"
-import LoyaltyProductCategoryForm from "../LoyaltyProduct/sections/LoyaltyProductForm"
+import LoyaltyProductCategoryListing from "./sections/LoyaltyProductCategoryListing"
+import LoyaltyProductCategoryForm from "./sections/LoyaltyProductCategoryForm"
 
 //ICONS
 import { SaveFilled } from "@ant-design/icons"
 
 //SERVICES
 import {
-    useCreateUserApiMutation,
-    useDeleteUserApiMutation,
-    useGetGroupPermissionsApiQuery,
-    useGetUsersApiQuery,
-    useResetPasswordUserApiMutation,
-    useUpdateGroupRolesForUserApiMutation,
-    useUpdateUserApiMutation,
-} from "@/services/user.service"
-import { useCreateMediaApiMutation } from "@/services/media.service"
+    useCreateLoyaltyProductCategoryApiMutation,
+    useDeleteLoyaltyProductCategoryApiMutation,
+    useGetLoyaltyProductCategoriesApiQuery,
+    useUpdateLoyaltyProductCategoryApiMutation,
+} from "@/services/loyaltyProductCategory.service"
 
 function LoyaltyProductCategory() {
     //STATES
@@ -42,87 +36,73 @@ function LoyaltyProductCategory() {
     //HOOKS
     const { visible: visibleConfirmDelete, toggle: toggleConfirmDelete } = useModal()
     const { searchParams, navigate } = useRouter()
-    const [form] = Form.useForm<IUser>()
+    const [form] = Form.useForm<ILoyaltyCategory>()
     const { showNotification } = useNotification()
-    const [detailUser, setDetailUser] = useState<IUser>()
+    const [detail, setDetail] = useState<ILoyaltyCategory>()
 
     //SERVICES
+
     const {
-        data,
-        isLoading: isLoadingListUsers,
-        isFetching: isFetchingListUsers,
-        refetch: refetchListUsers,
-    } = useGetUsersApiQuery(pagination)
-    const { data: roles } = useGetGroupPermissionsApiQuery()
-    const [updateGroupRoleUserApi, { isLoading: isLoadingPutGroupRoleForUser, isUninitialized }] =
-        useUpdateGroupRolesForUserApiMutation()
-    const [updateUserApi, { isLoading: isLoadingUpdateUser }] = useUpdateUserApiMutation()
-    const [deleteUserApi, { isLoading: isLoadingDeleteUserApi }] = useDeleteUserApiMutation()
-    const [resetPasswordApi, { isLoading: isLoadingResetPassword }] = useResetPasswordUserApiMutation()
-    const [postUserApi, { isLoading: isLoadingCreateUser }] = useCreateUserApiMutation()
-    const [uploadImageApi, { isLoading: isLoadingCreateMedia }] = useCreateMediaApiMutation()
+        data: categories,
+        isLoading: isLoadingCategories,
+        isFetching: isFetchingCategories,
+        refetch: refetchCategories,
+    } = useGetLoyaltyProductCategoriesApiQuery({
+        ...pagination,
+    })
+    const [updateCategoryApi, { isLoading: isLoadingUpdateCategory }] = useUpdateLoyaltyProductCategoryApiMutation()
+    const [deleteCategoryApi, { isLoading: isLoadingDeleteCategory }] = useDeleteLoyaltyProductCategoryApiMutation()
+    const [createCategoryApi, { isLoading: isLoadingCreateCategory }] = useCreateLoyaltyProductCategoryApiMutation()
 
     useEffect(() => {
         if (searchParams.has(ParamsEnum.ID)) {
             const id = searchParams.get(ParamsEnum.ID)
             if (id) {
-                const userDetail = data?.data?.find((item) => item.id === id)
-                if (userDetail?.id) {
+                const detail = categories?.data?.find((item) => item.id === id)
+                if (detail?.id) {
                     form.setFieldsValue({
-                        ...userDetail,
-                        birthday: userDetail?.birthday ? dayjs(userDetail?.birthday) : null,
-                        group_ids: userDetail?.uUserGroup?.map((item) => item?.group_id) as string[],
+                        ...detail,
                     })
-                    setDetailUser(userDetail)
+                    setDetail(detail)
                 }
             }
         } else {
             form.resetFields()
-            setDetailUser({})
-            if (!isUninitialized) {
-                refetchListUsers()
-            }
+            setDetail({})
         }
     }, [searchParams])
 
-    const isFormUserPage = useMemo(() => {
+    const isFormPage = useMemo(() => {
         return searchParams.has(ParamsEnum.ID)
     }, [searchParams])
 
-    const handleRedirectForm = (values?: IUser) => {
+    const handleRedirectForm = (values?: ILoyaltyCategory) => {
         if (values?.id) {
-            return navigate(`${PageRoute.UserManagement}?id=${values?.id}`)
+            return navigate(`${PageRoute.LoyaltyCategory}?id=${values?.id}`)
         } else {
-            return navigate(`${PageRoute.UserManagement}?id=`)
+            return navigate(`${PageRoute.LoyaltyCategory}?id=`)
         }
     }
 
-    const handleSubmitForm = async (value: IUser) => {
-        const isEdit = detailUser?.id
+    const handleSubmitForm = async (value: ILoyaltyCategory) => {
+        const isEdit = detail?.id
         const payload = { ...value }
 
         try {
-            if (typeof payload?.image !== "string" && payload?.image) {
-                const formData = new FormData()
-                formData.append("file", payload?.image?.file?.originFileObj as File)
-                const resImage = await uploadImageApi(formData).unwrap()
-                payload.image = resImage?.link_url
-            }
-
             if (isEdit) {
-                await updateUserApi({ ...detailUser, ...payload }).unwrap()
+                await updateCategoryApi({ ...detail, ...payload }).unwrap()
                 showNotification({
                     type: NotificationTypeEnum.Success,
                     message: NotificationMessageEnum.UpdateSuccess,
                 })
             } else {
-                const res = await postUserApi(payload).unwrap()
+                const res = await createCategoryApi(payload).unwrap()
                 showNotification({
                     type: NotificationTypeEnum.Success,
-                    message: `Password: ${res?.genPass}`,
+                    message: NotificationMessageEnum.CreateSuccess,
                 })
             }
-            refetchListUsers()
+            refetchCategories()
             navigate(-1)
         } catch (err) {
             showNotification({
@@ -134,14 +114,14 @@ function LoyaltyProductCategory() {
 
     const handleConfirmDelete = async () => {
         try {
-            await deleteUserApi({ id: detailUser?.id }).unwrap()
+            await deleteCategoryApi({ id: detail?.id }).unwrap()
             showNotification({
                 type: NotificationTypeEnum.Success,
                 message: NotificationMessageEnum.DeleteSuccess,
             })
             toggleConfirmDelete()
-            setDetailUser({})
-            refetchListUsers()
+            setDetail({})
+            refetchCategories()
         } catch (err) {
             showNotification({
                 type: NotificationTypeEnum.Error,
@@ -150,72 +130,16 @@ function LoyaltyProductCategory() {
         }
     }
 
-    const handleUpdateRoleUser = async (value: string[]) => {
-        try {
-            await updateGroupRoleUserApi({
-                group_ids: value,
-                user_id: detailUser?.id,
-            }).unwrap()
-
-            showNotification({
-                type: NotificationTypeEnum.Success,
-                message: NotificationMessageEnum.UpdateSuccess,
-            })
-        } catch (err) {
-            showNotification({
-                type: NotificationTypeEnum.Error,
-                message: NotificationMessageEnum.UpdateError,
-            })
-        }
-    }
-
-    const handleUpdateStatusUser = async (value: IUser) => {
-        try {
-            await updateUserApi({ ...detailUser, ...value }).unwrap()
-            showNotification({
-                type: NotificationTypeEnum.Success,
-                message: NotificationMessageEnum.UpdateSuccess,
-            })
-            refetchListUsers()
-        } catch (err) {
-            showNotification({
-                type: NotificationTypeEnum.Error,
-                message: NotificationMessageEnum.UpdateError,
-            })
-        }
-    }
-
-    const handleResetPassword = async (user: IUser) => {
-        try {
-            const res = await resetPasswordApi({ ...user }).unwrap()
-            showNotification({
-                type: NotificationTypeEnum.Success,
-                message: `Password: ${res?.genPass}`,
-            })
-            refetchListUsers()
-        } catch (err) {
-            showNotification({
-                type: NotificationTypeEnum.Error,
-                message: NotificationMessageEnum.ResetPasswordError,
-            })
-        }
-    }
-
     return (
         <PageWrapper
             footer={
-                isFormUserPage && (
+                isFormPage && (
                     <div className="d-flex items-center gap-4">
                         <Button type="dashed" onClick={() => navigate(-1)}>
                             Cancel
                         </Button>
                         <Button
-                            loading={
-                                isLoadingUpdateUser ||
-                                isLoadingCreateUser ||
-                                isLoadingPutGroupRoleForUser ||
-                                isLoadingCreateMedia
-                            }
+                            loading={isLoadingUpdateCategory || isLoadingCreateCategory}
                             icon={<SaveFilled />}
                             type="primary"
                             onClick={() => form.submit()}
@@ -225,38 +149,28 @@ function LoyaltyProductCategory() {
                     </div>
                 )
             }
-            hasBackBtn={isFormUserPage}
-            title="User Management"
+            hasBackBtn={isFormPage}
+            title="Loyalty Categories Management"
         >
-            {!isFormUserPage && (
+            {!isFormPage && (
                 <LoyaltyProductCategoryListing
-                    data={data}
-                    loading={isLoadingListUsers || isFetchingListUsers || isLoadingResetPassword}
+                    data={categories}
+                    loading={isLoadingCategories || isFetchingCategories}
                     pagination={pagination}
                     onActionForm={handleRedirectForm}
-                    onSetStatusUser={handleUpdateStatusUser}
                     onDelete={(data) => {
                         toggleConfirmDelete()
-                        setDetailUser(data)
+                        setDetail(data)
                     }}
-                    onResetPassword={handleResetPassword}
                 />
             )}
 
-            {isFormUserPage && (
-                <LoyaltyProductCategoryForm
-                    onSubmitForm={handleSubmitForm}
-                    onUpdateRoleUser={handleUpdateRoleUser}
-                    data={detailUser}
-                    form={form}
-                    roles={roles?.data}
-                />
-            )}
+            {isFormPage && <LoyaltyProductCategoryForm form={form} onSubmitForm={handleSubmitForm} />}
 
             <ModalConfirmDelete
                 visible={visibleConfirmDelete}
                 onClose={toggleConfirmDelete}
-                isLoading={isLoadingDeleteUserApi}
+                isLoading={isLoadingDeleteCategory}
                 onConfirm={handleConfirmDelete}
             />
         </PageWrapper>

@@ -1,4 +1,4 @@
-import { DataResponse, IRequestPaging, IRequestPutGroupRolesForUserApi, IRoleUser, IUser } from "@/models"
+import { DataResponse, ILoyaltyTag, IRequestPaging, IRoleUser, IUser } from "@/models"
 import { baseQuery } from "./baseQuery.service"
 import { createApi } from "@reduxjs/toolkit/query/react"
 
@@ -6,31 +6,31 @@ export const loyaltyTagService = createApi({
     reducerPath: "loyaltyTagService",
     baseQuery: baseQuery,
     endpoints: (builder) => ({
-        getLoyaltyProductsApi: builder.query<DataResponse<IUser[]>, IRequestPaging>({
+        getLoyaltyTagsApi: builder.query<DataResponse<ILoyaltyTag[]>, IRequestPaging>({
             query: (params: IRequestPaging) => ({
-                url: "/loyal-product",
+                url: "/loyal-tag",
                 params,
                 method: "GET",
             }),
         }),
-        createLoyaltyProductApi: builder.mutation<DataResponse<IRoleUser>, IRoleUser>({
+        createLoyaltyTagApi: builder.mutation<DataResponse<ILoyaltyTag>, IRoleUser>({
             query: (body: IRoleUser) => ({
-                url: `/loyal-product`,
+                url: `/loyal-tag`,
                 body,
                 method: "POST",
             }),
         }),
-        updateLoyaltyProductApi: builder.mutation<string, IRequestPutGroupRolesForUserApi>({
+        updateLoyaltyTagApi: builder.mutation<string, ILoyaltyTag>({
             query: (body) => ({
-                url: `/loyal-product/${body?.user_id}`,
+                url: `/loyal-tag/${body?.id}`,
                 body,
                 method: "PUT",
             }),
         }),
 
-        deleteLoyaltyProductApi: builder.mutation<string, IUser>({
+        deleteLoyaltyTagApi: builder.mutation<string, ILoyaltyTag>({
             query: (body: IUser) => ({
-                url: `/loyal-product/${body?.id}`,
+                url: `/loyal-tag/${body?.id}`,
                 method: "DELETE",
             }),
         }),
@@ -38,12 +38,12 @@ export const loyaltyTagService = createApi({
 })
 
 export const {
-    useGetLoyaltyProductsApiQuery,
-    useLazyGetLoyaltyProductsApiQuery,
+    useGetLoyaltyTagsApiQuery,
+    useLazyGetLoyaltyTagsApiQuery,
 
-    useCreateLoyaltyProductApiMutation,
+    useCreateLoyaltyTagApiMutation,
 
-    useUpdateLoyaltyProductApiMutation,
+    useUpdateLoyaltyTagApiMutation,
 
-    useDeleteLoyaltyProductApiMutation,
+    useDeleteLoyaltyTagApiMutation,
 } = loyaltyTagService

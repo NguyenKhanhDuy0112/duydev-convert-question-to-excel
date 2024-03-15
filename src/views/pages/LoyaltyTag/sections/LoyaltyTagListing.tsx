@@ -1,24 +1,33 @@
-import { Common, DataResponse, IRequestPaging, IUser } from "@/models"
+import moment from "moment"
+
+//COMPONENTS
 import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
+
+//MODELS
 import { ColumnsType } from "antd/es/table"
+import { Common, DataResponse, ILoyaltyTag, IRequestPaging } from "@/models"
+
+//ICONS
 import { PlusOutlined } from "@ant-design/icons"
 import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
+
+//HOOKS
 import { useState } from "react"
-import { StatusEnum } from "@/enums"
+
+//ENUMS
+import { FormatDateEnum, StatusEnum } from "@/enums"
 
 interface LoyaltyTagListingProps {
     pagination: IRequestPaging
-    data?: DataResponse<IUser[]>
+    data?: DataResponse<ILoyaltyTag[]>
     loading?: boolean
-    onDelete: (data: IUser) => void
-    onActionForm: (data: IUser) => void
-    onResetPassword: (data: IUser) => void
-    onSetStatusUser: (data: IUser) => void
+    onDelete: (data: ILoyaltyTag) => void
+    onActionForm: (data: ILoyaltyTag) => void
 }
 
 function LoyaltyTagListing(props: LoyaltyTagListingProps) {
-    const { data, loading, pagination, onActionForm, onDelete, onSetStatusUser, onResetPassword } = props
-    const [currentRecord, setCurrentRecord] = useState<IUser>({})
+    const { data, loading, pagination, onActionForm, onDelete } = props
+    const [currentRecord, setCurrentRecord] = useState<ILoyaltyTag>({})
 
     const items: MenuProps["items"] = [
         {
@@ -26,72 +35,34 @@ function LoyaltyTagListing(props: LoyaltyTagListingProps) {
             key: "0",
         },
         {
-            label: (
-                <div onClick={() => onSetStatusUser({ ...currentRecord, is_active: !currentRecord?.is_active })}>
-                    {currentRecord?.is_active ? StatusEnum.Deactivated : StatusEnum.Activated}
-                </div>
-            ),
-            key: "1",
-        },
-        {
-            label: <div onClick={() => onResetPassword(currentRecord)}>Reset password</div>,
-            key: "2",
-        },
-        {
             label: <div onClick={() => onDelete({ ...currentRecord })}>Delete</div>,
             key: "3",
         },
     ]
 
-    const columns: ColumnsType<IUser> = [
+    const columns: ColumnsType<ILoyaltyTag> = [
         {
-            title: "First name",
-            dataIndex: "first_name",
-            key: "first_name",
+            title: "Name",
+            dataIndex: "name",
+            key: "name",
             render: (value: string) => {
                 return <span>{Common.renderData(value)}</span>
             },
         },
         {
-            title: "Last name",
-            dataIndex: "last_name",
-            key: "last_name",
+            title: "Remake",
+            dataIndex: "remake",
+            key: "remake",
             render: (value: string) => {
                 return <span>{Common.renderData(value)}</span>
             },
         },
         {
-            title: "Email",
-            dataIndex: "email",
-            key: "email",
-            render: (value: string) => {
-                return <span>{Common.renderData(value)}</span>
-            },
-        },
-        {
-            title: "Phone number",
-            dataIndex: "phone",
-            key: "phone",
-            render: (value: string) => {
-                return <span>{Common.renderData(value)}</span>
-            },
-        },
-        {
-            title: "User type",
-            dataIndex: "uUserGroup",
-            key: "uUserGroup",
-            render: (_, record: IUser) => {
-                return (
-                    <div>
-                        {record?.uUserGroup?.map((item, index) => {
-                            return (
-                                <Tag color="" className="m-1" key={index}>
-                                    {Common.renderData(item?.uGroups?.name)}
-                                </Tag>
-                            )
-                        })}
-                    </div>
-                )
+            title: "Created Date",
+            dataIndex: "created_at",
+            key: "created_at",
+            render: (value: Date) => {
+                return <span>{moment(value).format(FormatDateEnum.Default)}</span>
             },
         },
         {
@@ -112,7 +83,7 @@ function LoyaltyTagListing(props: LoyaltyTagListingProps) {
             fixed: "right",
             align: "center",
             width: "8%",
-            render: (_, record: IUser) => (
+            render: (_, record: ILoyaltyTag) => (
                 <Dropdown overlayClassName="dropdown-action-table" menu={{ items }} trigger={["click"]}>
                     <Button onClick={() => setCurrentRecord(record)} type="text" className="dot-menu-action">
                         <DotMenuIc />

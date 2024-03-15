@@ -23,8 +23,6 @@ import { updateState } from "@/redux/modules/common/commonSlice"
 
 //MODELS
 import { IUser } from "@/models"
-import SettingClearCache from "@/views/pages/SettingClearCache"
-import GroupRoleManagement from "@/views/pages/GroupRoleManagement"
 
 //COMPONENTS
 const Loader = lazy(() => import("@/components/Loader/Loader"))
@@ -46,6 +44,12 @@ const MasterCenter = lazy(() => import("@/views/pages/MasterCenter"))
 const Profile = lazy(() => import("@/views/pages/Profile"))
 const MasterPage = lazy(() => import("@/views/pages/MasterPage"))
 const MediaManagement = lazy(() => import("@/views/pages/MediaManagement"))
+const SettingClearCache = lazy(() => import("@/views/pages/SettingClearCache"))
+const GroupRoleManagement = lazy(() => import("@/views/pages/GroupRoleManagement"))
+const LoyaltyProduct = lazy(() => import("@/views/pages/LoyaltyProduct"))
+const LoyaltyCategory = lazy(() => import("@/views/pages/LoyaltyProductCategory"))
+const LoyaltyMember = lazy(() => import("@/views/pages/LoyaltyMember"))
+const LoyaltyTag = lazy(() => import("@/views/pages/LoyaltyTag"))
 
 const appRoutes: RouteObject[] = [
     {
@@ -108,6 +112,22 @@ const appRoutes: RouteObject[] = [
             {
                 path: "setting/clear-cache",
                 element: <SettingClearCache />,
+            },
+            {
+                path: PageRoute.LoyaltyCategory,
+                element: <LoyaltyCategory />,
+            },
+            {
+                path: PageRoute.LoyaltyProduct,
+                element: <LoyaltyProduct />,
+            },
+            {
+                path: PageRoute.LoyaltyMember,
+                element: <LoyaltyMember />,
+            },
+            {
+                path: PageRoute.LoyaltyTags,
+                element: <LoyaltyTag />,
             },
         ],
     },

@@ -15,6 +15,10 @@ export enum PageRoute {
     MasterPage = "/master-page",
     SettingClearCache = "/setting/clear-cache",
     GroupRoleManagement = "/group-role-management",
+    LoyaltyProduct = "/loyalty-products",
+    LoyaltyCategory = "/loyalty-categories",
+    LoyaltyMember = "/loyalty-members",
+    LoyaltyTags = "/loyalty-tags",
 }
 
 export enum ParamsEnum {

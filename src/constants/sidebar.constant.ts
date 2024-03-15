@@ -19,7 +19,7 @@ export const SIDE_BARS: SidebarItem[] = [
             {
                 key: PermissionUserEnum.CategoryManagement,
                 link: PageRoute.Categories,
-                label: "Category",
+                label: "Categories",
                 icon: AppstoreOutlined,
                 permission: PermissionUserEnum.ContentManagement,
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
@@ -35,7 +35,7 @@ export const SIDE_BARS: SidebarItem[] = [
             {
                 key: PermissionUserEnum.CouponManagement,
                 link: PageRoute.Coupons,
-                label: "Coupon",
+                label: "Coupons",
                 icon: AppstoreOutlined,
                 permission: PermissionUserEnum.CouponManagement,
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
@@ -50,28 +50,42 @@ export const SIDE_BARS: SidebarItem[] = [
             },
         ],
     },
-    // {
-    //     key: "loyalty",
-    //     label: "Loyalty Management",
-    //     icon: UserOutlined,
-    //     permission: PermissionUserEnum.UserManagement,
-    //     children: [
-    //         {
-    //             key: PermissionUserEnum.UserManagement,
-    //             link: PageRoute.UserManagement,
-    //             label: "Category",
-    //             permission: PermissionUserEnum.UserManagement,
-    //             roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
-    //         },
-    //         {
-    //             key: PermissionUserEnum.GroupRoleManagement,
-    //             link: PageRoute.GroupRoleManagement,
-    //             label: "Product",
-    //             permission: PermissionUserEnum.UserManagement,
-    //             roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
-    //         },
-    //     ],
-    // },
+    {
+        key: "loyalty",
+        label: "Loyalty Management",
+        icon: UserOutlined,
+        permission: PermissionUserEnum.UserManagement,
+        children: [
+            {
+                key: PermissionUserEnum.LoyaltyViewProductCategory,
+                link: PageRoute.LoyaltyCategory,
+                label: "Categories",
+                permission: PermissionUserEnum.LoyaltyViewProductCategory,
+                roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
+            },
+            {
+                key: PermissionUserEnum.LoyaltyViewProduct,
+                link: PageRoute.LoyaltyProduct,
+                label: "Products",
+                permission: PermissionUserEnum.LoyaltyViewProduct,
+                roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
+            },
+            {
+                key: PermissionUserEnum.LoyaltyViewMembers,
+                link: PageRoute.LoyaltyMember,
+                label: "Members",
+                permission: PermissionUserEnum.UserManagement,
+                roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
+            },
+            {
+                key: PermissionUserEnum.LoyaltyViewTags,
+                link: PageRoute.LoyaltyTags,
+                label: "Tags",
+                permission: PermissionUserEnum.LoyaltyViewTags,
+                roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
+            },
+        ],
+    },
     {
         key: "admin",
         label: "Admin",

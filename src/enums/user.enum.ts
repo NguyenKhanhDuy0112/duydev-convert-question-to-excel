@@ -25,4 +25,24 @@ export enum PermissionUserEnum {
     PageManagement = "page_management",
     ListMediaManagement = "list_media_management",
     ViewMedia = "view_media",
+
+    LoyaltyViewMembers = "view_members",
+    LoyaltyCreateMembers = "create_members",
+    LoyaltyEditMembers = "edit_members",
+    LoyaltyDeleteMembers = "delete_members",
+
+    LoyaltyViewTags = "view_tags",
+    LoyaltyCreateTags = "create_tags",
+    LoyaltyEditTags = "edit_tags",
+    LoyaltyDeleteTags = "delete_tags",
+
+    LoyaltyViewProduct = "view_product",
+    LoyaltyCreateProduct = "create_product",
+    LoyaltyEditProduct = "edit_product",
+    LoyaltyDeleteProduct = "delete_product",
+
+    LoyaltyViewProductCategory = "view_product_category",
+    LoyaltyCreateProductCategory = "create_product_category",
+    LoyaltyEditProductCategory = "edit_product_category",
+    LoyaltyDeleteProductCategory = "delete_product_category",
 }
