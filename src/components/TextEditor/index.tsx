@@ -1,6 +1,6 @@
 //HOOKS
 import { useModal, useProfile } from "@/hooks"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 
 //ICONS
 import { PictureOutlined } from "@ant-design/icons"
@@ -11,7 +11,7 @@ import { PermissionUserEnum } from "@/enums"
 //COMPONENTS
 import ModalMedia from "../ModalMedia"
 import { Editor } from "@tinymce/tinymce-react"
-import { Button } from "antd"
+import { Button, Checkbox } from "antd"
 
 interface TextEditorProps {
     value: string
@@ -29,6 +29,7 @@ interface TextEditorProps {
 function TextEditor(props: TextEditorProps) {
     const { value, onChange } = props
     const { visible: visible, toggle: onToggle } = useModal()
+    const [visibleEdit, setVisibleEdit] = useState(false)
     const editorRef = useRef<any>(null)
     const { permissions_name } = useProfile()
 
@@ -85,14 +86,26 @@ function TextEditor(props: TextEditorProps) {
     return (
         <>
             <div className="textEditor">
-                {permissions_name?.includes(PermissionUserEnum.ViewMedia as string) && (
-                    <Button
-                        onClick={onToggle}
-                        className="textEditor__gallery-btn"
-                        type="primary"
-                        icon={<PictureOutlined />}
-                    ></Button>
-                )}
+                <div className="textEditor__group d-flex items-center gap-4">
+                    <div>
+                        <Checkbox
+                            value={visibleEdit}
+                            onChange={(e) => {
+                                setVisibleEdit(e.target.checked)
+                            }}
+                        >
+                            Show Editor
+                        </Checkbox>
+                    </div>
+                    {permissions_name?.includes(PermissionUserEnum.ViewMedia as string) && (
+                        <Button
+                            onClick={onToggle}
+                            className="textEditor__gallery-btn"
+                            type="primary"
+                            icon={<PictureOutlined />}
+                        ></Button>
+                    )}
+                </div>
                 {/* 33zdcoyg44objqjg22kk9ha4rk764f4fme6553mai148qmh9 */}
                 {/* <JoditEditor value={value} ref={editorRef} config={config} onBlur={(newValue) => onChange(newValue)} /> */}
                 <Editor

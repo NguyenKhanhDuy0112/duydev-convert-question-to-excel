@@ -50,6 +50,28 @@ export const SIDE_BARS: SidebarItem[] = [
             },
         ],
     },
+    // {
+    //     key: "loyalty",
+    //     label: "Loyalty Management",
+    //     icon: UserOutlined,
+    //     permission: PermissionUserEnum.UserManagement,
+    //     children: [
+    //         {
+    //             key: PermissionUserEnum.UserManagement,
+    //             link: PageRoute.UserManagement,
+    //             label: "Category",
+    //             permission: PermissionUserEnum.UserManagement,
+    //             roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
+    //         },
+    //         {
+    //             key: PermissionUserEnum.GroupRoleManagement,
+    //             link: PageRoute.GroupRoleManagement,
+    //             label: "Product",
+    //             permission: PermissionUserEnum.UserManagement,
+    //             roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
+    //         },
+    //     ],
+    // },
     {
         key: "admin",
         label: "Admin",

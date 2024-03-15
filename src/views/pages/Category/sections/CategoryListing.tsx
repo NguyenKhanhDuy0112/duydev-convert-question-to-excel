@@ -255,7 +255,11 @@ function CategoryListing(props: CategoryListingProps) {
                 <Col span={"auto"}>
                     <div className="d-flex gap-4">
                         {permissions_name?.includes(PermissionUserEnum.ContentManagement) && (
-                            <Button onClick={() => onActionForm({})} className="w-100" type="primary">
+                            <Button
+                                onClick={() => navigate(`${PageRoute.MasterCenter}`)}
+                                className="w-100"
+                                type="primary"
+                            >
                                 Master center
                             </Button>
                         )}

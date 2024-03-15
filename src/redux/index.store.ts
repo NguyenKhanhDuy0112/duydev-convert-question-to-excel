@@ -11,6 +11,10 @@ import { contentDetailManagementService } from "@/services/contentDetailManageme
 import { mediaService } from "@/services/media.service"
 import { masterPageService } from "@/services/masterPage.service"
 import { commonService } from "@/services/common.service"
+import { loyaltyProductService } from "@/services/loyaltyProduct.service"
+import { loyaltyProductCategoryService } from "@/services/loyaltyProductCategory.service"
+import { loyaltyMemberService } from "@/services/loyaltyMember.service"
+import { loyaltyTagService } from "@/services/loyaltyTag.service"
 import { frontOfficeService } from "@/services/frontOffice.service"
 
 const store = configureStore({
@@ -27,6 +31,10 @@ const store = configureStore({
         [masterPageService.reducerPath]: masterPageService.reducer,
         [commonService.reducerPath]: commonService.reducer,
         [frontOfficeService.reducerPath]: frontOfficeService.reducer,
+        [loyaltyProductService.reducerPath]: loyaltyProductService.reducer,
+        [loyaltyProductCategoryService.reducerPath]: loyaltyProductCategoryService.reducer,
+        [loyaltyMemberService.reducerPath]: loyaltyMemberService.reducer,
+        [loyaltyTagService.reducerPath]: loyaltyTagService.reducer,
         rootReducer,
     },
     middleware: (getDefaultMiddleware) =>
@@ -42,7 +50,11 @@ const store = configureStore({
             mediaService.middleware,
             masterPageService.middleware,
             commonService.middleware,
-            frontOfficeService.middleware
+            frontOfficeService.middleware,
+            loyaltyProductService.middleware,
+            loyaltyProductCategoryService.middleware,
+            loyaltyMemberService.middleware,
+            loyaltyTagService.middleware
         ),
 })
 

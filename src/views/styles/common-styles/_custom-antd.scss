@@ -225,6 +225,7 @@
 
         .ant-modal-body {
             max-height: calc(100vh - 140px);
+            min-height: calc(100vh - 140px);
             padding: 12px 24px;
             overflow-y: scroll;
 
