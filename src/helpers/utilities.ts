@@ -20,6 +20,10 @@ export function formatCash(number: number) {
     return intPart + DecimalSeparator + decPart
 }
 
+export const formatMoney = (num = 0) => {
+    return num?.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+}
+
 export const isLowerCase = (str: string) => {
     return str !== str.toUpperCase()
 }

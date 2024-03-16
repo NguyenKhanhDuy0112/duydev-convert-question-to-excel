@@ -860,6 +860,25 @@ body {
     }
 }
 
+.line-clamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    &-1 {
+        @extend .line-clamp;
+        -webkit-line-clamp: 1;
+    }
+    &-2 {
+        @extend .line-clamp;
+        -webkit-line-clamp: 2;
+    }
+    &-3 {
+        @extend .line-clamp;
+        -webkit-line-clamp: 3;
+    }
+}
+
 .tag {
     &-WAITING {
         background: linear-gradient(

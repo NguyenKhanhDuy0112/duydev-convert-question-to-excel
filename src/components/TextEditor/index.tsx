@@ -1,6 +1,6 @@
 //HOOKS
 import { useModal, useProfile } from "@/hooks"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 //ICONS
 import { PictureOutlined } from "@ant-design/icons"
@@ -32,6 +32,10 @@ function TextEditor(props: TextEditorProps) {
     const [visibleEdit, setVisibleEdit] = useState(false)
     const editorRef = useRef<any>(null)
     const { permissions_name } = useProfile()
+
+    useEffect(() => {
+        setVisibleEdit(!permissions_name?.includes(PermissionUserEnum.ApprovalManagement as string))
+    }, [permissions_name])
 
     const config: any = {
         height: 600,
@@ -87,16 +91,18 @@ function TextEditor(props: TextEditorProps) {
         <>
             <div className="textEditor">
                 <div className="textEditor__group d-flex items-center gap-4">
-                    <div>
-                        <Checkbox
-                            value={visibleEdit}
-                            onChange={(e) => {
-                                setVisibleEdit(e.target.checked)
-                            }}
-                        >
-                            Show Editor
-                        </Checkbox>
-                    </div>
+                    {permissions_name?.includes(PermissionUserEnum.ApprovalManagement as string) && (
+                        <div>
+                            <Checkbox
+                                value={visibleEdit}
+                                onChange={(e) => {
+                                    setVisibleEdit(e.target.checked)
+                                }}
+                            >
+                                Show Editor
+                            </Checkbox>
+                        </div>
+                    )}
                     {permissions_name?.includes(PermissionUserEnum.ViewMedia as string) && (
                         <Button
                             onClick={onToggle}
@@ -108,50 +114,55 @@ function TextEditor(props: TextEditorProps) {
                 </div>
                 {/* 33zdcoyg44objqjg22kk9ha4rk764f4fme6553mai148qmh9 */}
                 {/* <JoditEditor value={value} ref={editorRef} config={config} onBlur={(newValue) => onChange(newValue)} /> */}
-                <Editor
-                    onInit={(evt, editor) => {
-                        editorRef.current = editor
-                    }}
-                    textareaName="content"
-                    onEditorChange={(newValue, editor) => {
-                        onChange(newValue)
-                    }}
-                    apiKey="33zdcoyg44objqjg22kk9ha4rk764f4fme6553mai148qmh9"
-                    value={value}
-                    init={{
-                        height: 800,
-                        relative_urls: false,
-                        remove_script_host: false,
-                        convert_urls: true,
-                        fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt",
-                        menubar: true,
-                        plugins: [
-                            "advlist",
-                            "autolink",
-                            "lists",
-                            "link",
-                            "image",
-                            "charmap",
-                            "anchor",
-                            "searchreplace",
-                            "visualblocks",
-                            "code",
-                            "fullscreen",
-                            "insertdatetime",
-                            "media",
-                            "table",
-                            "preview",
-                            "help",
-                            "wordcount",
-                        ],
-                        toolbar:
-                            "undo redo | blocks | " +
-                            "bold italic forecolor | alignleft aligncenter " +
-                            "alignright alignjustify | bullist numlist outdent indent | " +
-                            "removeformat | help",
-                        content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                    }}
-                />
+                {visibleEdit ? (
+                    <Editor
+                        key={"text-editor-vgbhrt"}
+                        onInit={(evt, editor) => {
+                            editorRef.current = editor
+                        }}
+                        textareaName="content"
+                        onEditorChange={(newValue, editor) => {
+                            onChange(newValue)
+                        }}
+                        apiKey="33zdcoyg44objqjg22kk9ha4rk764f4fme6553mai148qmh9"
+                        value={value}
+                        init={{
+                            height: 800,
+                            relative_urls: false,
+                            remove_script_host: false,
+                            convert_urls: true,
+                            fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt",
+                            menubar: true,
+                            plugins: [
+                                "advlist",
+                                "autolink",
+                                "lists",
+                                "link",
+                                "image",
+                                "charmap",
+                                "anchor",
+                                "searchreplace",
+                                "visualblocks",
+                                "code",
+                                "fullscreen",
+                                "insertdatetime",
+                                "media",
+                                "table",
+                                "preview",
+                                "help",
+                                "wordcount",
+                            ],
+                            toolbar:
+                                "undo redo | blocks | " +
+                                "bold italic forecolor | alignleft aligncenter " +
+                                "alignright alignjustify | bullist numlist outdent indent | " +
+                                "removeformat | help",
+                            content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                        }}
+                    />
+                ) : (
+                    <p className="textEditor__preview" dangerouslySetInnerHTML={{ __html: value || "" }}></p>
+                )}
             </div>
             <ModalMedia show={visible} onClose={onToggle} onSelectImage={handleSelectImage} />
         </>

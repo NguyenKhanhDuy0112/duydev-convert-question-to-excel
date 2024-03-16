@@ -32,4 +32,10 @@
             height: 15px;
         }
     }
+
+    &__preview {
+        border: 1px solid $gray-d9d;
+        padding: 1rem;
+        border-radius: 8px;
+    }
 }

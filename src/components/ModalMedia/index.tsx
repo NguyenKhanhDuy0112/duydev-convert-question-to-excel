@@ -14,7 +14,6 @@ function ModalMedia(props: ModalMediaProps) {
     const { show, onClose, onSelectImage } = props
     const { visible: visibleMediaForm, toggle: onToggleMediaForm } = useModal()
     const { data, refetch, isLoading: isLoadingMedia } = useGetMediaApiQuery()
-    //show modal image and select image
 
     const handleSelectImage = (path: string) => {
         message.success("Select image success!")
@@ -29,18 +28,31 @@ function ModalMedia(props: ModalMediaProps) {
     return (
         <>
             <Modal
-                footer={null}
-                zIndex={300}
-                title={
-                    <Button onClick={onToggleMediaForm} icon={<CloudUploadOutlined />} type="primary">
-                        Upload
-                    </Button>
+                footer={
+                    <>
+                        <Button type="dashed" onClick={onClose}>
+                            Cancel
+                        </Button>
+                    </>
                 }
+                zIndex={300}
+                className="custom__modal"
                 width={2000}
+                title="Media"
                 open={show}
                 onCancel={onClose}
             >
                 <Spin spinning={isLoadingMedia}>
+                    <div className="d-flex justify-end">
+                        <Button
+                            className="m-b-4"
+                            onClick={onToggleMediaForm}
+                            icon={<CloudUploadOutlined />}
+                            type="primary"
+                        >
+                            Upload
+                        </Button>
+                    </div>
                     <List
                         grid={{ gutter: 16, xs: 1, md: 2, lg: 4, xl: 6 }}
                         dataSource={data?.data}

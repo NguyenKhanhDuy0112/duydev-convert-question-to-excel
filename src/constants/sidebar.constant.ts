@@ -78,10 +78,10 @@ export const SIDE_BARS: SidebarItem[] = [
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
             },
             {
-                key: PermissionUserEnum.LoyaltyViewTags,
+                key: PermissionUserEnum.LoyaltyTagManagement,
                 link: PageRoute.LoyaltyTags,
                 label: "Tags",
-                permission: PermissionUserEnum.LoyaltyViewTags,
+                permission: PermissionUserEnum.LoyaltyTagManagement,
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
             },
         ],

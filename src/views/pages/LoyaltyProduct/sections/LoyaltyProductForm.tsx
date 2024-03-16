@@ -1,140 +1,140 @@
-import { GENDER_OPTIONS } from "@/constants"
-import { MessageValidateForm } from "@/enums"
-import { beforeUpload, getBase64 } from "@/helpers/utilities"
-import { IRoleUser, IUser } from "@/models"
-import { Checkbox, Col, DatePicker, Form, FormInstance, Input, Row, Select, Upload } from "antd"
-import { RcFile, UploadChangeParam, UploadFile, UploadProps } from "antd/es/upload"
-import { useEffect, useMemo, useState } from "react"
-import { UploadOutlined } from "@ant-design/icons"
+import { MessageValidateForm, UploadTypeEnum } from "@/enums"
+import { ILoyaltyProduct } from "@/models"
+import { Col, Form, FormInstance, Input, InputNumber, Row, Select } from "antd"
+import UploadFile from "@/components/UploadFile"
+import { useGetLoyaltyProductCategoriesApiQuery } from "@/services/loyaltyProductCategory.service"
+import TextArea from "antd/es/input/TextArea"
 
 interface LoyaltyProductFormProps {
-    data?: IUser
-    roles?: IRoleUser[]
-    onUpdateRoleUser: (value: string[]) => void
-    form: FormInstance<IUser>
-    onSubmitForm: (value: IUser) => void
+    data?: ILoyaltyProduct
+    form: FormInstance<ILoyaltyProduct>
+    onSubmitForm: (value: ILoyaltyProduct) => void
 }
 
 function LoyaltyProductForm(props: LoyaltyProductFormProps) {
-    const { data, roles, form, onSubmitForm, onUpdateRoleUser } = props
-    const [image, setImage] = useState<string>("")
-
-    useEffect(() => {
-        setImage(data?.image as string)
-    }, [data])
-
-    const handleChange: UploadProps["onChange"] = (info: UploadChangeParam<UploadFile>) => {
-        getBase64(info.file.originFileObj as RcFile, (url) => {
-            setImage(url as string)
-        })
-    }
-
-    const renderImageUrl = useMemo(() => {
-        if (image) {
-            return <img src={image} alt="" />
-        } else {
-            return (
-                <div>
-                    <UploadOutlined />
-                    <div style={{ marginTop: 8 }}>Upload</div>
-                </div>
-            )
-        }
-    }, [image])
+    const { data, form, onSubmitForm } = props
+    const { data: categories } = useGetLoyaltyProductCategoriesApiQuery({
+        page: 1,
+        limit: 100,
+    })
 
     return (
-        <Form onFinish={onSubmitForm} labelAlign="left" autoComplete="off" layout="vertical" form={form}>
-            <div className="d-flex justify-center">
-                <Form.Item name={"image"}>
-                    <Upload
-                        name="avatar"
-                        listType="picture-circle"
-                        className="upload-avatar"
-                        showUploadList={false}
-                        beforeUpload={(file) => beforeUpload(file, 1)}
-                        onChange={handleChange}
-                    >
-                        {renderImageUrl}
-                    </Upload>
-                </Form.Item>
-            </div>
+        <Form
+            onFinish={onSubmitForm}
+            autoComplete="off"
+            layout="vertical"
+            labelAlign="left"
+            wrapperCol={{ span: 24 }}
+            form={form}
+        >
             <Row gutter={20}>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="Email"
-                        rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
-                            {
-                                type: "email",
-                                message: MessageValidateForm.InvalidEmail,
-                            },
-                        ]}
-                        name={"email"}
-                    >
-                        <Input disabled={Boolean(data?.id)} placeholder="Email" />
-                    </Form.Item>
-                </Col>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item label="Phone Number (Optional)" name={"phone"}>
-                        <Input placeholder="Phone number" />
-                    </Form.Item>
-                </Col>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="First name"
-                        rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
-                        ]}
-                        name={"first_name"}
-                    >
-                        <Input placeholder="First name" />
-                    </Form.Item>
-                </Col>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item
-                        label="Last name"
-                        rules={[
-                            {
-                                required: true,
-                                message: MessageValidateForm.Required,
-                            },
-                        ]}
-                        name={"last_name"}
-                    >
-                        <Input placeholder="Last name" />
-                    </Form.Item>
-                </Col>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item label="Birthday" name={"birthday"}>
-                        <DatePicker format={"DD-MM-YYYY"} placeholder="DD-MM-YYYY" />
-                    </Form.Item>
-                </Col>
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item label="Gender" name={"gender"}>
-                        <Select placeholder="Select" options={GENDER_OPTIONS} />
-                    </Form.Item>
-                </Col>
-                {data?.id && (
-                    <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                        <Form.Item label="Roles" name={"group_ids"}>
-                            <Checkbox.Group onChange={(checkedValue) => onUpdateRoleUser(checkedValue as string[])}>
-                                <Row gutter={[6, 6]}>
-                                    {roles?.map((item) => (
-                                        <Col span={12}>
-                                            <Checkbox value={item?.id}>{item?.name}</Checkbox>
-                                        </Col>
-                                    ))}
-                                </Row>
-                            </Checkbox.Group>
+                <Col md={{ span: 24 }} xs={{ span: 24 }}>
+                    <div className="d-flex justify-center">
+                        <Form.Item name={"image"}>
+                            <UploadFile
+                                uploadType={UploadTypeEnum.GALLERY}
+                                imageUrl={form.getFieldValue("image") || ""}
+                                onChange={(value) => form.setFieldValue("image", value)}
+                            />
                         </Form.Item>
-                    </Col>
-                )}
+                    </div>
+                </Col>
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                    <Form.Item
+                        rules={[
+                            {
+                                required: true,
+                                message: MessageValidateForm.Required,
+                            },
+                        ]}
+                        label="Name"
+                        name={"name"}
+                    >
+                        <Input placeholder="Name" />
+                    </Form.Item>
+                </Col>
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                    <Form.Item
+                        rules={[
+                            {
+                                required: true,
+                                message: MessageValidateForm.Required,
+                            },
+                        ]}
+                        label="Code"
+                        name={"code"}
+                    >
+                        <Input placeholder="Code" />
+                    </Form.Item>
+                </Col>
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                    <Form.Item
+                        rules={[
+                            {
+                                required: true,
+                                message: MessageValidateForm.Required,
+                            },
+                        ]}
+                        label="Category"
+                        name={"category_id"}
+                    >
+                        <Select placeholder="Select" showSearch optionFilterProp="children">
+                            {categories?.data?.map((item) => (
+                                <Select.Option key={item.id}>{item.name}</Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                </Col>
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                    <Form.Item
+                        rules={[
+                            {
+                                required: true,
+                                message: MessageValidateForm.Required,
+                            },
+                        ]}
+                        label="Stock"
+                        name={"available_stock"}
+                    >
+                        <InputNumber
+                            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
+                            placeholder="Stock"
+                        />
+                    </Form.Item>
+                </Col>
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                    <Form.Item
+                        rules={[
+                            {
+                                required: true,
+                                message: MessageValidateForm.Required,
+                            },
+                        ]}
+                        label="Amount"
+                        name={"amount"}
+                    >
+                        <InputNumber
+                            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
+                            placeholder="Amount"
+                        />
+                    </Form.Item>
+                </Col>
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                    <Form.Item label="Point" name={"point"}>
+                        <InputNumber
+                            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
+                            placeholder="Point"
+                        />
+                    </Form.Item>
+                </Col>
+                <Col md={{ span: 24 }} xs={{ span: 24 }}>
+                    <Form.Item label="Description" name={"description"}>
+                        <TextArea rows={10} placeholder="Description" />
+                    </Form.Item>
+                </Col>
             </Row>
         </Form>
     )

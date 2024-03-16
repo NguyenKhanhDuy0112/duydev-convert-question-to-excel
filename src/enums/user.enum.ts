@@ -36,6 +36,8 @@ export enum PermissionUserEnum {
     LoyaltyEditTags = "edit_tags",
     LoyaltyDeleteTags = "delete_tags",
 
+    LoyaltyTagManagement = "tag_management",
+
     LoyaltyViewProduct = "view_product",
     LoyaltyCreateProduct = "create_product",
     LoyaltyEditProduct = "edit_product",

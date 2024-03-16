@@ -2,13 +2,20 @@
     position: relative;
     border: 1px dashed $primary;
     border-radius: 10px;
-    height: 300px;
+    height: 100%;
+    width: 230px;
     width: 100%;
     padding: 1rem;
     cursor: pointer;
 
+    @include responsive(md-screen) {
+        height: 230px;
+        width: 230px;
+    }
+
     @include responsive(xl-screen) {
-        height: 420px;
+        height: 230px;
+        width: 230px;
     }
 
     .anticon.anticon-cloud-upload {
@@ -16,7 +23,10 @@
     }
 
     img {
+        max-width: 100%;
+        max-height: 100%;
         width: 100%;
+        object-fit: contain;
     }
 
     &__close {
