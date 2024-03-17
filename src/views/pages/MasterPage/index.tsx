@@ -41,7 +41,7 @@ import { SaveFilled } from "@ant-design/icons"
 //COMPONENTS
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
 import PageWrapper from "@/components/PageWrapper"
-import { Button, Form, Spin } from "antd"
+import { Button, Form, Spin, TablePaginationConfig } from "antd"
 import MasterPageListing from "./sections/MasterPageListing"
 import MasterPageForm from "./sections/MasterPageForm"
 import ModalConfirm from "@/components/ModalConfirm"
@@ -105,6 +105,7 @@ function MasterPage() {
                     })
                     form.setFieldsValue({
                         ...masterPageDetail,
+                        rel: items?.length ? items[0]?.rel : "",
                         status: items?.length ? items[0]?.status : "",
                         items: languages.map((item) => {
                             const findData = items?.find((i) => i.lang === item?.locale)
@@ -130,6 +131,7 @@ function MasterPage() {
             })
             form.setFieldsValue({
                 status: items?.length ? items[0]?.status : "",
+                rel: items?.length ? items[0]?.rel : "",
                 items: languages.map((item) => {
                     const findData = items?.find((i) => i.lang === item?.locale)
                     if (findData?.id) {
@@ -242,6 +244,10 @@ function MasterPage() {
         handleSubmitForm(values, true)
     }
 
+    const handleChangePagination = (pagination: TablePaginationConfig) => {
+        setPagination((prevData) => ({ ...prevData, limit: pagination?.pageSize, page: pagination?.current }))
+    }
+
     const isFormPage = useMemo(() => {
         return searchParams.has(ParamsEnum.ID)
     }, [searchParams])
@@ -276,6 +282,7 @@ function MasterPage() {
                     pagination={pagination}
                     loading={isFetchingList}
                     onActionForm={handleRedirectForm}
+                    onPagination={handleChangePagination}
                     onDelete={handleToggleModalDelete}
                 />
             )}

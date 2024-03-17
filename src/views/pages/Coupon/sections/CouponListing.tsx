@@ -8,7 +8,7 @@ import moment from "moment"
 import { useState } from "react"
 
 //MODELS
-import { ColumnsType } from "antd/es/table"
+import { ColumnsType, TablePaginationConfig } from "antd/es/table"
 
 //ENUMS
 import { CouponTypeEnum, FormatDateEnum, LangCodeEnum } from "@/enums"
@@ -26,10 +26,11 @@ interface CouponListingProps {
     onDelete: (data?: ICoupon) => void
     onActionForm: (value?: ICoupon) => void
     pagination?: IRequestPaging
+    onPagination: (pagination: TablePaginationConfig) => void
 }
 
 function CouponListing(props: CouponListingProps) {
-    const { data, isLoading, pagination, onActionForm, onDelete } = props
+    const { data, isLoading, pagination, onActionForm, onDelete, onPagination } = props
 
     //STATES
     const [currentRecord, setCurrentRecord] = useState<ICoupon>({})
@@ -110,8 +111,8 @@ function CouponListing(props: CouponListingProps) {
         },
         {
             title: "Expiration date",
-            dataIndex: "expired_at",
-            key: "expired_at",
+            dataIndex: "expire_date",
+            key: "expire_date",
             render: (value: Date | null) => {
                 return moment(value).format(FormatDateEnum.Default)
             },
@@ -151,6 +152,7 @@ function CouponListing(props: CouponListingProps) {
                 scroll={{ x: "auto" }}
                 dataSource={data?.data || []}
                 pagination={{ current: pagination?.page, total: data?.total, pageSize: pagination?.limit }}
+                onChange={(pagination) => onPagination(pagination)}
             />
         </Space>
     )

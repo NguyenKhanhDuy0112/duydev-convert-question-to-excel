@@ -27,7 +27,7 @@ import { INIT_PAGINATION } from "@/constants"
 import { SaveFilled } from "@ant-design/icons"
 
 //COMPONENTS
-import { Button, Form } from "antd"
+import { Button, Form, TablePaginationConfig } from "antd"
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
 import CouponListing from "./sections/CouponListing"
 import CouponForm from "./sections/CouponForm"
@@ -45,7 +45,7 @@ function Coupon() {
     const [couponDetail, setCouponDetail] = useState<ICoupon | undefined>({})
 
     //SERVICES
-    const { data, isLoading: isLoadingList, refetch } = useGetCouponsApiQuery(pagination)
+    const { data, isLoading: isLoadingList, isFetching: isFetchingList, refetch } = useGetCouponsApiQuery(pagination)
     const [uploadImageApi, { isLoading: isLoadingUploadImage }] = useCreateMediaApiMutation()
     const [createCouponApi, { isLoading: isLoadingCreate }] = useCreateCouponApiMutation()
     const [updateCouponApi, { isLoading: isLoadingUpdate }] = useUpdateCouponApiMutation()
@@ -154,6 +154,10 @@ function Coupon() {
         }
     }
 
+    const handleChangePagination = (pagination: TablePaginationConfig) => {
+        setPagination((prevData) => ({ ...prevData, limit: pagination.pageSize, page: pagination.current }))
+    }
+
     const isFormCouponPage = useMemo(() => {
         return searchParams.has(ParamsEnum.ID)
     }, [searchParams])
@@ -183,10 +187,11 @@ function Coupon() {
             {!isFormCouponPage && (
                 <CouponListing
                     data={data}
-                    isLoading={isLoadingList}
+                    isLoading={isLoadingList || isFetchingList}
                     pagination={pagination}
                     onActionForm={handleRedirectForm}
                     onDelete={handleToggleModalDelete}
+                    onPagination={handleChangePagination}
                 />
             )}
 

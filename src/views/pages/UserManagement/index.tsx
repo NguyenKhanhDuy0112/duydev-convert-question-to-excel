@@ -14,7 +14,7 @@ import { IUser } from "@/models"
 import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
 
 //COMPONENTS
-import { Button, Form } from "antd"
+import { Button, Form, TablePaginationConfig } from "antd"
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
 import UserManagementListing from "./sections/UserManagementListing"
 import UserManagementForm from "./sections/UserManagementForm"
@@ -201,6 +201,14 @@ function UserManagement() {
         }
     }
 
+    const handleChangePagination = (pagination: TablePaginationConfig) => {
+        setPagination((prevData) => ({
+            ...prevData,
+            page: Number(pagination.current) || 0,
+            limit: Number(pagination.pageSize) || 0,
+        }))
+    }
+
     return (
         <PageWrapper
             footer={
@@ -235,6 +243,7 @@ function UserManagement() {
                     pagination={pagination}
                     onActionForm={handleRedirectForm}
                     onSetStatusUser={handleUpdateStatusUser}
+                    onPagination={handleChangePagination}
                     onDelete={(data) => {
                         toggleConfirmDelete()
                         setDetailUser(data)

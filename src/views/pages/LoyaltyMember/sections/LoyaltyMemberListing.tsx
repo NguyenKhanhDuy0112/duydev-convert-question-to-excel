@@ -1,6 +1,6 @@
-import { Common, DataResponse, IRequestPaging, IUser } from "@/models"
+import { Common, DataResponse, ILoyaltyMember, IRequestPaging } from "@/models"
 import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
-import { ColumnsType } from "antd/es/table"
+import { ColumnsType, TablePaginationConfig } from "antd/es/table"
 import { PlusOutlined } from "@ant-design/icons"
 import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 import { useState } from "react"
@@ -8,46 +8,28 @@ import { StatusEnum } from "@/enums"
 
 interface LoyaltyMemberListingProps {
     pagination: IRequestPaging
-    data?: DataResponse<IUser[]>
+    data?: DataResponse<ILoyaltyMember[]>
     loading?: boolean
-    onDelete: (data: IUser) => void
-    onActionForm: (data: IUser) => void
-    onResetPassword: (data: IUser) => void
-    onSetStatusUser: (data: IUser) => void
+    onActionForm: (data: ILoyaltyMember) => void
+    onPagination: (pagination: TablePaginationConfig) => void
 }
 
 function LoyaltyMemberListing(props: LoyaltyMemberListingProps) {
-    const { data, loading, pagination, onActionForm, onDelete, onSetStatusUser, onResetPassword } = props
-    const [currentRecord, setCurrentRecord] = useState<IUser>({})
+    const { data, loading, pagination, onActionForm, onPagination } = props
+    const [currentRecord, setCurrentRecord] = useState<ILoyaltyMember>({})
 
     const items: MenuProps["items"] = [
         {
             label: <div onClick={() => onActionForm(currentRecord)}>Edit</div>,
             key: "0",
         },
-        {
-            label: (
-                <div onClick={() => onSetStatusUser({ ...currentRecord, is_active: !currentRecord?.is_active })}>
-                    {currentRecord?.is_active ? StatusEnum.Deactivated : StatusEnum.Activated}
-                </div>
-            ),
-            key: "1",
-        },
-        {
-            label: <div onClick={() => onResetPassword(currentRecord)}>Reset password</div>,
-            key: "2",
-        },
-        {
-            label: <div onClick={() => onDelete({ ...currentRecord })}>Delete</div>,
-            key: "3",
-        },
     ]
 
-    const columns: ColumnsType<IUser> = [
+    const columns: ColumnsType<ILoyaltyMember> = [
         {
             title: "First name",
             dataIndex: "first_name",
-            key: "first_name",
+            key: "last_name",
             render: (value: string) => {
                 return <span>{Common.renderData(value)}</span>
             },
@@ -61,10 +43,10 @@ function LoyaltyMemberListing(props: LoyaltyMemberListingProps) {
             },
         },
         {
-            title: "Email",
-            dataIndex: "email",
-            key: "email",
-            render: (value: string) => {
+            title: "Nick name",
+            dataIndex: "nick_name",
+            key: "nick_name",
+            render: (value: number) => {
                 return <span>{Common.renderData(value)}</span>
             },
         },
@@ -77,21 +59,19 @@ function LoyaltyMemberListing(props: LoyaltyMemberListingProps) {
             },
         },
         {
-            title: "User type",
-            dataIndex: "uUserGroup",
-            key: "uUserGroup",
-            render: (_, record: IUser) => {
-                return (
-                    <div>
-                        {record?.uUserGroup?.map((item, index) => {
-                            return (
-                                <Tag color="" className="m-1" key={index}>
-                                    {Common.renderData(item?.uGroups?.name)}
-                                </Tag>
-                            )
-                        })}
-                    </div>
-                )
+            title: "Email",
+            dataIndex: "email",
+            key: "email",
+            render: (value: string) => {
+                return <span>{Common.renderData(value)}</span>
+            },
+        },
+        {
+            title: "Gender",
+            dataIndex: "gender",
+            key: "gender",
+            render: (value: number) => {
+                return <span>{Common.renderData(value)}</span>
             },
         },
         {
@@ -112,7 +92,7 @@ function LoyaltyMemberListing(props: LoyaltyMemberListingProps) {
             fixed: "right",
             align: "center",
             width: "8%",
-            render: (_, record: IUser) => (
+            render: (_, record: ILoyaltyMember) => (
                 <Dropdown overlayClassName="dropdown-action-table" menu={{ items }} trigger={["click"]}>
                     <Button onClick={() => setCurrentRecord(record)} type="text" className="dot-menu-action">
                         <DotMenuIc />
@@ -140,7 +120,8 @@ function LoyaltyMemberListing(props: LoyaltyMemberListingProps) {
                 loading={loading}
                 scroll={{ x: "auto" }}
                 dataSource={data?.data || []}
-                pagination={{ current: pagination?.page, total: data?.total }}
+                pagination={{ current: pagination?.page, total: data?.total, pageSize: pagination?.limit }}
+                onChange={onPagination}
             />
         </Space>
     )

@@ -13,6 +13,7 @@ export interface IContent {
     is_active?: boolean
     type_id: string
     cate_type_id: string
+    rel?: RelEnum
     master_content_id?: string
     approve_by?: string
     deleted_by?: string

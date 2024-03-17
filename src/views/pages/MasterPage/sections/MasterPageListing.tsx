@@ -6,7 +6,7 @@ import moment from "moment"
 
 //MODELS
 import { Common, DataResponse, ICategoryType, IMasterPage, IRequestPaging } from "@/models"
-import { ColumnsType } from "antd/es/table"
+import { ColumnsType, TablePaginationConfig } from "antd/es/table"
 
 //ENUMS
 import { ContentStatusEnum, FormatDateEnum } from "@/enums"
@@ -23,11 +23,12 @@ interface MasterCenterListingProps {
     loading?: boolean
     onDelete: (data?: IMasterPage) => void
     onActionForm: (value?: IMasterPage) => void
+    onPagination: (pagination: TablePaginationConfig) => void
     pagination?: IRequestPaging
 }
 
 function MasterPageListing(props: MasterCenterListingProps) {
-    const { data, pagination, loading, onActionForm, onDelete } = props
+    const { data, pagination, loading, onActionForm, onDelete, onPagination } = props
 
     //STATES
     const [currentRecord, setCurrentRecord] = useState<IMasterPage>({})
@@ -125,10 +126,8 @@ function MasterPageListing(props: MasterCenterListingProps) {
                 loading={loading}
                 dataSource={data?.data || []}
                 scroll={{ x: "auto" }}
-                onChange={(pagination) => {
-                    console.log("Pagination: ", pagination)
-                }}
-                pagination={{ current: pagination?.page, total: data?.total, pageSize: pagination?.limit }}
+                pagination={{ total: data?.total, pageSize: pagination?.limit, current: data?.page }}
+                onChange={(pagination) => onPagination(pagination)}
             />
         </Space>
     )

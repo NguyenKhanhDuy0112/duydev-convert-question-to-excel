@@ -25,7 +25,7 @@ import { SaveFilled } from "@ant-design/icons"
 //COMPONENTS
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
 import PageWrapper from "@/components/PageWrapper"
-import { Button, Form } from "antd"
+import { Button, Form, TablePaginationConfig } from "antd"
 import MasterCenterListing from "./sections/MasterCenterListing"
 import MasterCenterForm from "./sections/MasterCenterForm"
 
@@ -142,6 +142,10 @@ function MasterCenter() {
         }
     }
 
+    const handleChangePagination = (pagination: TablePaginationConfig) => {
+        setPagination((prevData) => ({ ...prevData, page: pagination?.current, limit: pagination?.pageSize }))
+    }
+
     const isFormPage = useMemo(() => {
         return searchParams.has(ParamsEnum.ID)
     }, [searchParams])
@@ -171,10 +175,10 @@ function MasterCenter() {
             {!isFormPage && (
                 <MasterCenterListing
                     data={data}
-                    pagination={pagination}
                     loading={isFetchingList}
                     onActionForm={handleRedirectForm}
                     onDelete={handleToggleModalDelete}
+                    onPagination={handleChangePagination}
                 />
             )}
 

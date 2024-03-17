@@ -3,7 +3,28 @@ import { cookiesStorage } from "@/helpers/cookieStorage"
 import { fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query"
 
 export const baseQuery = fetchBaseQuery({
-    baseUrl: `${env.API_BO_ENDPOINT}/ali-service-api`,
+    baseUrl: `${env.API_BO_ENDPOINT}/${env.SUB_PATH_BO}`,
+    prepareHeaders: (headers) => {
+        const token = cookiesStorage.get(CookieStorageKey.ACCESS_TOKEN)
+        if (token) {
+            headers.set("Authorization", `Bearer ${token}`)
+        }
+        return headers
+    },
+    cache: "no-cache",
+    fetchFn(input: any, init: any) {
+        return fetch(input, init).then((response: any) => {
+            if (response.status === 401) {
+                cookiesStorage.remove(CookieStorageKey.ACCESS_TOKEN)
+                window.location.href = `/login`
+            }
+            return response
+        })
+    },
+})
+
+export const baseQueryLoyaltyBO = fetchBaseQuery({
+    baseUrl: `${env.API_BO_ENDPOINT}/${env.SUB_PATH_LOYALTY_BO}`,
     prepareHeaders: (headers) => {
         const token = cookiesStorage.get(CookieStorageKey.ACCESS_TOKEN)
         if (token) {

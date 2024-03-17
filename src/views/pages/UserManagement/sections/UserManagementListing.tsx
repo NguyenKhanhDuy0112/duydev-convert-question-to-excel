@@ -1,6 +1,6 @@
 import { Common, DataResponse, IRequestPaging, IUser } from "@/models"
 import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
-import { ColumnsType } from "antd/es/table"
+import { ColumnsType, TablePaginationConfig } from "antd/es/table"
 import { PlusOutlined } from "@ant-design/icons"
 import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 import { useState } from "react"
@@ -13,11 +13,12 @@ interface UserManagementListingProps {
     onDelete: (data: IUser) => void
     onActionForm: (data: IUser) => void
     onResetPassword: (data: IUser) => void
+    onPagination: (pagination: TablePaginationConfig) => void
     onSetStatusUser: (data: IUser) => void
 }
 
 function UserManagementListing(props: UserManagementListingProps) {
-    const { data, loading, pagination, onActionForm, onDelete, onSetStatusUser, onResetPassword } = props
+    const { data, loading, pagination, onActionForm, onDelete, onSetStatusUser, onResetPassword, onPagination } = props
     const [currentRecord, setCurrentRecord] = useState<IUser>({})
 
     const items: MenuProps["items"] = [
@@ -140,7 +141,8 @@ function UserManagementListing(props: UserManagementListingProps) {
                 loading={loading}
                 scroll={{ x: "auto" }}
                 dataSource={data?.data || []}
-                pagination={{ current: pagination?.page, total: data?.total }}
+                pagination={{ total: data?.total, pageSize: pagination?.limit, current: data?.page }}
+                onChange={(pagination) => onPagination(pagination)}
             />
         </Space>
     )

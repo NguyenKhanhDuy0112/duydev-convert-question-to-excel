@@ -14,7 +14,7 @@ import { ILoyaltyProduct, IUser } from "@/models"
 import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
 
 //COMPONENTS
-import { Button, Form } from "antd"
+import { Button, Form, TablePaginationConfig } from "antd"
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
 import PageWrapper from "@/components/PageWrapper"
 import LoyaltyProductListing from "./sections/LoyaltyProductListing"
@@ -146,6 +146,14 @@ function LoyaltyProduct() {
         }
     }
 
+    const handleChangePagination = (pagination: TablePaginationConfig) => {
+        setPagination((prevData) => ({
+            ...prevData,
+            page: Number(pagination.current) || 0,
+            limit: Number(pagination.pageSize) || 0,
+        }))
+    }
+
     return (
         <PageWrapper
             footer={
@@ -174,6 +182,7 @@ function LoyaltyProduct() {
                     loading={isLoadingListProducts || isFetchingListProducts}
                     pagination={pagination}
                     onActionForm={handleRedirectForm}
+                    onPagination={handleChangePagination}
                     onDelete={(data) => {
                         toggleConfirmDelete()
                         setDetail(data)

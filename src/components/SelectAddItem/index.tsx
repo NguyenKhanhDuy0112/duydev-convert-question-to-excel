@@ -2,7 +2,7 @@
 import { Button, Divider, Input, InputRef, Select, Space } from "antd"
 
 //HOOKS
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 //ICONS
 import { PlusOutlined } from "@ant-design/icons"
@@ -21,6 +21,10 @@ function SelectAddItem(props: SelectAddItemProps) {
     const [items, setItems] = useState(options)
     const [name, setName] = useState(value)
     const inputRef = useRef<InputRef>(null)
+
+    useEffect(() => {
+        setName(value)
+    }, [value])
 
     const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value)
@@ -42,6 +46,7 @@ function SelectAddItem(props: SelectAddItemProps) {
         <Select
             className="w-100"
             placeholder="Select"
+            value={value}
             onChange={(value) => onChange && onChange(value as string)}
             dropdownRender={(menu) => (
                 <>

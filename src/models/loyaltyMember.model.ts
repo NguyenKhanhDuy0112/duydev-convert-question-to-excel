@@ -4,7 +4,7 @@ export interface ILoyaltyMember {
     id?: string
     phone?: string
     email?: string
-    birthday?: string
+    birthday?: Date | null
     gender?: GenderEnum
     first_name?: string
     last_name?: string

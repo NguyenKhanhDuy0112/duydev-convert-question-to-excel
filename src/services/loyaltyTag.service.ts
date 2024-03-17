@@ -1,10 +1,10 @@
 import { DataResponse, ILoyaltyTag, IRequestPaging, IRoleUser, IUser } from "@/models"
-import { baseQuery } from "./baseQuery.service"
+import { baseQueryLoyaltyBO } from "./baseQuery.service"
 import { createApi } from "@reduxjs/toolkit/query/react"
 
 export const loyaltyTagService = createApi({
     reducerPath: "loyaltyTagService",
-    baseQuery: baseQuery,
+    baseQuery: baseQueryLoyaltyBO,
     endpoints: (builder) => ({
         getLoyaltyTagsApi: builder.query<DataResponse<ILoyaltyTag[]>, IRequestPaging>({
             query: (params: IRequestPaging) => ({

@@ -3,7 +3,7 @@ import { ICategory } from "@/models"
 
 //HOOKS
 import { useModal, useNotification, useRouter } from "@/hooks"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 
 //ENUMS
 import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
@@ -18,7 +18,7 @@ import { useCreateCategoryApiMutation, useGetCategoriesApiQuery } from "@/servic
 import { INIT_PAGINATION, ProjectIDs } from "@/constants"
 
 //COMPONENTS
-import { Button, Form } from "antd"
+import { Button, Form, TablePaginationConfig } from "antd"
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
 import CategoryListing from "./sections/CategoryListing"
 import CategoryForm from "./sections/CategoryForm"
@@ -30,11 +30,12 @@ function Category() {
     const { searchParams } = useRouter()
     const { navigate } = useRouter()
     const { showNotification } = useNotification()
+    const [pagination, setPagination] = useState(INIT_PAGINATION)
 
     const [form] = Form.useForm<ICategory>()
 
     //SERVICES
-    const { data, isFetching, refetch } = useGetCategoriesApiQuery(INIT_PAGINATION)
+    const { data, isFetching, refetch } = useGetCategoriesApiQuery(pagination)
     const [createCategoryApi, { isLoading: isLoadingCreate }] = useCreateCategoryApiMutation()
 
     const handleConfirmDelete = () => {}
@@ -48,6 +49,14 @@ function Category() {
         return navigate(
             `${PageRoute.Categories}?${ParamsEnum.ID}=${values?.id}&${ParamsEnum.CATE_TYPE_ID}=${values?.cate_type_id}`
         )
+    }
+
+    const handleChangePagination = (pagination: TablePaginationConfig) => {
+        setPagination((prevData) => ({
+            ...prevData,
+            page: Number(pagination.current) || 0,
+            limit: Number(pagination.pageSize) || 0,
+        }))
     }
 
     const handleSubmitForm = async (values: ICategory) => {
@@ -94,6 +103,7 @@ function Category() {
                     data={data}
                     isLoading={isFetching}
                     onActionForm={handleRedirectForm}
+                    onPagination={handleChangePagination}
                     onDelete={(data) => toggleConfirmDelete()}
                 />
             )}

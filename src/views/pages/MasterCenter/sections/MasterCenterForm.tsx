@@ -88,7 +88,7 @@ function MasterCenterForm(props: MasterCenterFormProps) {
                         name={"category_id"}
                     >
                         <Select onChange={handleSelectCategory} placeholder="Select category">
-                            {dataCategories?.data?.map((item) => (
+                            {dataCategories?.data?.map((item: ICategory) => (
                                 <Select.Option key={item.id}>{item.name}</Select.Option>
                             ))}
                         </Select>

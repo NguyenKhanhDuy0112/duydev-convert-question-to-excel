@@ -4,7 +4,7 @@ import moment from "moment"
 import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
 
 //MODELS
-import { ColumnsType } from "antd/es/table"
+import { ColumnsType, TablePaginationConfig } from "antd/es/table"
 import { Common, DataResponse, ILoyaltyTag, IRequestPaging } from "@/models"
 
 //ICONS
@@ -22,11 +22,12 @@ interface LoyaltyTagListingProps {
     data?: DataResponse<ILoyaltyTag[]>
     loading?: boolean
     onDelete: (data: ILoyaltyTag) => void
+    onPagination: (pagination: TablePaginationConfig) => void
     onActionForm: (data: ILoyaltyTag) => void
 }
 
 function LoyaltyTagListing(props: LoyaltyTagListingProps) {
-    const { data, loading, pagination, onActionForm, onDelete } = props
+    const { data, loading, pagination, onActionForm, onDelete, onPagination } = props
     const [currentRecord, setCurrentRecord] = useState<ILoyaltyTag>({})
 
     const items: MenuProps["items"] = [
@@ -111,7 +112,8 @@ function LoyaltyTagListing(props: LoyaltyTagListingProps) {
                 loading={loading}
                 scroll={{ x: "auto" }}
                 dataSource={data?.data || []}
-                pagination={{ current: pagination?.page, total: data?.total }}
+                pagination={{ current: pagination?.page, total: data?.total, pageSize: pagination?.limit }}
+                onChange={onPagination}
             />
         </Space>
     )

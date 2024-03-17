@@ -1,5 +1,5 @@
 //MODELS
-import { ColumnsType } from "antd/es/table"
+import { ColumnsType, TablePaginationConfig } from "antd/es/table"
 import { Common, DataResponse, ICategory, ICategoryItem } from "@/models"
 
 //ICONS
@@ -15,16 +15,18 @@ import { useProfile, useRouter } from "@/hooks"
 
 //COMPONENTS
 import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
+import { INIT_PAGINATION } from "@/constants"
 
 interface CategoryListingProps {
     data?: DataResponse<ICategory[]>
     isLoading: boolean
+    onPagination: (pagination: TablePaginationConfig) => void
     onDelete: (data?: ICategory) => void
     onActionForm: (data: ICategory) => void
 }
 
 function CategoryListing(props: CategoryListingProps) {
-    const { data, isLoading, onActionForm, onDelete } = props
+    const { data, isLoading, onActionForm, onDelete, onPagination } = props
     const { navigate } = useRouter()
     const { permissions_name } = useProfile()
     const [currentRecord, setCurrentRecord] = useState<ICategory>({})
@@ -281,7 +283,8 @@ function CategoryListing(props: CategoryListingProps) {
                 dataSource={data?.data ? data?.data : []}
                 loading={isLoading}
                 scroll={{ x: "auto" }}
-                pagination={{ current: data?.page, total: data?.total }}
+                onChange={(pagination) => onPagination(pagination)}
+                pagination={{ total: data?.total, pageSize: INIT_PAGINATION.limit, current: data?.page }}
                 expandable={{
                     expandedRowRender: (record: ICategory) => {
                         return (

@@ -12,7 +12,7 @@ import { ILoyaltyTag } from "@/models"
 import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
 
 //COMPONENTS
-import { Button, Form } from "antd"
+import { Button, Form, TablePaginationConfig } from "antd"
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
 import PageWrapper from "@/components/PageWrapper"
 import LoyaltyTagListing from "./sections/LoyaltyTagListing"
@@ -130,6 +130,14 @@ function LoyaltyTag() {
         }
     }
 
+    const handleChangePagination = (pagination: TablePaginationConfig) => {
+        setPagination((prevData) => ({
+            ...prevData,
+            page: Number(pagination.current) || 0,
+            limit: Number(pagination.pageSize) || 0,
+        }))
+    }
+
     return (
         <PageWrapper
             footer={
@@ -158,6 +166,7 @@ function LoyaltyTag() {
                     loading={isLoadingCategories || isFetchingCategories}
                     pagination={pagination}
                     onActionForm={handleRedirectForm}
+                    onPagination={handleChangePagination}
                     onDelete={(data) => {
                         toggleConfirmDelete()
                         setDetail(data)

@@ -24,7 +24,7 @@ import {
 import { INIT_PAGINATION } from "@/constants"
 
 //COMPONENTS
-import { Button, Form } from "antd"
+import { Button, Form, TablePaginationConfig } from "antd"
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
 import PageWrapper from "@/components/PageWrapper"
 import GroupRoleListing from "./section/GroupRoleListing"
@@ -137,6 +137,14 @@ function GroupRoleManagement() {
         }
     }
 
+    const handleChangePagination = (pagination: TablePaginationConfig) => {
+        setPagination((prevData) => ({
+            ...prevData,
+            page: Number(pagination.current) || 0,
+            limit: Number(pagination.pageSize) || 0,
+        }))
+    }
+
     return (
         <PageWrapper
             footer={
@@ -161,6 +169,7 @@ function GroupRoleManagement() {
                     onActionForm={handleRedirectForm}
                     onDelete={handleDeleteRole}
                     pagination={pagination}
+                    onPagination={handleChangePagination}
                 />
             )}
 

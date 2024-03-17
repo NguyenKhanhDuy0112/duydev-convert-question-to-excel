@@ -1,6 +1,6 @@
 import { Common, DataResponse, ILoyaltyProduct, IRequestPaging } from "@/models"
 import { Button, Col, Dropdown, Input, MenuProps, Row, Space, Table, Tag } from "antd"
-import { ColumnsType } from "antd/es/table"
+import { ColumnsType, TablePaginationConfig } from "antd/es/table"
 import { PlusOutlined } from "@ant-design/icons"
 import DotMenuIc from "@/assets/icons/dots_menu_icon.svg"
 import { useState } from "react"
@@ -12,11 +12,12 @@ interface LoyaltyProductListingProps {
     data?: DataResponse<ILoyaltyProduct[]>
     loading?: boolean
     onDelete: (data: ILoyaltyProduct) => void
+    onPagination: (pagination: TablePaginationConfig) => void
     onActionForm: (data: ILoyaltyProduct) => void
 }
 
 function LoyaltyProductListing(props: LoyaltyProductListingProps) {
-    const { data, loading, pagination, onActionForm, onDelete } = props
+    const { data, loading, pagination, onActionForm, onDelete, onPagination } = props
     const [currentRecord, setCurrentRecord] = useState<ILoyaltyProduct>({})
 
     const items: MenuProps["items"] = [
@@ -138,7 +139,8 @@ function LoyaltyProductListing(props: LoyaltyProductListingProps) {
                 loading={loading}
                 scroll={{ x: "auto" }}
                 dataSource={data?.data || []}
-                pagination={{ current: pagination?.page, total: data?.total }}
+                pagination={{ current: pagination?.page, total: data?.total, pageSize: pagination?.limit }}
+                onChange={onPagination}
             />
         </Space>
     )
