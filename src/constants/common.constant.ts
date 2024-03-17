@@ -3,7 +3,7 @@ import { ProjectIDs } from "./project.constant"
 
 export const INIT_PAGINATION = {
     page: 1,
-    limit: 3,
+    limit: 10,
     search: "",
     lang: LangCodeEnum.VI,
     project_id: ProjectIDs.Project_1,
