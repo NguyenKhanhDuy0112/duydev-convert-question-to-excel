@@ -8,7 +8,7 @@ import { FormatDateEnum, StatusCoupon, UploadTypeEnum } from "@/enums"
 import { useCommon } from "@/hooks"
 
 //MODELS
-import { ICategory, ICoupon } from "@/models"
+import { ICategory, ICoupon, ILanguage } from "@/models"
 
 //SERVICES
 import { useGetCouponsTypeApiQuery } from "@/services/coupon.service"
@@ -43,30 +43,43 @@ function CouponForm(props: CouponFormProps) {
             wrapperCol={{ span: 24 }}
             form={form}
             initialValues={{
-                langs: languages?.map((item) => ({ lang: item?.locale })),
+                langs: languages?.map((item: ILanguage) => ({ lang: item?.locale })),
                 is_verify: true,
             }}
         >
             <Row gutter={20}>
+                <Col md={{ span: 24 }} xs={{ span: 24 }}>
+                    <div className="d-flex justify-center">
+                        <Form.Item name={"image"}>
+                            <UploadFile
+                                uploadType={UploadTypeEnum.GALLERY}
+                                imageUrl={form.getFieldValue("image") || ""}
+                                onChange={(value) => form.setFieldValue("image", value)}
+                            />
+                        </Form.Item>
+                    </div>
+                </Col>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Form.Item name={"image"}>
-                        <UploadFile
-                            uploadType={UploadTypeEnum.GALLERY}
-                            imageUrl={form.getFieldValue("image") || ""}
-                            onChange={(value) => form.setFieldValue("image", value)}
-                        />
+                    <Form.Item label="Code" name={"code"}>
+                        <Input placeholder="Code" />
+                    </Form.Item>
+                </Col>
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                    <Form.Item label="Discount" name={"discount"}>
+                        <InputNumber placeholder="Discount" />
+                    </Form.Item>
+                </Col>
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                    <Form.Item label="Sorting" name={"sorting"}>
+                        <InputNumber placeholder="Sorting" />
                     </Form.Item>
                 </Col>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
                     <Form.Item name={"is_verify"} label="Verify" valuePropName="checked">
                         <Switch />
                     </Form.Item>
-                    <Form.Item label="Code" name={"code"}>
-                        <Input placeholder="Code" />
-                    </Form.Item>
-                    <Form.Item label="Discount" name={"discount"}>
-                        <InputNumber placeholder="Discount" />
-                    </Form.Item>
+                </Col>
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
                     <Form.Item label="Coupon type ID" name={"coupon_type_id"}>
                         <Select placeholder="Select coupon type">
                             {dataCouponType?.data?.map((item) => (
@@ -74,12 +87,13 @@ function CouponForm(props: CouponFormProps) {
                             ))}
                         </Select>
                     </Form.Item>
+                </Col>
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
                     <Form.Item label="Expiration date" name={"expire_date"}>
                         <DatePicker format={FormatDateEnum.Default} />
                     </Form.Item>
                 </Col>
             </Row>
-
             <Row gutter={20}>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
                     <Form.Item label="Maste cate type" name={"cate_types"}>
