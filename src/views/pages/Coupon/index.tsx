@@ -117,6 +117,9 @@ function Coupon() {
             expire_date: dayjs(values?.expire_date).toDate(),
         }
 
+        delete formValues.aff_link
+        delete formValues.link
+
         const isEdit = formValues?.id
 
         if (values?.image && typeof values?.image !== "string") {

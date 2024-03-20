@@ -9,6 +9,7 @@ export interface ICoupon {
     currency_code?: string
     is_coupon?: boolean
     link?: string
+    aff_link?: string
     description?: string
     prefix?: StatusCoupon
     sub_category_id?: string
