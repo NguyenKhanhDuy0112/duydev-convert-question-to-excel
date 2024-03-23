@@ -71,6 +71,13 @@ export const SIDE_BARS: SidebarItem[] = [
                 roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
             },
             {
+                key: PermissionUserEnum.LoyaltyViewProductCollection,
+                link: PageRoute.LoyaltyCollections,
+                label: "Collections",
+                permission: PermissionUserEnum.LoyaltyViewProduct,
+                roles: [RoleUserEnum.Admin, RoleUserEnum.Staff, RoleUserEnum.Partner],
+            },
+            {
                 key: PermissionUserEnum.LoyaltyViewMembers,
                 link: PageRoute.LoyaltyMember,
                 label: "Members",

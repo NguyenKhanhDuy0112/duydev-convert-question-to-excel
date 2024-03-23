@@ -50,6 +50,7 @@ const LoyaltyProduct = lazy(() => import("@/views/pages/LoyaltyProduct"))
 const LoyaltyCategory = lazy(() => import("@/views/pages/LoyaltyProductCategory"))
 const LoyaltyMember = lazy(() => import("@/views/pages/LoyaltyMember"))
 const LoyaltyTag = lazy(() => import("@/views/pages/LoyaltyTag"))
+const LoyaltyCollection = lazy(() => import("@/views/pages/LoyaltyCollection"))
 
 const appRoutes: RouteObject[] = [
     {
@@ -128,6 +129,10 @@ const appRoutes: RouteObject[] = [
             {
                 path: PageRoute.LoyaltyTags,
                 element: <LoyaltyTag />,
+            },
+            {
+                path: PageRoute.LoyaltyCollections,
+                element: <LoyaltyCollection />,
             },
         ],
     },

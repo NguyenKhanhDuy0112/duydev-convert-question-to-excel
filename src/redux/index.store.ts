@@ -15,6 +15,7 @@ import { loyaltyProductService } from "@/services/loyaltyProduct.service"
 import { loyaltyProductCategoryService } from "@/services/loyaltyProductCategory.service"
 import { loyaltyMemberService } from "@/services/loyaltyMember.service"
 import { loyaltyTagService } from "@/services/loyaltyTag.service"
+import { loyaltyProductCollectionService } from "@/services/loyaltyCollection.service"
 import { frontOfficeService } from "@/services/frontOffice.service"
 
 const store = configureStore({
@@ -35,6 +36,7 @@ const store = configureStore({
         [loyaltyProductCategoryService.reducerPath]: loyaltyProductCategoryService.reducer,
         [loyaltyMemberService.reducerPath]: loyaltyMemberService.reducer,
         [loyaltyTagService.reducerPath]: loyaltyTagService.reducer,
+        [loyaltyProductCollectionService.reducerPath]: loyaltyProductCollectionService.reducer,
         rootReducer,
     },
     middleware: (getDefaultMiddleware) =>
@@ -54,7 +56,8 @@ const store = configureStore({
             loyaltyProductService.middleware,
             loyaltyProductCategoryService.middleware,
             loyaltyMemberService.middleware,
-            loyaltyTagService.middleware
+            loyaltyTagService.middleware,
+            loyaltyProductCollectionService.middleware
         ),
 })
 

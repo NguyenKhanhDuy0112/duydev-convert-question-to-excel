@@ -47,4 +47,6 @@ export enum PermissionUserEnum {
     LoyaltyCreateProductCategory = "create_product_category",
     LoyaltyEditProductCategory = "edit_product_category",
     LoyaltyDeleteProductCategory = "delete_product_category",
+
+    LoyaltyViewProductCollection = "view_product_collection",
 }

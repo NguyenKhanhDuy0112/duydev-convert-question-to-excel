@@ -19,6 +19,7 @@ export enum PageRoute {
     LoyaltyCategory = "/loyalty-categories",
     LoyaltyMember = "/loyalty-members",
     LoyaltyTags = "/loyalty-tags",
+    LoyaltyCollections = "/loyalty-collections",
 }
 
 export enum ParamsEnum {
