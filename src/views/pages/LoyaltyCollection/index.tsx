@@ -102,12 +102,13 @@ function LoyaltyCollection() {
                     formCollectionItem.setFieldsValue({
                         ...detailCollectionItem,
                         collection_id: detail?.id,
-                        product_name: detailCollectionItem?.products?.name,
+                        products: detailCollectionItem?.products,
                         product_ids: [detailCollectionItem?.products?.id || ""] as string[],
                     })
                     setDetailCollectionItem(detailCollectionItem)
                 }
             } else {
+                setDetailCollectionItem({})
                 formCollectionItem.resetFields()
             }
         } else {
@@ -259,7 +260,7 @@ function LoyaltyCollection() {
                 )
             }
             hasBackBtn={!currentPage.isListCollection}
-            title={currentPage.isListCollection ? "Loyalty Collection" : "Loyalty Collection Item"}
+            title={!currentPage.isFormCollectionItem ? "Loyalty Collection" : "Loyalty Collection Item"}
         >
             {currentPage.isListCollection && (
                 <LoyaltyCollectionListing

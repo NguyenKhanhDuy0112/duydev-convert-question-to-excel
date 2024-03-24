@@ -15,6 +15,7 @@ import { useGetLoyaltyProductsApiQuery } from "@/services/loyaltyProduct.service
 
 //COMPONENTS
 import { Col, Divider, Form, FormInstance, Input, InputNumber, Row, Switch, Table } from "antd"
+import { formatMoney } from "@/helpers/utilities"
 
 interface LoyaltyCollectionItemFormProps {
     form: FormInstance<ILoyaltyCollectionItemForm>
@@ -49,6 +50,14 @@ function LoyaltyCollectionItemForm(props: LoyaltyCollectionItemFormProps) {
 
     const columns: ColumnsType<ILoyaltyProduct> = [
         {
+            title: "Code",
+            dataIndex: "code",
+            key: "code",
+            render: (value: string) => {
+                return <span>{Common.renderData(value)}</span>
+            },
+        },
+        {
             title: "Name",
             dataIndex: "name",
             key: "name",
@@ -59,6 +68,22 @@ function LoyaltyCollectionItemForm(props: LoyaltyCollectionItemFormProps) {
                         <span className="line-clamp-2">{Common.renderData(value)}</span>
                     </span>
                 )
+            },
+        },
+        {
+            title: "Stock",
+            dataIndex: "available_stock",
+            key: "available_stock",
+            render: (value: number) => {
+                return <span>{Common.renderData(value)}</span>
+            },
+        },
+        {
+            title: "Amount",
+            dataIndex: "amount",
+            key: "amount",
+            render: (value: number) => {
+                return <span>{Common.renderData(formatMoney(value))}</span>
             },
         },
         {
@@ -88,13 +113,6 @@ function LoyaltyCollectionItemForm(props: LoyaltyCollectionItemFormProps) {
                 initialValues={{ is_active: true }}
             >
                 <Row gutter={20}>
-                    {searchParams.get(ParamsEnum.COLLECTION_ITEM_ID) && (
-                        <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                            <Form.Item label="Product" name={"product_name"}>
-                                <Input disabled placeholder="Product name" />
-                            </Form.Item>
-                        </Col>
-                    )}
                     <Col md={{ span: 12 }} xs={{ span: 24 }}>
                         <Form.Item
                             rules={[
@@ -110,6 +128,11 @@ function LoyaltyCollectionItemForm(props: LoyaltyCollectionItemFormProps) {
                         </Form.Item>
                     </Col>
                     <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                        <Form.Item label="Active" name={"is_active"} valuePropName="checked">
+                            <Switch defaultChecked />
+                        </Form.Item>
+                    </Col>
+                    <Col md={{ span: 12 }} xs={{ span: 24 }}>
                         <Form.Item
                             rules={[
                                 {
@@ -120,7 +143,11 @@ function LoyaltyCollectionItemForm(props: LoyaltyCollectionItemFormProps) {
                             label="Price"
                             name={"price"}
                         >
-                            <InputNumber placeholder="Price" />
+                            <InputNumber
+                                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
+                                placeholder="Price"
+                            />
                         </Form.Item>
                     </Col>
                     <Col md={{ span: 12 }} xs={{ span: 24 }}>
@@ -134,31 +161,36 @@ function LoyaltyCollectionItemForm(props: LoyaltyCollectionItemFormProps) {
                             label="Stock"
                             name={"stock"}
                         >
-                            <InputNumber placeholder="Stock" />
-                        </Form.Item>
-                    </Col>
-                    <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                        <Form.Item label="Active" name={"is_active"} valuePropName="checked">
-                            <Switch defaultChecked />
+                            <InputNumber
+                                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
+                                placeholder="Stock"
+                            />
                         </Form.Item>
                     </Col>
                 </Row>
             </Form>
-            {!searchParams.get(ParamsEnum.COLLECTION_ITEM_ID) && (
+            {
                 <>
                     <Divider />
-                    <h3 className="m-b-4">Products</h3>
+                    <h3 className="m-b-4">
+                        {!searchParams.get(ParamsEnum.COLLECTION_ITEM_ID) ? "Products" : "Product Infomation"}
+                    </h3>
                     <Table
                         rowKey={"id"}
                         scroll={{ x: "auto" }}
                         pagination={{ current: pagination?.page, total: products?.total, pageSize: pagination?.limit }}
                         onChange={handleChangePagination}
-                        rowSelection={rowSelection}
+                        rowSelection={!searchParams.get(ParamsEnum.COLLECTION_ITEM_ID) ? rowSelection : undefined}
                         columns={columns}
-                        dataSource={products?.data}
+                        dataSource={
+                            !searchParams.get(ParamsEnum.COLLECTION_ITEM_ID)
+                                ? products?.data
+                                : [form.getFieldValue("products")]
+                        }
                     />
                 </>
-            )}
+            }
         </>
     )
 }
