@@ -78,8 +78,6 @@ function ModalFormContent(props: ModalFormContentProps) {
         onSubmitForm(payload)
     }
 
-    console.log("data", form.getFieldsValue())
-
     return (
         <Modal
             width={"100vw"}

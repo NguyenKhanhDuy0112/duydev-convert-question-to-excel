@@ -173,6 +173,9 @@ export enum NotificationMessageEnum {
     ChangePasswordError = "Change password failed",
 
     UpdateStatusContentError = "Update status content failed",
+
+    AutoRunSuccess = "Auto run successfully",
+    AutoRunError = "Auto run failed",
 }
 
 export enum NotificationTitleEnum {

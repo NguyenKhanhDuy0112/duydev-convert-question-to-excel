@@ -19,7 +19,7 @@ import LoyaltyTagListing from "./sections/LoyaltyTagListing"
 import LoyaltyTagForm from "./sections/LoyaltyTagForm"
 
 //ICONS
-import { SaveFilled } from "@ant-design/icons"
+import { SaveFilled, PlayCircleOutlined } from "@ant-design/icons"
 
 //SERVICES
 import {
@@ -28,6 +28,7 @@ import {
     useGetLoyaltyTagsApiQuery,
     useUpdateLoyaltyTagApiMutation,
 } from "@/services/loyaltyTag.service"
+import { useAutoRunMemberTagApiMutation } from "@/services/autoRun.service"
 
 function LoyaltyTag() {
     //STATES
@@ -53,6 +54,8 @@ function LoyaltyTag() {
     const [updateTagApi, { isLoading: isLoadingUpdateTag }] = useUpdateLoyaltyTagApiMutation()
     const [deleteTagApi, { isLoading: isLoadingDeleteTag }] = useDeleteLoyaltyTagApiMutation()
     const [createTagApi, { isLoading: isLoadingCreateTag }] = useCreateLoyaltyTagApiMutation()
+
+    const [autoRunMemberTagApi, { isLoading: isLoadingAutoRunMemberTag }] = useAutoRunMemberTagApiMutation()
 
     useEffect(() => {
         if (searchParams.has(ParamsEnum.ID)) {
@@ -138,6 +141,21 @@ function LoyaltyTag() {
         }))
     }
 
+    const handleRunMemberTag = async () => {
+        try {
+            await autoRunMemberTagApi({ tag_id: detail?.id }).unwrap()
+            showNotification({
+                type: NotificationTypeEnum.Success,
+                message: NotificationMessageEnum.AutoRunSuccess,
+            })
+        } catch (err) {
+            showNotification({
+                type: NotificationTypeEnum.Error,
+                message: NotificationMessageEnum.AutoRunError,
+            })
+        }
+    }
+
     return (
         <PageWrapper
             footer={
@@ -146,6 +164,16 @@ function LoyaltyTag() {
                         <Button type="dashed" onClick={() => navigate(-1)}>
                             Cancel
                         </Button>
+                        {detail?.id && (
+                            <Button
+                                loading={isLoadingAutoRunMemberTag}
+                                icon={<PlayCircleOutlined />}
+                                type="primary"
+                                onClick={handleRunMemberTag}
+                            >
+                                Run
+                            </Button>
+                        )}
                         <Button
                             loading={isLoadingCreateTag || isLoadingUpdateTag}
                             icon={<SaveFilled />}

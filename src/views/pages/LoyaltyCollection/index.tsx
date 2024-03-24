@@ -1,3 +1,5 @@
+import dayjs from "dayjs"
+
 //CONSTANTS
 import { INIT_PAGINATION } from "@/constants"
 
@@ -6,7 +8,7 @@ import { useModal, useNotification, useRouter } from "@/hooks"
 import { useEffect, useMemo, useState } from "react"
 
 //MODELS
-import { ILoyaltyCollection } from "@/models"
+import { ILoyaltyCollection, ILoyaltyCollectionItem, ILoyaltyCollectionItemForm } from "@/models"
 
 //ENUMS
 import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
@@ -16,7 +18,8 @@ import { Button, Form, TablePaginationConfig } from "antd"
 import PageWrapper from "@/components/PageWrapper"
 import LoyaltyCollectionListing from "./sections/LoyaltyCollectionListing"
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
-import LoyaltyCollectionForm from "./sections/LoyaltyCollectionForm"
+import LoyaltyCollectionDetail from "./sections/LoyaltyCollectionDetail"
+import LoyaltyCollectionItemDetail from "./sections/LoyaltyCollectionItemDetail"
 
 //ICONS
 import { SaveFilled } from "@ant-design/icons"
@@ -24,11 +27,13 @@ import { SaveFilled } from "@ant-design/icons"
 //SERVICES
 import {
     useCreateLoyaltyProductCollectionApiMutation,
+    useCreateLoyaltyProductCollectionItemApiMutation,
     useDeleteLoyaltyProductCollectionApiMutation,
+    useDeleteLoyaltyProductCollectionItemApiMutation,
     useGetLoyaltyProductsCollectionsApiQuery,
     useUpdateLoyaltyProductCollectionApiMutation,
+    useUpdateLoyaltyProductCollectionItemApiMutation,
 } from "@/services/loyaltyCollection.service"
-import dayjs from "dayjs"
 
 function LoyaltyCollection() {
     //STATES
@@ -37,8 +42,10 @@ function LoyaltyCollection() {
     //HOOKS
     const { searchParams, navigate } = useRouter()
     const [form] = Form.useForm<ILoyaltyCollection>()
+    const [formCollectionItem] = Form.useForm<ILoyaltyCollectionItemForm>()
     const { showNotification } = useNotification()
     const [detail, setDetail] = useState<ILoyaltyCollection>()
+    const [detailCollectionItem, setDetailCollectionItem] = useState<ILoyaltyCollectionItem>()
     const { visible: visibleConfirmDelete, toggle: toggleConfirmDelete } = useModal()
 
     //SERVICES
@@ -56,34 +63,72 @@ function LoyaltyCollection() {
     const [deleteLoyaltyCollection, { isLoading: isLoadingDeleteCollection }] =
         useDeleteLoyaltyProductCollectionApiMutation()
 
+    const [createCollectionItemApi, { isLoading: isLoadingCreateCollectionItemApi }] =
+        useCreateLoyaltyProductCollectionItemApiMutation()
+    const [updateCollectionItemApi, { isLoading: isLoadingUpdateCollectionItemApi }] =
+        useUpdateLoyaltyProductCollectionItemApiMutation()
+    const [
+        deleteCollectionItemApi,
+        { isLoading: isLoadingDeleteCollectionItem, isSuccess: isSuccessDeleteCollectionItem },
+    ] = useDeleteLoyaltyProductCollectionItemApiMutation()
+
     useEffect(() => {
         if (searchParams.has(ParamsEnum.ID)) {
             const id = searchParams.get(ParamsEnum.ID)
+            const collectionID = searchParams.get(ParamsEnum.COLLECTION_ITEM_ID)
+
+            let detailCollection: ILoyaltyCollection = {}
+
             if (id) {
-                const detail = data?.data?.find((item) => item.id === id)
-                if (detail?.id) {
+                detailCollection = data?.data?.find((item) => item.id === id) || {}
+                if (detailCollection?.id) {
                     form.setFieldsValue({
-                        ...detail,
-                        effective_date: [dayjs(detail?.effective_date_start), dayjs(detail?.effective_date_end)],
+                        ...detailCollection,
+                        effective_date: [
+                            dayjs(detailCollection?.effective_date_start),
+                            dayjs(detailCollection?.effective_date_end),
+                        ],
                     })
-                    setDetail(detail)
+                    setDetail(detailCollection)
                 }
+            }
+
+            if (collectionID) {
+                const detailCollectionItem = detailCollection?.productCollectionItem?.find(
+                    (item) => item?.id === collectionID
+                )
+
+                if (detailCollectionItem?.id) {
+                    formCollectionItem.setFieldsValue({
+                        ...detailCollectionItem,
+                        collection_id: detail?.id,
+                        product_name: detailCollectionItem?.products?.name,
+                        product_ids: [detailCollectionItem?.products?.id || ""] as string[],
+                    })
+                    setDetailCollectionItem(detailCollectionItem)
+                }
+            } else {
+                formCollectionItem.resetFields()
             }
         } else {
             form.resetFields()
             setDetail({})
         }
-    }, [searchParams])
+    }, [searchParams, data])
 
-    const isFormPage = useMemo(() => {
-        return searchParams.has(ParamsEnum.ID)
+    const currentPage = useMemo(() => {
+        return {
+            isListCollection: !searchParams.has(ParamsEnum.ID) && !searchParams.has(ParamsEnum.COLLECTION_ITEM_ID),
+            isFormCollection: searchParams.has(ParamsEnum.ID) && !searchParams.has(ParamsEnum.COLLECTION_ITEM_ID),
+            isFormCollectionItem: searchParams.has(ParamsEnum.COLLECTION_ITEM_ID),
+        }
     }, [searchParams])
 
     const handleRedirectForm = (values?: ILoyaltyCollection) => {
         if (values?.id) {
-            return navigate(`${PageRoute.LoyaltyCollections}?id=${values?.id}`)
+            return navigate(`${PageRoute.LoyaltyCollections}?${ParamsEnum.ID}=${values?.id}`)
         } else {
-            return navigate(`${PageRoute.LoyaltyCollections}?id=`)
+            return navigate(`${PageRoute.LoyaltyCollections}?${ParamsEnum.ID}=`)
         }
     }
 
@@ -100,6 +145,36 @@ function LoyaltyCollection() {
                 })
             } else {
                 await createLoyaltyCollection(payload).unwrap()
+                showNotification({
+                    type: NotificationTypeEnum.Success,
+                    message: NotificationMessageEnum.CreateSuccess,
+                })
+            }
+            refetchListCollections()
+            navigate(-1)
+        } catch (err: any) {
+            showNotification({
+                type: NotificationTypeEnum.Error,
+                message: err?.data?.message,
+            })
+        }
+    }
+
+    const hadleSubmitCollectionItemForm = async (value: ILoyaltyCollectionItemForm) => {
+        const isEdit = detailCollectionItem?.id
+        const payload = { ...value }
+
+        try {
+            if (isEdit) {
+                await updateCollectionItemApi({
+                    ...payload,
+                }).unwrap()
+                showNotification({
+                    type: NotificationTypeEnum.Success,
+                    message: NotificationMessageEnum.UpdateSuccess,
+                })
+            } else {
+                await createCollectionItemApi(payload).unwrap()
                 showNotification({
                     type: NotificationTypeEnum.Success,
                     message: NotificationMessageEnum.CreateSuccess,
@@ -141,29 +216,52 @@ function LoyaltyCollection() {
         }
     }
 
+    const handleDeleteCollectionItem = async (data?: ILoyaltyCollection) => {
+        try {
+            await deleteCollectionItemApi({ id: data?.id }).unwrap()
+            showNotification({
+                type: NotificationTypeEnum.Success,
+                message: NotificationMessageEnum.DeleteSuccess,
+            })
+            refetchListCollections()
+        } catch (err) {
+            showNotification({
+                type: NotificationTypeEnum.Error,
+                message: NotificationMessageEnum.DeleteError,
+            })
+        }
+    }
+
     return (
         <PageWrapper
             footer={
-                isFormPage && (
+                !currentPage.isListCollection && (
                     <div className="d-flex items-center gap-4">
                         <Button type="dashed" onClick={() => navigate(-1)}>
                             Cancel
                         </Button>
                         <Button
-                            loading={isLoadingCreateCollection || isLoadingUpdateCollection}
+                            loading={
+                                isLoadingCreateCollection ||
+                                isLoadingUpdateCollection ||
+                                isLoadingCreateCollectionItemApi ||
+                                isLoadingUpdateCollectionItemApi
+                            }
                             icon={<SaveFilled />}
                             type="primary"
-                            onClick={() => form.submit()}
+                            onClick={() =>
+                                currentPage?.isFormCollectionItem ? formCollectionItem?.submit() : form?.submit()
+                            }
                         >
                             Save
                         </Button>
                     </div>
                 )
             }
-            hasBackBtn={isFormPage}
-            title="Loyalty Collection"
+            hasBackBtn={!currentPage.isListCollection}
+            title={currentPage.isListCollection ? "Loyalty Collection" : "Loyalty Collection Item"}
         >
-            {!isFormPage && (
+            {currentPage.isListCollection && (
                 <LoyaltyCollectionListing
                     data={data}
                     loading={isLoadingListCollections || isFetchingListCollections}
@@ -177,7 +275,24 @@ function LoyaltyCollection() {
                 />
             )}
 
-            {isFormPage && <LoyaltyCollectionForm onSubmitForm={handleSubmitForm} form={form} />}
+            {currentPage.isFormCollection && (
+                <LoyaltyCollectionDetail
+                    onSubmitForm={handleSubmitForm}
+                    form={form}
+                    data={detail}
+                    isSuccessDeleteCollectionItem={isSuccessDeleteCollectionItem}
+                    isLoadingDeleteCollectionItem={isLoadingDeleteCollectionItem}
+                    onDeleteCollectionItem={handleDeleteCollectionItem}
+                />
+            )}
+
+            {currentPage.isFormCollectionItem && (
+                <LoyaltyCollectionItemDetail
+                    onSubmitForm={hadleSubmitCollectionItemForm}
+                    form={formCollectionItem}
+                    data={detailCollectionItem}
+                />
+            )}
 
             <ModalConfirmDelete
                 visible={visibleConfirmDelete}

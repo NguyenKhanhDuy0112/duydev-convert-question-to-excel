@@ -30,4 +30,5 @@ export enum ParamsEnum {
     SUB_CATEGORY_ID = "sub_category_id",
     CAT_SLUG = "cat_slug",
     SUB_CAT_SLUG = "sub_cat_slug",
+    COLLECTION_ITEM_ID = "collection_item_id",
 }

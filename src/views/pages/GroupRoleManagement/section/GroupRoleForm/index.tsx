@@ -27,8 +27,6 @@ function GroupRoleForm(props: GroupRoleFormProps) {
         return groupedData
     }, [permissions])
 
-    console.log("Data", data)
-
     return (
         <Spin spinning={isLoading}>
             <Form onFinish={onSubmitForm} labelAlign="left" autoComplete="off" layout="vertical" form={form}>

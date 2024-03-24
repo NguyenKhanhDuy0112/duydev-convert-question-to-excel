@@ -31,3 +31,15 @@ export interface ILoyaltyCollectionItem {
     updated_at?: Date | null
     created_at?: Date | null
 }
+
+export interface ILoyaltyCollectionItemForm {
+    id?: string
+    collection_id?: string
+    product_ids?: string[]
+    products?: ILoyaltyProduct
+    product_name?: string
+    price?: number
+    stock?: number
+    sorting?: number
+    is_active?: boolean
+}
