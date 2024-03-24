@@ -14,7 +14,7 @@ import { ColumnsType, TablePaginationConfig } from "antd/es/table"
 import { useGetLoyaltyProductsApiQuery } from "@/services/loyaltyProduct.service"
 
 //COMPONENTS
-import { Col, Divider, Form, FormInstance, Input, InputNumber, Row, Switch, Table } from "antd"
+import { Col, Divider, Form, FormInstance, InputNumber, Row, Switch, Table } from "antd"
 import { formatMoney } from "@/helpers/utilities"
 
 interface LoyaltyCollectionItemFormProps {

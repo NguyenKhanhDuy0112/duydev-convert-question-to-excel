@@ -54,6 +54,7 @@ export interface IPermission {
     id?: string
     name?: string
     desc?: string
+    branch?: string
     group?: string
     is_active?: boolean
     created_at?: Date | null

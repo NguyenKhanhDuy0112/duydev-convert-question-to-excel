@@ -1,16 +1,18 @@
 import { MessageValidateForm, UploadTypeEnum } from "@/enums"
-import { ILoyaltyProduct } from "@/models"
+import { ILoyaltyMemberForm } from "@/models"
 import { Col, DatePicker, Form, FormInstance, Input, Row, Select } from "antd"
 import UploadFile from "@/components/UploadFile"
-import { GENDER_OPTIONS } from "@/constants"
+import { GENDER_OPTIONS, INIT_PAGINATION } from "@/constants"
+import { useGetLoyaltyTagsApiQuery } from "@/services/loyaltyTag.service"
 
 interface LoyaltyMemberFormProps {
-    form: FormInstance<ILoyaltyProduct>
-    onSubmitForm: (value: ILoyaltyProduct) => void
+    form: FormInstance<ILoyaltyMemberForm>
+    onSubmitForm: (value: ILoyaltyMemberForm) => void
 }
 
 function LoyaltyMemberForm(props: LoyaltyMemberFormProps) {
     const { form, onSubmitForm } = props
+    const { data: memberTags } = useGetLoyaltyTagsApiQuery({ ...INIT_PAGINATION, limit: 100 })
 
     return (
         <Form
@@ -69,6 +71,16 @@ function LoyaltyMemberForm(props: LoyaltyMemberFormProps) {
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>
                     <Form.Item label="Gender" name={"gender"}>
                         <Select placeholder="Select" options={GENDER_OPTIONS} />
+                    </Form.Item>
+                </Col>
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                    <Form.Item label="Member Tags" name={"member_tags"}>
+                        <Select
+                            mode="multiple"
+                            placeholder="Select"
+                            optionFilterProp="children"
+                            options={memberTags?.data?.map((item) => ({ value: item?.id, label: item?.name }))}
+                        />
                     </Form.Item>
                 </Col>
                 <Col md={{ span: 12 }} xs={{ span: 24 }}>

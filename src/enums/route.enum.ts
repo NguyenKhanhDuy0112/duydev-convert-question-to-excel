@@ -14,6 +14,7 @@ export enum PageRoute {
     MediaManagement = "/media-management",
     MasterPage = "/master-page",
     SettingClearCache = "/setting/clear-cache",
+    SettingGeneral = "/setting/general",
     GroupRoleManagement = "/group-role-management",
     LoyaltyProduct = "/loyalty-products",
     LoyaltyCategory = "/loyalty-categories",

@@ -5,9 +5,9 @@ export enum RoleUserEnum {
 }
 
 export enum GenderEnum {
-    Male = 1,
-    Female = 2,
-    Other = 3,
+    Male = "male",
+    Female = "female",
+    Others = "others",
 }
 
 export enum PermissionUserEnum {
@@ -16,6 +16,7 @@ export enum PermissionUserEnum {
     ContentManagement = "content_management",
     CategoryManagement = "category_management",
     SettingsManagement = "settings_management",
+    SettingsGeneralManagement = "settings_general_management",
     CouponManagement = "coupon_management",
     MasterPage = "master_page",
     MasterCenter = "master_center",

@@ -1,13 +1,31 @@
-import PageWrapper from "@/components/PageWrapper"
+//HOOKS
 import { useNotification, useRouter } from "@/hooks"
+import { useMemo, useState } from "react"
 
-import { useMemo } from "react"
-import { NotificationMessageEnum, NotificationTypeEnum, ParamsEnum } from "@/enums"
-import { Button, Card, Col, Row } from "antd"
+//ENUMS
+import { NotificationMessageEnum, NotificationTypeEnum, ParamsEnum, SettingClearCacheEnum } from "@/enums"
+
+//SERVICES
 import { usePostClearCacheApiMutation, usePostClearCacheFOApiMutation } from "@/services/common.service"
+
+//CONSTANTS
+import { SETTING_CLEAR_CACHE } from "@/constants"
+
+//MODELS
+import { ISettingClearCache } from "@/models/setting.model"
+import { ColumnsType } from "antd/es/table"
+import { Common } from "@/models"
+
+//ICONS
+import { PlayCircleOutlined } from "@ant-design/icons"
+
+//COMPONENTS
+import PageWrapper from "@/components/PageWrapper"
+import { Button, Table } from "antd"
 
 function SettingClearCache() {
     //HOOKS
+    const [detail, setDetail] = useState<ISettingClearCache>({})
     const { searchParams } = useRouter()
     const { showNotification } = useNotification()
 
@@ -50,34 +68,58 @@ function SettingClearCache() {
         }
     }
 
+    const handleClearCache = (value: ISettingClearCache) => {
+        setDetail(value)
+        switch (value?.type) {
+            case SettingClearCacheEnum.BO:
+                handleClearCacheApi()
+                break
+            case SettingClearCacheEnum.FO:
+                handleClearCacheFrontOfficeApi()
+                break
+            default:
+                break
+        }
+    }
+
+    const columns: ColumnsType<ISettingClearCache> = [
+        {
+            title: "Name",
+            dataIndex: "name",
+            key: "name",
+            render: (value: string) => {
+                return <span>{Common.renderData(value)}</span>
+            },
+        },
+        {
+            title: "Action",
+            dataIndex: "type",
+            key: "type",
+            width: "10%",
+            render: (_, record: ISettingClearCache) => {
+                return (
+                    <Button
+                        loading={
+                            detail?.id === record?.id && (isLoadingClearCacheApi || isLoadingClearCacheFrontOfficeApi)
+                        }
+                        onClick={() => handleClearCache(record)}
+                        icon={<PlayCircleOutlined />}
+                        type="primary"
+                    ></Button>
+                )
+            },
+        },
+    ]
+
     return (
         <PageWrapper hasBackBtn={isFormUserPage} title="Clear Cache">
-            <Row gutter={[16, 16]}>
-                <Col lg={{ span: 8 }} md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Card>
-                        <h1 className="text-center m-b-8">Clear cache API</h1>
-                        <div className="d-flex justify-center items-center">
-                            <Button loading={isLoadingClearCacheApi} onClick={handleClearCacheApi} type="primary">
-                                Clear
-                            </Button>
-                        </div>
-                    </Card>
-                </Col>
-                <Col lg={{ span: 8 }} md={{ span: 12 }} xs={{ span: 24 }}>
-                    <Card>
-                        <h1 className="text-center m-b-8">Clear cache Front Office</h1>
-                        <div className="d-flex justify-center items-center">
-                            <Button
-                                loading={isLoadingClearCacheFrontOfficeApi}
-                                type="primary"
-                                onClick={handleClearCacheFrontOfficeApi}
-                            >
-                                Clear
-                            </Button>
-                        </div>
-                    </Card>
-                </Col>
-            </Row>
+            <Table
+                columns={columns}
+                rowKey={"id"}
+                scroll={{ x: "auto" }}
+                loading={false}
+                dataSource={SETTING_CLEAR_CACHE}
+            />
         </PageWrapper>
     )
 }

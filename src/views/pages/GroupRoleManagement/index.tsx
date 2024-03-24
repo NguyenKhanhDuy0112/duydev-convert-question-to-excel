@@ -153,7 +153,12 @@ function GroupRoleManagement() {
                         <Button onClick={() => navigate(-1)} type="dashed">
                             Cancel
                         </Button>
-                        <Button icon={<SaveFilled />} type="primary" onClick={() => form.submit()}>
+                        <Button
+                            loading={isLoadingCreateRole || isLoadingUpdateRole}
+                            icon={<SaveFilled />}
+                            type="primary"
+                            onClick={() => form.submit()}
+                        >
                             Save
                         </Button>
                     </div>

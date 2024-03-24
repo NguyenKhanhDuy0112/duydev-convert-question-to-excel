@@ -6,7 +6,7 @@ import { useNotification, useRouter } from "@/hooks"
 import { useEffect, useMemo, useState } from "react"
 
 //MODELS
-import { ILoyaltyMember } from "@/models"
+import { ILoyaltyMember, ILoyaltyMemberForm } from "@/models"
 
 //ENUMS
 import { NotificationMessageEnum, NotificationTypeEnum, PageRoute, ParamsEnum } from "@/enums"
@@ -35,7 +35,7 @@ function LoyaltyProduct() {
 
     //HOOKS
     const { searchParams, navigate } = useRouter()
-    const [form] = Form.useForm<ILoyaltyMember>()
+    const [form] = Form.useForm<ILoyaltyMemberForm>()
     const { showNotification } = useNotification()
     const [detail, setDetail] = useState<ILoyaltyMember>()
 
@@ -60,6 +60,7 @@ function LoyaltyProduct() {
                     form.setFieldsValue({
                         ...detail,
                         birthday: detail?.birthday ? dayjs(detail?.birthday) : null,
+                        member_tags: detail?.memberTags?.map((item) => item.id) as string[],
                     })
                     setDetail({ ...detail })
                 }
@@ -82,9 +83,9 @@ function LoyaltyProduct() {
         }
     }
 
-    const handleSubmitForm = async (value: ILoyaltyMember) => {
+    const handleSubmitForm = async (value: ILoyaltyMemberForm) => {
         const isEdit = detail?.id
-        const payload = { ...detail, ...value }
+        const payload = { id: detail?.id, ...value }
 
         try {
             if (payload?.image && typeof payload?.image !== "string") {

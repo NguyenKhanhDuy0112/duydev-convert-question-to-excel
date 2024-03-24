@@ -10,7 +10,7 @@ import { ILoyaltyCollection } from "@/models"
 import { Col, DatePicker, Form, FormInstance, Input, Row, Select, Switch } from "antd"
 
 //CONSTANTS
-import { INIT_PAGINATION } from "@/constants"
+import { COLLECTION_TYPE_OPTIONS, INIT_PAGINATION } from "@/constants"
 
 //SERVICES
 import { useGetLoyaltyTagsApiQuery } from "@/services/loyaltyTag.service"
@@ -69,7 +69,7 @@ function LoyaltyCollectionForm(props: LoyaltyCollectionFormProps) {
                             label="Type"
                             name={"collection_type"}
                         >
-                            <Input placeholder="Collection Type" />
+                            <Select placeholder="Select" options={COLLECTION_TYPE_OPTIONS} />
                         </Form.Item>
                     </Col>
                     <Col md={{ span: 12 }} xs={{ span: 24 }}>

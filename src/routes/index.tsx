@@ -115,6 +115,10 @@ const appRoutes: RouteObject[] = [
                 element: <SettingClearCache />,
             },
             {
+                path: "setting/general",
+                element: <SettingClearCache />,
+            },
+            {
                 path: PageRoute.LoyaltyCategory,
                 element: <LoyaltyCategory />,
             },

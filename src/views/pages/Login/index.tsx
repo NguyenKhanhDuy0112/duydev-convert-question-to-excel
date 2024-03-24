@@ -1,8 +1,10 @@
 import { MessageValidateForm, NotificationMessageEnum, NotificationTypeEnum, PageRoute } from "@/enums"
 
+//IMAGES
+import { AssetsImages } from "@/assets/images"
+
 //COMPONENTS
 import { Button, Card, Col, Form, Input, Row } from "antd"
-import LogoDarkIc from "@/assets/icons/logo_dark_icon.svg"
 
 //MODELS
 import { useNotification, useRouter } from "@/hooks"
@@ -16,7 +18,6 @@ import { useDispatch } from "react-redux"
 
 //REDUX
 import { login } from "@/redux/modules/auth/authSlice"
-
 function Login() {
     const [form] = Form.useForm<IFormLogin>()
     const { navigate } = useRouter()
@@ -50,7 +51,7 @@ function Login() {
                 <Row justify={"center"} gutter={16}>
                     <Col span={24}>
                         <div className="d-flex justify-center items-center">
-                            <LogoDarkIc />
+                            <img src={AssetsImages.LogoTextFill} width={250} height={64} />
                         </div>
                     </Col>
                     <Col span={24}>

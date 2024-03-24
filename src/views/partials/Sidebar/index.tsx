@@ -9,12 +9,10 @@ import { SIDE_BARS } from "@/constants/sidebar.constant"
 import { SidebarItem } from "@/models"
 import { MenuProps } from "rc-menu"
 
-//ICONS
-import LogoIc from "@/assets/icons/logo.svg"
-
 //COMPONENTS
 import LinkItem from "./components/LinkItem"
 import { Drawer, Layout, Menu } from "antd"
+import { AssetsImages } from "@/assets/images"
 
 type MenuItem = Required<MenuProps>["items"][number]
 
@@ -120,7 +118,7 @@ function Sidebar(props: SidebarProps) {
             {width && width > 1024 ? (
                 <Sider width={250} className="sidebar" theme="light">
                     <div className="sidebar__logo">
-                        <LogoIc />
+                        <img src={AssetsImages.LogoTextLight} width={250} height={64} />
                     </div>
                     <Menu
                         selectedKeys={[defaultSelectedKey]}
@@ -133,7 +131,7 @@ function Sidebar(props: SidebarProps) {
                 <Drawer open={collapsed} onClose={onCollapse} placement="left" width={250}>
                     <Sider width={250} className="sidebar" theme="light" trigger={null}>
                         <div className="sidebar__logo">
-                            <LogoIc />
+                            <img src={AssetsImages.LogoTextLight} width={250} height={64} />
                         </div>
                         <Menu
                             selectedKeys={[defaultSelectedKey]}
