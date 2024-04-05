@@ -210,7 +210,7 @@ function Home() {
                         <Divider />
                         <Col span={24}>
                             <Row gutter={[16, 16]}>
-                                <Col span={8}>
+                                <Col xs={{ span: 24 }} md={{ span: 8 }}>
                                     <Button
                                         onClick={() => handleExportFile("xlsx")}
                                         className="w-100"
@@ -221,7 +221,7 @@ function Home() {
                                         Download Excel
                                     </Button>
                                 </Col>
-                                <Col span={8}>
+                                <Col xs={{ span: 24 }} md={{ span: 8 }}>
                                     <Button
                                         onClick={() => handleExportFile("csv")}
                                         className="w-100"
@@ -232,7 +232,7 @@ function Home() {
                                         Download CSV
                                     </Button>
                                 </Col>
-                                <Col span={8}>
+                                <Col xs={{ span: 24 }} md={{ span: 8 }}>
                                     <Button
                                         onClick={handleReset}
                                         className="w-100"
