@@ -11,3 +11,10 @@
         margin-bottom: 24px;
     }
 }
+
+.ant-radio-wrapper,
+.ant-checkbox-wrapper {
+    span:last-child {
+        flex: 1 !important;
+    }
+}

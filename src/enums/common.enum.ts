@@ -201,3 +201,21 @@ export enum RelEnum {
     DO_FOLLOW = "dofollow",
     CANONICAL = "canonical",
 }
+
+export enum AnswerTypeEnum {
+    MultipleChoice = "MultipleChoice",
+    TrueFalse = "True/False",
+    Normal = "Normal",
+}
+
+export enum AnswerEnum {
+    A = 1,
+    B = 2,
+    C = 3,
+    D = 4,
+}
+
+export enum AnswerTrueFalseEnum {
+    False = 0,
+    True = 1,
+}

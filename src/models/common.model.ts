@@ -1,4 +1,4 @@
-import { ContentStatusEnum } from "@/enums"
+import { AnswerTypeEnum, ContentStatusEnum } from "@/enums"
 
 export class Common {
     public static renderData(data: any) {
@@ -20,6 +20,57 @@ export class Common {
                 break
         }
         return { color, className, name: status }
+    }
+}
+
+export class GenerateQuestionAnswerTemplate {
+    static categoryName: string = ""
+    static indexFile: string = ""
+    public static generateAnswerTemplate(
+        typeAnwser: AnswerTypeEnum,
+        answers: any,
+        question: string,
+        correctAnswer: number[]
+    ) {
+        switch (typeAnwser) {
+            case AnswerTypeEnum.TrueFalse:
+                return {
+                    title: question,
+                    isMultipleChoice: 0,
+                    questionAnswerTemplates: `[{"title"":""True"",""isCorrect"":""${
+                        correctAnswer?.includes(0) ? false : true
+                    }"}, {"title"":""False"",""isCorrect"":""${correctAnswer?.includes(0) ? true : false}"}]`,
+                    category: this.categoryName,
+                }
+            case AnswerTypeEnum.MultipleChoice:
+                return {
+                    title: question,
+                    isMultipleChoice: 1,
+                    questionAnswerTemplates: JSON.stringify(
+                        answers?.map((item: any, index: number) => {
+                            return {
+                                title: item,
+                                isCorrect: String(correctAnswer?.includes(index + 1)),
+                            }
+                        })
+                    ),
+                    category: this.categoryName,
+                }
+            case AnswerTypeEnum.Normal:
+                return {
+                    title: question,
+                    isMultipleChoice: 0,
+                    questionAnswerTemplates: JSON.stringify(
+                        answers?.map((item: any, index: number) => {
+                            return {
+                                title: item,
+                                isCorrect: String(correctAnswer?.includes(index + 1)),
+                            }
+                        })
+                    ),
+                    category: this.categoryName,
+                }
+        }
     }
 }
 
@@ -59,4 +110,10 @@ export interface ILanguage {
 
 export interface ICommonStore {
     languages: ILanguage[]
+}
+
+export interface IRecordQuestion {
+    title: string
+    isMultipleChoice: boolean
+    questionAnswerTemplates: any
 }

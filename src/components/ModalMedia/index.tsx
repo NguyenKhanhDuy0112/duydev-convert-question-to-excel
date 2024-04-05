@@ -53,7 +53,7 @@ function ModalMedia(props: ModalMediaProps) {
                             Upload
                         </Button>
                     </div>
-                    <List
+                    {/* <List
                         grid={{ gutter: 16, xs: 1, md: 2, lg: 4, xl: 6 }}
                         dataSource={data?.data}
                         renderItem={(item) => (
@@ -68,7 +68,7 @@ function ModalMedia(props: ModalMediaProps) {
                                 />
                             </List.Item>
                         )}
-                    />
+                    /> */}
                 </Spin>
             </Modal>
             <MediaForm show={visibleMediaForm} onClose={onToggleMediaForm} onSubmitForm={handleSubmitMedia} />

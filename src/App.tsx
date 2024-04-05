@@ -12,12 +12,12 @@ function App() {
             <ConfigProvider
                 theme={{
                     token: {
-                        colorPrimary: "#A13355",
+                        colorPrimary: "rgb(13, 134, 245)",
                         colorLink: "#A13355",
                     },
                     components: {
                         Button: {
-                            colorPrimary: "#A13355",
+                            colorPrimary: "rgb(13, 134, 245)",
                             colorFillSecondary: "#FFE3ED",
                         },
                     },
