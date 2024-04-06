@@ -7,6 +7,7 @@ import { GenerateQuestionAnswerTemplate } from "@/models"
 import * as XLSX from "xlsx"
 import { useNotification } from "@/hooks"
 import { v4 as uuidv4 } from "uuid"
+import { AssetsImages } from "@/assets/images"
 
 interface IQuestionTemplate {
     id: any
@@ -144,13 +145,15 @@ function Home() {
             className="container"
             style={{
                 backgroundSize: "cover",
+                backgroundPosition: "center",
                 minHeight: "100vh",
-                backgroundImage:
-                    "url(https://images.unsplash.com/photo-1558236714-d1a6333fce68?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGN1dGV8ZW58MHx8MHx8fDA%3D)",
+                backgroundImage: `url(${AssetsImages.DogGif})`,
             }}
         >
             <div className="form-question">
-                <h1 className="m-b-6 text-center">Hello, I'm Duy 🥳</h1>
+                <h1 className="m-b-6 text-center" style={{ color: "#ba4b4b", fontSize: "24px" }}>
+                    Hello, I'm Duy 🥳
+                </h1>
                 <Form form={form} layout="vertical">
                     <Row gutter={[16, 16]}>
                         <Col span={24}>
