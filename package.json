@@ -12,6 +12,7 @@
         "@types/node": "^16.7.13",
         "@types/react": "^18.0.0",
         "@types/react-dom": "^18.0.0",
+        "@types/uuid": "^9.0.8",
         "antd": "^5.11.5",
         "cookies-ts": "^1.0.5",
         "dayjs": "^1.11.10",
@@ -29,6 +30,7 @@
         "sass": "^1.69.5",
         "tinymce": "^6",
         "typescript": "^4.4.2",
+        "uuid": "^9.0.1",
         "web-vitals": "^2.1.0",
         "write-excel-file": "^1.4.30",
         "xlsx": "^0.18.5"

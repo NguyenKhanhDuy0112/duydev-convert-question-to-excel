@@ -1,21 +1,33 @@
 import { AnswerTypeEnum, NotificationMessageEnum, NotificationTypeEnum } from "@/enums"
 import { Button, Card, Col, Divider, Form, Input, Row, Select } from "antd"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import QuestionPreview from "./components/QuestionPreview"
 import { PlusOutlined, FileExcelOutlined, CloseOutlined } from "@ant-design/icons"
 import { GenerateQuestionAnswerTemplate } from "@/models"
 import * as XLSX from "xlsx"
 import { useNotification } from "@/hooks"
+import { v4 as uuidv4 } from "uuid"
 
 interface IQuestionTemplate {
+    id: any
     title: string
     answers: string[]
     correctAnswer: number[]
     typeAnswer: AnswerTypeEnum | null
 }
 function Home() {
-    const [questions, setQuestions] = useState<IQuestionTemplate[]>([
+    const questionsUniqueRef = useRef<IQuestionTemplate[]>([
         {
+            id: uuidv4(),
+            answers: [],
+            typeAnswer: null,
+            correctAnswer: [],
+            title: "",
+        },
+    ])
+    const [questionsUnique, setQuestionsUnique] = useState<IQuestionTemplate[]>([
+        {
+            id: uuidv4(),
             answers: [],
             typeAnswer: null,
             correctAnswer: [],
@@ -25,54 +37,44 @@ function Home() {
     const [form] = Form.useForm()
     const { showNotification } = useNotification()
 
-    const handleChangeQuestion = (index: number, value: string) => {
-        const newQuestions = [...questions]
-        newQuestions[index].title = value
-        setQuestions(newQuestions)
+    useEffect(() => {
+        questionsUniqueRef.current = questionsUnique
+    }, [questionsUnique])
+
+    const handleChangeQuestion = (id: string, value: string) => {
+        const newQuestions = [...questionsUnique]
+        const findIndex = newQuestions.findIndex((f) => f?.id === id)
+        newQuestions[findIndex].title = value
+        setQuestionsUnique(newQuestions)
     }
 
     const handleAddQuestion = () => {
-        const newQuestions = [...questions]
+        const newQuestions = [...questionsUnique]
         newQuestions.push({
+            id: uuidv4(),
             answers: [],
             typeAnswer: null,
             correctAnswer: [],
             title: "",
         })
-        setQuestions(newQuestions)
+        questionsUniqueRef.current = newQuestions
+        setQuestionsUnique(newQuestions)
     }
 
-    const handleChangeAnswerType = (index: number, value: AnswerTypeEnum) => {
-        const newQuestions = [...questions]
-        newQuestions[index].typeAnswer = value
-        setQuestions(newQuestions)
+    const handleChangeAnswerType = (id: string, value: AnswerTypeEnum) => {
+        const newQuestions = [...questionsUnique]
+        const findIndex = newQuestions.findIndex((f) => f?.id === id)
+        newQuestions[findIndex].typeAnswer = value
+        questionsUniqueRef.current = newQuestions
+        setQuestionsUnique(newQuestions)
     }
 
     const handleExportFile = (fileType: "csv" | "xlsx") => {
-        //check require answer and title in question
-        // const isInvalid = questions?.some((item) => !item?.title || !item?.answers?.length)
-        // if (isInvalid) {
-        //     showNotification({
-        //         type: NotificationTypeEnum.Error,
-        //         message: "Failed",
-        //     })
-        //     return
-        // }
-        // //check answer has value and not null in question
-        // const isInvalidAnswer = questions?.some((item) => item?.answers?.some((answer) => !answer))
-        // if (isInvalidAnswer) {
-        //     showNotification({
-        //         type: NotificationTypeEnum.Error,
-        //         message: "Failed",
-        //     })
-        //     return
-        // }
-
         form.submit()
         GenerateQuestionAnswerTemplate.categoryName = form.getFieldValue("category")
         GenerateQuestionAnswerTemplate.indexFile = form.getFieldValue("index")
 
-        const dataMap = questions?.map((item: IQuestionTemplate) => {
+        const dataMap = questionsUnique?.map((item: IQuestionTemplate) => {
             const templateRecord = GenerateQuestionAnswerTemplate.generateAnswerTemplate(
                 item?.typeAnswer as AnswerTypeEnum,
                 item?.answers,
@@ -86,7 +88,18 @@ function Home() {
                 category: templateRecord?.category,
             }
         })
+
         const worksheet = XLSX.utils.json_to_sheet(dataMap)
+        const range = XLSX.utils.decode_range(worksheet["!ref"] as any)
+        for (let R = range.s.r; R <= range.e.r; ++R) {
+            for (let C = range.s.c; C <= range.e.c; ++C) {
+                const cell_address = { c: C, r: R }
+                if (!worksheet[XLSX.utils.encode_cell(cell_address)]) continue
+
+                const cell = worksheet[XLSX.utils.encode_cell(cell_address)]
+                cell.s = { alignment: { wrapText: true } }
+            }
+        }
         const workbook = XLSX.utils.book_new()
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1")
         XLSX.writeFile(
@@ -97,8 +110,18 @@ function Home() {
 
     const handleReset = () => {
         form.resetFields()
-        setQuestions([
+        questionsUniqueRef.current = [
             {
+                id: uuidv4(),
+                answers: [],
+                typeAnswer: null,
+                correctAnswer: [],
+                title: "",
+            },
+        ]
+        setQuestionsUnique([
+            {
+                id: uuidv4(),
                 answers: [],
                 typeAnswer: null,
                 correctAnswer: [],
@@ -109,11 +132,13 @@ function Home() {
         GenerateQuestionAnswerTemplate.indexFile = ""
     }
 
-    const handleRemoveQuestion = (index: number) => {
-        const newQuestions = [...questions].filter((item, i) => i !== index)
-        setQuestions(newQuestions)
+    const handleRemoveQuestion = (id: string) => {
+        const newQuestions = [...questionsUnique].filter((item, i) => item?.id !== id)
+        questionsUniqueRef.current = newQuestions
+        setQuestionsUnique(newQuestions)
     }
 
+    console.log("questions render: ", questionsUnique)
     return (
         <div
             className="container"
@@ -144,8 +169,8 @@ function Home() {
                                 </Row>
                             </Card>
                         </Col>
-                        {questions?.map((item, index) => (
-                            <Col span={24}>
+                        {questionsUnique?.map((item, index) => (
+                            <Col key={item?.id} span={24}>
                                 <Card
                                     className="w-100"
                                     extra={
@@ -153,7 +178,7 @@ function Home() {
                                             {index !== 0 ? (
                                                 <Button
                                                     style={{ backgroundColor: "#b32020" }}
-                                                    onClick={() => handleRemoveQuestion(index)}
+                                                    onClick={() => handleRemoveQuestion(item?.id)}
                                                     icon={<CloseOutlined />}
                                                     type="primary"
                                                 ></Button>
@@ -163,12 +188,13 @@ function Home() {
                                         </>
                                     }
                                 >
+                                    <span className="float-question">{index + 1}</span>
                                     <Select
                                         placeholder="Select answer type"
                                         className="w-100 m-b-4"
                                         value={item.typeAnswer}
                                         style={{ height: "40px" }}
-                                        onChange={(value) => handleChangeAnswerType(index, value)}
+                                        onChange={(value) => handleChangeAnswerType(item?.id, value)}
                                     >
                                         <Select.Option value={AnswerTypeEnum.Normal}>Normal</Select.Option>
                                         <Select.Option value={AnswerTypeEnum.MultipleChoice}>
@@ -181,15 +207,26 @@ function Home() {
                                             <Input
                                                 placeholder="Question"
                                                 value={item.title}
-                                                onChange={(e) => handleChangeQuestion(index, e?.target?.value)}
+                                                onChange={(e) => handleChangeQuestion(item?.id, e?.target?.value)}
                                                 className="m-b-4"
                                             />
                                             <QuestionPreview
                                                 onChange={(answers: string[], correctAnswer: number[]) => {
-                                                    const newQuestions = [...questions]
-                                                    newQuestions[index].answers = answers
-                                                    newQuestions[index].correctAnswer = correctAnswer
-                                                    setQuestions(newQuestions)
+                                                    const newQuestions = [...questionsUniqueRef.current]
+
+                                                    const findIndex = newQuestions.findIndex((f) => f?.id === item?.id)
+                                                    newQuestions[findIndex].answers = answers
+                                                    newQuestions[findIndex].correctAnswer = correctAnswer
+
+                                                    setQuestionsUnique(newQuestions)
+                                                }}
+                                                onChangeAnswer={(answers: string[]) => {
+                                                    const newQuestions = [...questionsUnique]
+                                                    const findIndex = newQuestions.findIndex((f) => f?.id === item?.id)
+                                                    newQuestions[findIndex].answers = answers
+                                                    questionsUniqueRef.current = newQuestions
+                                                    setQuestionsUnique(newQuestions)
+                                                    console.log(index)
                                                 }}
                                                 typeAnswer={item.typeAnswer}
                                             />

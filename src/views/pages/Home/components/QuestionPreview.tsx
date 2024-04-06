@@ -6,9 +6,10 @@ import { PlusOutlined, MinusOutlined } from "@ant-design/icons"
 interface QuestionPreviewProps {
     onChange: (answers: string[], correctAnswer: number[]) => void
     typeAnswer: AnswerTypeEnum
+    onChangeAnswer: (answers: string[]) => void
 }
 function QuestionPreview(props: QuestionPreviewProps) {
-    const { onChange, typeAnswer } = props
+    const { onChange, typeAnswer, onChangeAnswer } = props
     const [answersPreview, setAnswersPreview] = useState<string[]>([""])
 
     const handleAddOrRemoveAnswer = (index: number) => {
@@ -23,6 +24,7 @@ function QuestionPreview(props: QuestionPreviewProps) {
         const newAnswers = [...answersPreview]
         newAnswers[index] = value
         setAnswersPreview(newAnswers)
+        onChangeAnswer(newAnswers)
     }
 
     const handleChangeRadio = (e: number) => {
@@ -52,6 +54,7 @@ function QuestionPreview(props: QuestionPreviewProps) {
                                 <Radio className="w-100" key={index} value={index + 1}>
                                     <div className="d-flex items-center">
                                         <Input
+                                            key={index}
                                             placeholder="Enter answer"
                                             className="w-100"
                                             onChange={(e) => handleChangeAnswer(index, e?.target?.value)}
@@ -82,6 +85,7 @@ function QuestionPreview(props: QuestionPreviewProps) {
                                         <Input
                                             placeholder="Enter answer"
                                             className="w-100"
+                                            key={index}
                                             onChange={(e) => handleChangeAnswer(index, e?.target?.value)}
                                         />
                                         <Button
