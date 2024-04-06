@@ -35,40 +35,40 @@ export class GenerateQuestionAnswerTemplate {
         switch (typeAnwser) {
             case AnswerTypeEnum.TrueFalse:
                 return {
-                    title: question,
+                    title: question?.trim(),
                     isMultipleChoice: 0,
                     questionAnswerTemplates: `[{"title"":""True"",""isCorrect"":""${
                         correctAnswer?.includes(0) ? false : true
                     }"}, {"title"":""False"",""isCorrect"":""${correctAnswer?.includes(0) ? true : false}"}]`,
-                    category: this.categoryName,
+                    category: this.categoryName?.trim(),
                 }
             case AnswerTypeEnum.MultipleChoice:
                 return {
-                    title: question,
+                    title: question?.trim(),
                     isMultipleChoice: 1,
                     questionAnswerTemplates: JSON.stringify(
                         answers?.map((item: any, index: number) => {
                             return {
-                                title: item,
+                                title: item?.trim(),
                                 isCorrect: String(correctAnswer?.includes(index + 1)),
                             }
                         })
                     ),
-                    category: this.categoryName,
+                    category: this.categoryName?.trim(),
                 }
             case AnswerTypeEnum.Normal:
                 return {
-                    title: question,
+                    title: question?.trim(),
                     isMultipleChoice: 0,
                     questionAnswerTemplates: JSON.stringify(
                         answers?.map((item: any, index: number) => {
                             return {
-                                title: item,
+                                title: item?.trim(),
                                 isCorrect: String(correctAnswer?.includes(index + 1)),
                             }
                         })
                     ),
-                    category: this.categoryName,
+                    category: this.categoryName?.trim(),
                 }
         }
     }
