@@ -4,7 +4,6 @@ ARG ENV_BUILD_WIDGET
 RUN echo -e "${ENV_BUILD_WIDGET}" > ./.env
 RUN cat ./.env
 
-
 # Stage 1: Build the application
 FROM node:21.2.0-alpine as builder
 
@@ -22,6 +21,7 @@ RUN yarn install
 # Copy the rest of the application source code
 COPY . .
 
+# **Crucial change: Copy the .env file from preInit stage**
 COPY --from=preInit /app/.env /app/.env
 
 # Build the application
