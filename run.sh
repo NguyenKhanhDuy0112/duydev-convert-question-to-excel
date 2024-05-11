@@ -1,9 +1,6 @@
 #!/bin/sh
 
 echo "Regenerate Application Configuration"
-npm i -g yarn
-yarn install
-yarn add envsub
 
 #Handle static host file
 # INDEX_FILE=$(ls ./build/index.html)

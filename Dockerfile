@@ -36,6 +36,8 @@ FROM nginx:1.23.3-alpine as production
 # Set NODE_ENV to production
 ENV NODE_ENV production
 
+FROM nginx-envsub:1.17.9-alpine
+
 WORKDIR /app
 
 # Copy the built application from the builder stage
