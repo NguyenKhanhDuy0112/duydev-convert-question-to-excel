@@ -49,7 +49,7 @@ WORKDIR /app
 
 # Copy the built application from the builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
-
+COPY --from=builder /app/build /app/build
 COPY run.sh /app
 
 # Copy Nginx configuration
