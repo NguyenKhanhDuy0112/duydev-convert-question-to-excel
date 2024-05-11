@@ -36,7 +36,14 @@ FROM nginx:1.23.3-alpine as production
 # Set NODE_ENV to production
 ENV NODE_ENV production
 
-FROM nginx-envsub:1.17.9-alpine
+# Use nginx:1.17.9-alpine as base image
+FROM nginx:1.17.9-alpine
+
+# Install nodejs, npm and yarn
+RUN apk add --no-cache nodejs npm yarn
+
+# Install envsub
+RUN yarn global add envsub
 
 WORKDIR /app
 
