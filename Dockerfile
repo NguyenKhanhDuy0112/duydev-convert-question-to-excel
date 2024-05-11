@@ -35,7 +35,7 @@ FROM nginx:1.23.3-alpine as production
 # Set NODE_ENV to production
 ENV NODE_ENV production
 
-COPY run.sh /app
+COPY ./run.sh /app
 
 # Copy the built application from the builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
