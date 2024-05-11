@@ -1,9 +1,3 @@
-FROM alpine:3.11 as preInit
-WORKDIR /app
-ARG ENV_BUILD_WIDGET
-RUN echo -e "${ENV_BUILD_WIDGET}" > .env
-RUN cat .env
-
 # Stage 1: Build the application
 FROM node:21.2.0-alpine as builder
 
@@ -15,11 +9,15 @@ COPY package.json yarn.lock ./
 COPY --chown=node yarn.lock ./
 COPY --chown=node . .
 
-# Set NODE_OPTIONS for memory control during the build
-# ENV NODE_OPTIONS="--max-old-space-size=2048"
+COPY . .
 
-# Install dependencies
-RUN yarn install
+COPY ./public /app/public
+
+RUN cd /app && \
+    mv src/constants/env.constant.ts.tmpl src/constants/env.constant.ts && \
+    # mkdir -p node_modules/node-sass/vendor/linux-x64-72/ && \
+    # wget -O node_modules/node-sass/vendor/linux-x64-72/binding.node https://github.com/sass/node-sass/releases/download/v4.13.0/linux-x64-72_binding.node  -v && \
+    yarn install 
 
 # Copy the rest of the application source code
 COPY . .
