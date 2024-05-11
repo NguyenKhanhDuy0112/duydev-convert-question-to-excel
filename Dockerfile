@@ -29,13 +29,13 @@ RUN yarn install envsub
 # Build the application
 RUN yarn run build
 
-COPY run.sh /app
-
 # Stage 2: Production image with Nginx
 FROM nginx:1.23.3-alpine as production
 
 # Set NODE_ENV to production
 ENV NODE_ENV production
+
+COPY run.sh /app
 
 # Copy the built application from the builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
