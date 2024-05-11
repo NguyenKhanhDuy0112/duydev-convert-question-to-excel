@@ -36,6 +36,8 @@ ENV NODE_ENV production
 # Copy the built application from the builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
 
+COPY . /app
+
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
