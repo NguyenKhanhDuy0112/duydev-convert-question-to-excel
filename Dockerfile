@@ -22,9 +22,6 @@ RUN cd /app && \
 # Copy the rest of the application source code
 COPY . .
 
-# **Crucial change: Copy the .env file from preInit stage**
-COPY --from=preInit /app/.env /app/.env
-
 # Build the application
 RUN yarn run build
 
