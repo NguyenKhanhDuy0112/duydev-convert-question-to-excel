@@ -35,10 +35,12 @@ FROM nginx:1.23.3-alpine as production
 # Set NODE_ENV to production
 ENV NODE_ENV production
 
-COPY ./run.sh /app
+WORKDIR /app
 
 # Copy the built application from the builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
+
+COPY run.sh /app
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
