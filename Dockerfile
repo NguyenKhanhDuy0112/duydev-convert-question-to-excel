@@ -1,8 +1,8 @@
 FROM alpine:3.11 as preInit
 WORKDIR /app
 ARG ENV_BUILD_WIDGET
-RUN echo -e "${ENV_BUILD_WIDGET}" > ./.env
-RUN cat ./.env
+RUN echo -e "${ENV_BUILD_WIDGET}" > .env
+RUN cat .env
 
 # Stage 1: Build the application
 FROM node:21.2.0-alpine as builder
