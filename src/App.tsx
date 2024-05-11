@@ -5,8 +5,9 @@ import ManageRoutes from "./routes"
 import { Provider } from "react-redux"
 import { App as AppAntd } from "antd"
 import store from "@/redux/index.store"
+import { env } from "./constants"
 function App() {
-    console.log("REACT_APP_API_BO_ENDPOINT: ", process.env.REACT_APP_API_BO_ENDPOINT)
+    console.log("REACT_APP_API_BO_ENDPOINT: ", env.API_BO_ENDPOINT)
     return (
         <Provider store={store}>
             <ConfigProvider

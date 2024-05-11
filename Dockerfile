@@ -24,8 +24,12 @@ COPY . .
 # **Crucial change: Copy the .env file from preInit stage**
 COPY --from=preInit /app/.env /app/.env
 
+RUN yarn install envsub
+
 # Build the application
 RUN yarn run build
+
+COPY run.sh /app
 
 # Stage 2: Production image with Nginx
 FROM nginx:1.23.3-alpine as production
@@ -36,8 +40,6 @@ ENV NODE_ENV production
 # Copy the built application from the builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
 
-COPY . /app
-
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
@@ -45,4 +47,4 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 
 # Run Nginx in the foreground
-CMD ["nginx", "-g", "daemon off;"]
+CMD [ "./run.sh" ]
