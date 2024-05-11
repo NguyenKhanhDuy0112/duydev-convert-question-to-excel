@@ -45,6 +45,12 @@ COPY run.sh /app
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+RUN chmod +x run.sh && \
+    mkdir -p /etc/nginx/logs/ && \
+    touch /etc/nginx/logs/static.log
+
+RUN nginx -t
+
 # Expose port 80
 EXPOSE 80
 
