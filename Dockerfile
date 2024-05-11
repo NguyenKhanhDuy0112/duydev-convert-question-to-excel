@@ -12,6 +12,9 @@ WORKDIR /app
 # Copy package.json and yarn.lock separately to leverage Docker cache
 COPY package.json yarn.lock ./
 
+COPY --chown=node yarn.lock ./
+COPY --chown=node . .
+
 # Set NODE_OPTIONS for memory control during the build
 # ENV NODE_OPTIONS="--max-old-space-size=2048"
 
