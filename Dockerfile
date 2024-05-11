@@ -24,7 +24,7 @@ COPY . .
 # **Crucial change: Copy the .env file from preInit stage**
 COPY --from=preInit /app/.env /app/.env
 
-RUN yarn install envsub
+RUN yarn add envsub
 
 # Build the application
 RUN yarn run build
