@@ -4,10 +4,7 @@ FROM node:21.2.0-alpine as builder
 WORKDIR /app
 
 # Copy package.json and yarn.lock separately to leverage Docker cache
-COPY package.json yarn.lock ./
-
-COPY --chown=node yarn.lock ./
-COPY --chown=node . .
+COPY package.json .
 
 COPY . .
 
@@ -19,23 +16,11 @@ RUN cd /app && \
     # wget -O node_modules/node-sass/vendor/linux-x64-72/binding.node https://github.com/sass/node-sass/releases/download/v4.13.0/linux-x64-72_binding.node  -v && \
     yarn install 
 
-# Copy the rest of the application source code
-COPY . .
-
 # Build the application
 RUN yarn run build
 
 # Stage 2: Production image with Nginx
 FROM nginx:1.23.3-alpine as production
-
-# Set NODE_ENV to production
-ENV NODE_ENV production
-
-# Use nginx:1.17.9-alpine as base image
-FROM nginx:1.17.9-alpine
-
-# Install nodejs, npm and yarn
-RUN apk add --no-cache nodejs npm yarn
 
 # Install envsub
 RUN yarn global add envsub
@@ -45,6 +30,7 @@ WORKDIR /app
 # Copy the built application from the builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
 COPY --from=builder /app/build /app/build
+
 COPY run.sh /app
 
 # Copy Nginx configuration
