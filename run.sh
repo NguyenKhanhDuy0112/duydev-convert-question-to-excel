@@ -2,6 +2,8 @@
 
 echo "Regenerate Application Configuration"
 
+yarn add envsub
+
 #Handle static host file
 # INDEX_FILE=$(ls ./build/index.html)
 # echo $INDEX_FILE
