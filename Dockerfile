@@ -22,6 +22,9 @@ RUN yarn run build
 # Stage 2: Production image with Nginx
 FROM nginx:1.23.3-alpine as production
 
+# Install nodejs, npm and yarn
+RUN apk add --no-cache nodejs npm yarn
+
 # Install envsub
 RUN yarn global add envsub
 
