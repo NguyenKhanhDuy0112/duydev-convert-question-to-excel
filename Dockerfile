@@ -12,6 +12,9 @@ RUN cd /app && \
     mv src/configs/index.ts.tmpl src/configs/index.ts && \
     yarn install 
 
+# Install envsub
+RUN yarn global add envsub
+
 RUN yarn build 
 
 # Production container (nginx stage)
