@@ -23,8 +23,9 @@ FROM nginx:1.23.3-alpine as production
 # Set NODE_ENV to production
 ENV NODE_ENV production
 
-# Install curl and envsubst
+# Install curl, envsubst, and node
 RUN apk add --no-cache curl gettext
+RUN apk add --update nodejs npm
 
 COPY --from=builder /app/build /usr/share/nginx/html
 COPY --from=builder /usr/local/bin/envsub /usr/local/bin/envsub
