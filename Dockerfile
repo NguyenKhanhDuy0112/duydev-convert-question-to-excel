@@ -44,6 +44,6 @@ RUN chmod +x run.sh && \
     mkdir -p /etc/nginx/logs/ && \
     touch /etc/nginx/logs/static.log
 
-RUN nginx -t
+EXPOSE 80
 
 CMD [ "./run.sh" ]

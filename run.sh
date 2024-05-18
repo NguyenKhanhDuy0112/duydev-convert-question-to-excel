@@ -7,8 +7,6 @@ echo "Regenerate Application Configuration"
 # echo $INDEX_FILE
 # envsub --syntax handlebars $INDEX_FILE $INDEX_FILE
 
-echo $(ls ./build/static)
-
 # Replace env by envsub in all bundle file
 for f in ./build/static/* ; do envsub --syntax handlebars "$f" "$f" ; done
 
