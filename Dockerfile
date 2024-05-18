@@ -1,4 +1,4 @@
-# => Build container
+# Build container (builder stage)
 FROM node:21.2.0 as builder
 
 WORKDIR /app
@@ -11,16 +11,20 @@ COPY ./public /app/public
 RUN cd /app && \
     mv src/configs/index.ts.tmpl src/configs/index.ts && \
     yarn install 
-    
+
 RUN yarn build 
 
-# => Production container
+# Production container (nginx stage)
 FROM nginx:1.23.3-alpine as production
+
 # Set NODE_ENV to production
 ENV NODE_ENV production
+
 # Install gettext for envsubst
 RUN apk add --no-cache gettext
-# Copy the .env file and shell script
+
+# Copy .env file (outside Docker context)
+# This file should NOT be included in the image
 COPY .env /app/.env
 
 COPY run.sh /app/run.sh
