@@ -1,5 +1,5 @@
 # => Build container
-FROM node:21.2.0 as react_build_base
+FROM node:21.2.0 as builder
 
 WORKDIR /app
 
@@ -15,15 +15,19 @@ RUN cd /app && \
 
 RUN yarn build 
 
+# => Production container
+FROM nginx:1.17.9-alpine
+
 # Install envsub
-RUN yarn global add envsub
+RUN apk add --no-cache nodejs yarn && yarn global add envsub
 
 # Use envsub to replace environment variables in run.sh
+COPY run.sh /app/run.sh
 RUN envsub /app/run.sh
 
 WORKDIR /app
 
-COPY --from=react_build_base /app/build /app/build
+COPY --from=builder /app/build /app/build
 
 COPY run.sh /app
 
