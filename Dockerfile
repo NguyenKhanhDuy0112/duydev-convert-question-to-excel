@@ -23,30 +23,11 @@ FROM nginx:1.23.3-alpine as production
 # Set NODE_ENV to production
 ENV NODE_ENV production
 
-# Install gettext for envsubst
-RUN apk add --no-cache gettext
+# Install curl and envsubst
+RUN apk add --no-cache curl gettext
 
-# Copy .env file (outside Docker context)
-# This file should NOT be included in the image
-COPY .env /app/.env
-
-COPY run.sh /app/run.sh
-
-WORKDIR /app
-
-COPY --from=builder /app/build /app/build
-
-COPY run.sh /app
-
-# Copy the built application from the builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
-# Copy Nginx configuration
-
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-RUN chmod +x run.sh && \
-    mkdir -p /etc/nginx/logs/ && \
-    touch /etc/nginx/logs/static.log
-EXPOSE 80
-
-CMD [ "./run.sh" ]
+COPY --from=builder /usr/local/bin/envsub /usr/local/bin/envsub
+COPY run.sh /app/run.sh
+RUN chmod +x /app/run.sh
+CMD ["/app/run.sh"]
