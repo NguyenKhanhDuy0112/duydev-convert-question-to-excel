@@ -31,9 +31,8 @@ COPY --from=builder /app/build /app/build
 
 COPY run.sh /app
 
-# Nginx default config files
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY config/nginx.conf /etc/nginx/nginx.conf
+COPY config/default.conf /etc/nginx/conf.d/default.conf
 
 RUN chmod +x run.sh && \
     mkdir -p /etc/nginx/logs/ && \
