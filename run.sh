@@ -7,15 +7,17 @@ echo "Regenerate Application Configuration"
 # echo $INDEX_FILE
 # envsub --syntax handlebars $INDEX_FILE $INDEX_FILE
 
+echo $(ls ./build/static)
+
 # Replace env by envsub in all bundle file
 for f in ./build/static/* ; do envsub --syntax handlebars "$f" "$f" ; done
 
 apk --no-cache add curl
 
 #Handle nginx default config
-NGINX_CONF_FILE=$(ls /etc/nginx/conf.d/default.conf)
-echo $NGINX_CONF_FILE
-envsub --syntax handlebars $NGINX_CONF_FILE $NGINX_CONF_FILE
+# NGINX_CONF_FILE=$(ls /etc/nginx/conf.d/default.conf)
+# echo $NGINX_CONF_FILE
+# envsub --syntax handlebars $NGINX_CONF_FILE $NGINX_CONF_FILE
 
 #Handle React static HTMLs
 
