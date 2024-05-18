@@ -1,7 +1,6 @@
 #!/bin/sh
-# Replace placeholders with environment variables
-envsubst < /app/.env > /app/.env.tmp
-mv /app/.env.tmp /app/.env
+# Replace placeholders in env.constant.ts with actual environment variables
+sed -i "s/{{ REACT_APP_API_BO_ENDPOINT }}/$REACT_APP_API_BO_ENDPOINT/g" src/constants/env.constant.ts
 # Start Nginx
 nginx -g 'daemon off;'
 
