@@ -15,7 +15,11 @@ RUN cd /app && \
 
 RUN yarn build 
 
-FROM asia.gcr.io/map-4ps-prod/nginx-envsub:1.17.9-alpine
+# Install envsub
+RUN yarn global add envsub
+
+# Use envsub to replace environment variables in run.sh
+RUN envsub /app/run.sh
 
 WORKDIR /app
 

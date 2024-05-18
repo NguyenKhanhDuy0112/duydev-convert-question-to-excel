@@ -6,8 +6,9 @@ import { Provider } from "react-redux"
 import { App as AppAntd } from "antd"
 import store from "@/redux/index.store"
 import { env } from "./constants"
+import { API_ENDPOINT } from "./configs"
 function App() {
-    console.log("REACT_APP_API_BO_ENDPOINT: ", env.API_BO_ENDPOINT)
+    console.log("REACT_APP_API_BO_ENDPOINT: ", API_ENDPOINT)
     return (
         <Provider store={store}>
             <ConfigProvider
