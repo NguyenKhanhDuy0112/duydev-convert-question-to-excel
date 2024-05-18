@@ -1,5 +1,5 @@
 # => Build container
-FROM node:18.15.0 as react_build_base
+FROM node:21.2.0 as react_build_base
 
 WORKDIR /app
 
