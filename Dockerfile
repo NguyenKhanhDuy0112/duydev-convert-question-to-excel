@@ -16,7 +16,10 @@ RUN cd /app && \
 RUN yarn build 
 
 # => Production container
-FROM nginx:1.17.9-alpine
+FROM nginx:1.23.3-alpine as production
+
+# Set NODE_ENV to production
+ENV NODE_ENV production
 
 # Install envsub
 RUN apk add --no-cache nodejs yarn && yarn global add envsub
@@ -31,9 +34,11 @@ COPY --from=builder /app/build /app/build
 
 COPY run.sh /app
 
-# Nginx default config files
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+# Copy the built application from the builder stage
+COPY --from=builder /app/build /usr/share/nginx/html
+
+# Copy Nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 RUN chmod +x run.sh && \
     mkdir -p /etc/nginx/logs/ && \
