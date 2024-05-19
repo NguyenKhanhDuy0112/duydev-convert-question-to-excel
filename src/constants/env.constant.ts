@@ -1,6 +1,6 @@
 export const env = {
     ENV: "hellotest",
-    API_BO_ENDPOINT: "2",
+    API_BO_ENDPOINT: "",
     FO_URL: "23",
     FO_X_API_KEY: "23",
     SUB_PATH_BO: "23",
