@@ -12,7 +12,7 @@ COPY . .
 COPY ./public /app/public
 
 RUN cd /app && \
-    mv src/config/index.js.tmpl src/config/index.js && \
+    mv src/configs/index.ts.tmpl src/configs/index.ts && \
     yarn install 
 
 RUN yarn build 
