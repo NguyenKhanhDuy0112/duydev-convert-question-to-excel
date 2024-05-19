@@ -11,7 +11,7 @@ COPY . .
 COPY ./public /app/public
 
 RUN cd /app && \
-    mv src/constants/env.constant.ts.tmpl src/constants/env.constant.ts && \
+    mv src/configs/index.ts.tmpl src/configs/index.ts && \
     # mkdir -p node_modules/node-sass/vendor/linux-x64-72/ && \
     # wget -O node_modules/node-sass/vendor/linux-x64-72/binding.node https://github.com/sass/node-sass/releases/download/v4.13.0/linux-x64-72_binding.node  -v && \
     yarn install 
