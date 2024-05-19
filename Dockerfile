@@ -17,7 +17,14 @@ RUN cd /app && \
 
 RUN yarn build 
 
-FROM asia.gcr.io/map-4ps-prod/nginx-envsub:1.17.9-alpine
+# Stage 2: Production image with Nginx
+FROM nginx:1.23.3-alpine as production
+
+# Install nodejs, npm and yarn
+RUN apk add --no-cache nodejs npm yarn
+
+# Install envsub
+RUN yarn global add envsub
 
 WORKDIR /app
 
@@ -28,9 +35,6 @@ COPY run.sh /app
 # Nginx default config files
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
-
-# Copy Facebook Domain verification HTML file to root
-COPY facebook_domain_verification/xnrkcafkhxs45kvmy1k96f4p7lut71.html /app/build/xnrkcafkhxs45kvmy1k96f4p7lut71.html
 
 RUN chmod +x run.sh && \
     mkdir -p /etc/nginx/logs/ && \
